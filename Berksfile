@@ -10,7 +10,7 @@ cookbook 'openssl'
 cookbook 'maven'
 cookbook 'xml'
 
-cookbook 'alfresco',  path:    '/Users/mau/w/alf/chef-alfresco'
+cookbook 'alfresco',    git:    'git://github.com/maoo/chef-alfresco.git'
 
 cookbook 'imagemagick', git:    'git://github.com/cookbooks/imagemagick.git'
 cookbook 'openoffice',  git:    'git://github.com/rgauss/chef-openoffice.git'
