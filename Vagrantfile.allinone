@@ -11,26 +11,26 @@ else
 end
 
 Vagrant.configure("2") do |config|
-  # TODO - not tested yet - shouldn't be handled with AMIs
   # For AWS provisioning, export the following environment variables and run "vagrant up --provider aws"
   # AWS_ACCESS_KEY=<MY_ACCESS_KEY>
   # AWS_SECRET_KEY=<MY_SECRET_KEY>
   # AWS_KEYPATH=<MY_KEY_PATH>
   # AWS_KEYPAIR_NAME=<MY_KEYPAIR_NAME>
   # WEB_SECURITY_GROUP_ID=<MY_WEB_SECURITY_GROUP_ID>
-  # config.vm.provider :aws do |aws, override|
-  #   override.vm.box               = "aws-alfresco-box"
-  #   override.vm.box_url           = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-  #   override.ssh.private_key_path = ENV["AWS_KEYPATH"]
-  #   override.ssh.username         = "ubuntu"
-  #   aws.access_key_id             = ENV["AWS_ACCESS_KEY"]
-  #   aws.secret_access_key         = ENV["AWS_SECRET_KEY"]
-  #   aws.keypair_name              = ENV["AWS_KEYPAIR_NAME"]
-  #   aws.security_groups           = [ENV['WEB_SECURITY_GROUP_NAME']]
-  #   aws.region                    = "us-east-1"
-  #   aws.ami                       = "ami-7747d01e"
-  #   aws.instance_type             = 'm1.small'
-  # end
+  config.vm.provider :aws do |aws, override|
+    override.vm.box               = "aws-alfresco-box"
+    override.vm.box_url           = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+    override.ssh.private_key_path = ENV["AWS_KEYPATH"]
+    override.ssh.username         = "ubuntu"
+    aws.access_key_id             = ENV["AWS_ACCESS_KEY"]
+    aws.secret_access_key         = ENV["AWS_SECRET_KEY"]
+    aws.keypair_name              = ENV["AWS_KEYPAIR_NAME"]
+    aws.security_groups           = [ENV['WEB_SECURITY_GROUP_NAME']]
+    aws.region                    = "us-east-1"
+    aws.ami                       = "ami-a73264ce"
+    aws.instance_type             = 'm1.small'
+    aws.block_device_mapping      = [  {:DeviceName => '/dev/sda1', 'Ebs.VolumeSize' => 20 } ]
+  end
 
   # Box env configuration
   config.vm.provider :virtualbox do |vb,override|
