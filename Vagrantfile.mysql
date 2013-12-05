@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     aws.region                    = "us-east-1"
     aws.ami                       = "ami-a73264ce"
     aws.instance_type             = 'm1.small'
-    aws.block_device_mapping      = [  {:DeviceName => '/dev/sda1', 'Ebs.VolumeSize' => 5 } ]
+    aws.block_device_mapping      = [  {:DeviceName => '/dev/sda1', 'Ebs.VolumeSize' => 8 } ]
   end
 
   # Box env configuration
