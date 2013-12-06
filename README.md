@@ -8,7 +8,7 @@ Preparing Boxes
 
 * Checkout this project
 * Install [Vagrant](http://docs.vagrantup.com/v2/installation/index.html) and [VirtualBox](https://www.virtualbox.org)
-* From your commandline run:
+* From your commandline run the following commands; for AWS, use ```vagrant up --provider aws```:
 
 ```
 vagrant plugin install vagrant-berkshelf
@@ -27,7 +27,7 @@ vagrant destroy
 
 The box binary can be found at [https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-mysql-vb.box](https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-mysql-vb.box)
 
-For AWS, the following AMI is available: ```aws.ami    = "ami-3b634e52"```
+For AWS, the following AMI is available: ```aws.ami = "ami-3b634e52"```
 
 ```
 rm -Rf .vagrant.d
@@ -40,7 +40,7 @@ vagrant destroy
 
 The box binary can be found at [https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-web-vb.box](https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-web-vb.box)
 
-For AWS, the following AMI is available: ```aws.ami    = "ami-157d507c"```
+For AWS, the following AMI is available: ```aws.ami = "ami-157d507c"```
 
 ```
 rm -Rf .vagrant.d
@@ -52,4 +52,4 @@ vagrant destroy
 ```
 The box binary can be found at [https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-allinone-vb.box](https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-allinone-vb.box)
 
-For AWS, the following AMI is available: ```aws.ami    = "ami-e565488c"```
+For AWS, the following AMI is available: ```aws.ami = "ami-e565488c"```
