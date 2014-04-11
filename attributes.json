@@ -9,20 +9,38 @@
         "recipe[tomcat::default]",
         "recipe[alfresco::repo_config]",
         "recipe[alfresco::share_config]",
-        "recipe[alfresco::solr_config]",
-        "recipe[artifact-deployer::default]"
+        "recipe[artifact-deployer::default]",
+        "recipe[alfresco::solr_config]"
     ],
     "tomcat" : {
       "base_version" : 7,
       "user" : "tomcat7",
       "group" : "tomcat7",
-      "java_options" : "-Xmx1500M -XX:MaxPermSize=256M"
+      "java_options" : "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome"
     },
     "alfresco" : {
         "maven" : {
             "repo_type" : "public",
             "username" : "alfresco",
             "password" : "alfresco"
+        },
+        "solr" : {
+            "alfresco_secureComms" : "none",
+            "solr_secureComms" : "none"
+        }
+    },
+    "maven" : {
+        "repos" : {
+            "maoo-public-cloudbees" : {
+                "url" : "https://repository-maoo.forge.cloudbees.com/release"
+            }
+        }
+    },
+    "artifacts" : {
+        "alfresco" : {
+            "groupId" : "it.session.alfresco",
+            "artifactId" : "alfresco-nossl",
+            "version" : "4.2.f"
         }
     },
     "java" : {
