@@ -15,7 +15,8 @@
     "tomcat" : {
       "base_version" : 7,
       "user" : "tomcat7",
-      "group" : "tomcat7"
+      "group" : "tomcat7",
+      "java_options" : "-Xmx1500M -XX:MaxPermSize=256M"
     },
     "alfresco" : {
         "maven" : {
