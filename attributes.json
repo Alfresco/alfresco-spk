@@ -1,0 +1,36 @@
+{
+    "hostname" : "alfresco-allinone",
+    "ip" : "192.168.0.34",
+    "run_list" : [
+        "recipe[apt::default]",
+        "recipe[alfresco::mysql_server]",
+        /* @TODO - alfresco::tomcat doesn't work yet due to unresolved chef/rewind lib */
+        "recipe[tomcat::default]",
+        "recipe[alfresco::repository]",
+        "recipe[alfresco::share]",
+        "recipe[alfresco::solr]"
+    ],
+    "tomcat" : {
+      "base_version" : 7,
+      "user" : "tomcat7",
+      "group" : "tomcat7"
+    },
+    "alfresco" : {
+        "maven" : {
+            "repo_type" : "public",
+            "username" : "alfresco",
+            "password" : "alfresco"
+        }
+    },
+    "java" : {
+        "default" : true,
+        "jdk_version" : "7",
+        "install_flavor" : "oracle",
+        "oracle" : {
+            "accept_oracle_download_terms" : true
+        }
+    },
+    "vagrant" : {
+        "adapter": "en1: Wi-Fi (AirPort)"
+    }
+}

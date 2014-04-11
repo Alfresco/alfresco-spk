@@ -7,49 +7,22 @@ Preparing Boxes
 ======
 
 * Checkout this project
-* Install [Vagrant](http://docs.vagrantup.com/v2/installation/index.html) and [VirtualBox](https://www.virtualbox.org)
-* From your commandline run the following commands; for AWS, use ```vagrant up --provider aws```:
+* Install [Vagrant 1.3.5](http://docs.vagrantup.com/v2/installation/index.html) and [VirtualBox 4.3.2](https://www.virtualbox.org); please respect the exact mentioned versions
 
 ```
 vagrant plugin install vagrant-berkshelf
 vagrant plugin install vagrant-omnibus
-vagrant plugin install vagrant-aws
+vagrant plugin install vagrant-vb
 ```
 
-```
-rm -Rf .vagrant.d
-rm -Rf ~/.vagrant.d/boxes/alfresco-mysql-vb
-ln -s Vagrantfile.mysql Vagrantfile
-vagrant up
-vagrant package --output alfresco-mysql-vb.box
-vagrant destroy
-```
-
-The box binary can be found at [https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-mysql-vb.box](https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-mysql-vb.box)
-
-For AWS, the following AMI is available: ```aws.ami = "ami-3b634e52"```
+To reset your local environment, run the following command
 
 ```
-rm -Rf .vagrant.d
-rm -Rf ~/.vagrant.d/boxes/alfresco-web-vb
-ln -s Vagrantfile.web Vagrantfile
-vagrant up
-vagrant package --output alfresco-web-vb.box
-vagrant destroy
+vagrant destroy -f && killall VBoxSVC && rm -Rf .vagrant *.lock
 ```
 
-The box binary can be found at [https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-web-vb.box](https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-web-vb.box)
-
-For AWS, the following AMI is available: ```aws.ami = "ami-157d507c"```
+To run the box type
 
 ```
-rm -Rf .vagrant.d
-rm -Rf ~/.vagrant.d/boxes/alfresco-allinone-vb
-ln -s Vagrantfile.allinone Vagrantfile
-vagrant up
-vagrant package --output alfresco-allinone-vb.box
-vagrant destroy
+MVN_ALF_USERNAME=xxx MVN_ALF_PASSWORD=xxx vagrant up
 ```
-The box binary can be found at [https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-allinone-vb.box](https://dl.dropboxusercontent.com/u/723955/boxes/alfresco-allinone-vb.box)
-
-For AWS, the following AMI is available: ```aws.ami = "ami-e565488c"```
