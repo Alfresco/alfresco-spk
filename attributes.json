@@ -3,6 +3,7 @@
     "ip" : "192.168.0.34",
     "run_list" : [
         "recipe[apt::default]",
+        "recipe[alfresco::3rdparty]",
         "recipe[alfresco::mysql_server]",
         "recipe[alfresco::mysql_createdb]",
         /* @TODO - alfresco::tomcat doesn't work yet due to unresolved chef/rewind lib */
