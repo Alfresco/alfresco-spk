@@ -1,6 +1,4 @@
 {
-    "hostname" : "alfresco-allinone",
-    "ip" : "192.168.0.34",
     "run_list" : [
         "recipe[apt::default]",
         "recipe[alfresco::3rdparty]",
@@ -13,6 +11,8 @@
         "recipe[artifact-deployer::default]",
         "recipe[alfresco::solr_config]"
     ],
+    "hostname" : "alfresco-allinone",
+    "ip" : "192.168.0.34",
     "tomcat" : {
       "base_version" : 7,
       "user" : "tomcat7",

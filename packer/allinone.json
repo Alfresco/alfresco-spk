@@ -1,0 +1,76 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": ""
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-east-1",
+    "source_ami": "ami-de0d9eb7",
+    "instance_type": "t1.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "alfresco-allinone {{timestamp}}"
+  }],
+  "provisioners": [{
+      "type": "chef-solo",
+      "cookbook_paths": [ "packer/cookbooks" ],
+      "run_list": [
+          "apt::default",
+          "alfresco::3rdparty",
+          "alfresco::mysql_server",
+          "alfresco::mysql_createdb",
+          "tomcat::default",
+          "alfresco::repo_config",
+          "alfresco::share_config",
+          "artifact-deployer::default",
+          "alfresco::solr_config"],
+      "json": {
+          "hostname" : "alfresco-allinone",
+          "ip" : "192.168.0.34",
+          "tomcat" : {
+            "base_version" : 7,
+            "user" : "tomcat7",
+            "group" : "tomcat7",
+            "java_options" : "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome"
+          },
+          "alfresco" : {
+              "maven" : {
+                  "repo_type" : "public",
+                  "username" : "alfresco",
+                  "password" : "alfresco"
+              },
+              "solr" : {
+                  "alfresco_secureComms" : "none",
+                  "solr_secureComms" : "none"
+              }
+          },
+          "maven" : {
+              "repos" : {
+                  "maoo-public-cloudbees" : {
+                      "url" : "https://repository-maoo.forge.cloudbees.com/release"
+                  }
+              }
+          },
+          "artifacts" : {
+              "alfresco" : {
+                  "groupId" : "it.session.alfresco",
+                  "artifactId" : "alfresco-nossl",
+                  "version" : "4.2.f"
+              }
+          },
+          "java" : {
+              "default" : true,
+              "jdk_version" : "7",
+              "install_flavor" : "oracle",
+              "oracle" : {
+                  "accept_oracle_download_terms" : true
+              }
+          },
+          "vagrant" : {
+              "adapter": "en1: Wi-Fi (AirPort)"
+          }
+      }
+    }]
+}
