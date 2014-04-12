@@ -39,5 +39,5 @@ bundle install
 Commands to execute for each box build
 ```
 bundle exec berks install --path vendor-cookbooks
-packer build  -var 'aws_access_key=YOUR ACCESS KEY'  -var 'aws_secret_key=YOUR SECRET KEY' packer/allinone.json
+packer build  -var 'aws_access_key=YOUR ACCESS KEY'  -var 'aws_secret_key=YOUR SECRET KEY' packer-allinone.json
 ```

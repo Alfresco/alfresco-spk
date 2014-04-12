@@ -9,7 +9,7 @@
     "secret_key": "{{user `aws_secret_key`}}",
     "region": "us-east-1",
     "source_ami": "ami-de0d9eb7",
-    "instance_type": "t1.micro",
+    "instance_type": "m1.small",
     "ssh_username": "ubuntu",
     "ami_name": "alfresco-allinone {{timestamp}}"
   }],
