@@ -1,0 +1,50 @@
+# Alfresco Vagrant Web Box
+#
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  
+  # Attributes are loaded from attributes.json
+  if !(File.exists?("attributes.json"))
+    warn "Copy attributes.json.example attributes.json and try again."
+    exit
+  end
+
+  attributes = JSON.parse(IO.read("attributes.json"))
+
+  if !ENV['MVN_ALF_USER'].nil? and !ENV['MVN_ALF_PASSWORD'].nil?
+    attributes[:alfresco][:maven][:repo_type] = "private"
+    attributes[:alfresco][:maven][:username] = ENV['MVN_ALF_USERNAME']
+    attributes[:alfresco][:maven][:password] = ENV['MVN_ALF_PASSWORD']
+  end
+
+  # Box env configuration
+  config.vm.provider :virtualbox do |vb,override|
+    override.vm.box_url         = "http://files.vagrantup.com/precise64.box"
+    override.vm.box             = "precise64"
+    vb.customize ["modifyvm", :id, "--memory", 2048]
+  end
+
+  config.vm.network :private_network, ip:  attributes["ip"]
+  config.vm.hostname = attributes["hostname"]
+  config.vm.provision :hosts
+
+  # Vagrant plugins configuration
+  config.berkshelf.enabled    = true
+  config.omnibus.chef_version = "11.4.0"
+
+  config.vm.provision :chef_solo do |chef|
+    # Used as Vagrant cache during build
+    chef.provisioning_path  = "/tmp/vagrant-chef-solo"
+    chef.file_cache_path    = chef.provisioning_path    
+
+    # Add this layer's Run List
+    attributes["run_list"].each do |recipe|
+      chef.add_recipe recipe
+    end
+
+    # Pass the rest of the attributes
+    chef.json = attributes    
+  end
+end

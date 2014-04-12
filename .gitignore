@@ -1,6 +1,6 @@
 Berksfile.lock
 .vagrant
-Vagrantfile
 Gemfile.lock
 vendor-cookbooks
 packer_cache
+output-virtualbox-iso
