@@ -21,5 +21,5 @@ cookbook 'imagemagick', git:    'git://github.com/someara/imagemagick.git'
 
 cookbook 'artifact-deployer',    git:    'git://github.com/maoo/artifact-deployer.git', tag: 'artifact-deployer-0.1'
 
-cookbook 'alfresco',   git:    'git://github.com/maoo/chef-alfresco.git', tag: 'chef-alfresco-0.1'
+cookbook 'alfresco',   git:    'git://github.com/maoo/chef-alfresco.git', tag: 'chef-alfresco-0.1.1'
 #cookbook 'alfresco',    path:   '/Users/mau/w/alf/chef-alfresco'
