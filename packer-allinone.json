@@ -1,3 +1,5 @@
+/* AMI(ami-de0d9eb7) URL - http://thecloudmarket.com/image/ami-de0d9eb7--ubuntu-images-ebs-ubuntu-precise-12-04-amd64-server-20130222 */
+    
 {
   "variables": {
     "aws_access_key": "",
@@ -28,7 +30,7 @@
           "alfresco::solr_config"],
       "json": {
           "hostname" : "alfresco-allinone",
-          "ip" : "192.168.0.34",
+          "ip" : "192.168.0.23",
           "tomcat" : {
             "base_version" : 7,
             "user" : "tomcat7",
@@ -37,10 +39,9 @@
           },
           "alfresco" : {
               "maven" : {
-                  "repo_type" : "public",
-                  "username" : "alfresco",
-                  "password" : "alfresco"
+                  "repo_type" : "public"
               },
+              "index_subsystem" : "solr",
               "solr" : {
                   "alfresco_secureComms" : "none",
                   "solr_secureComms" : "none"
@@ -58,6 +59,11 @@
                   "groupId" : "it.session.alfresco",
                   "artifactId" : "alfresco-nossl",
                   "version" : "4.2.f"
+              },
+              "solr" : {
+                  "groupId" : "it.session.alfresco",
+                  "artifactId" : "apache-solr-nossl",
+                  "version" : "1.4.1-alfresco-patched"
               }
           },
           "java" : {
@@ -67,10 +73,8 @@
               "oracle" : {
                   "accept_oracle_download_terms" : true
               }
-          },
-          "vagrant" : {
-              "adapter": "en1: Wi-Fi (AirPort)"
           }
       }
-    }]
+    }],
+    "post-processors": ["vagrant"]
 }
