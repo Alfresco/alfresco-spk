@@ -29,4 +29,15 @@ MVN_ALF_USERNAME=xxx MVN_ALF_PASSWORD=xxx vagrant up
 
 Using Packer.io
 ---
-```packer build  -var 'aws_access_key=YOUR ACCESS KEY'  -var 'aws_secret_key=YOUR SECRET KEY' packer/allinone.json```
+
+Commands to execute once on your box to configure Gems; you'll need to re-run them also if there are some changes applied to the Chef recipes you depend on
+```
+gem install bundler
+bundle install
+```
+
+Commands to execute for each box build
+```
+bundle exec berks install --path vendor-cookbooks
+packer build  -var 'aws_access_key=YOUR ACCESS KEY'  -var 'aws_secret_key=YOUR SECRET KEY' packer/allinone.json
+```

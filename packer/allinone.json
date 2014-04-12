@@ -15,7 +15,7 @@
   }],
   "provisioners": [{
       "type": "chef-solo",
-      "cookbook_paths": [ "packer/cookbooks" ],
+      "cookbook_paths": [ "vendor-cookbooks" ],
       "run_list": [
           "apt::default",
           "alfresco::3rdparty",
