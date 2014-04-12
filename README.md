@@ -29,4 +29,4 @@ MVN_ALF_USERNAME=xxx MVN_ALF_PASSWORD=xxx vagrant up
 
 Using Packer.io
 ---
-packer build  -var 'aws_access_key=YOUR ACCESS KEY'  -var 'aws_secret_key=YOUR SECRET KEY' packer/allinone.json
+```packer build  -var 'aws_access_key=YOUR ACCESS KEY'  -var 'aws_secret_key=YOUR SECRET KEY' packer/allinone.json```
