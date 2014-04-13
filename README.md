@@ -42,12 +42,21 @@ vagrant plugin install vagrant-omnibus
 vagrant plugin install vagrant-vb
 ```
 
+To run the VM run ```vagrant up```
+
 Debugging
+---
+For debugging purposes, prepend
+* ```PACKER_LOG=1``` to ```packer``` commands
+* ```VAGRANT_LOG=debug``` to ```vagrant``` commsnds
+
+Troubleshooting
 ---
 If you want to check if VirtualBox is still running from previous attempps run
 
 ```
 ps aux | grep VirtualBoxVM
+ps aux | grep Vbox
 ```
 
 To reset your local environment, run the following command
