@@ -1,5 +1,5 @@
 Berksfile.lock
-*/Berksfile.dev
+dev/Berksfile.dev
 .vagrant
 *.box
 Gemfile.lock

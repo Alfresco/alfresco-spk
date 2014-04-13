@@ -20,7 +20,3 @@ cookbook 'imagemagick', git:    'git://github.com/someara/imagemagick.git'
 
 cookbook 'alfresco',   git:    'git://github.com/maoo/chef-alfresco.git', tag: 'chef-alfresco-0.1.4'
 cookbook 'artifact-deployer',    git:    'git://github.com/maoo/artifact-deployer.git', tag: 'artifact-deployer-0.1'
-
-# Use local cookbooks for dev purposes
-# cookbook 'artifact-deployer',    path:   '/Users/mau/w/pers/artifact-deployer'
-# cookbook 'alfresco',    path:   '/Users/mau/w/alf/chef-alfresco'
