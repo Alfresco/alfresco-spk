@@ -35,15 +35,30 @@ This will create the file ```packer_virtualbox-iso_virtualbox.box``` in the root
 
 Running VM on Vagrant
 ---
+If you want to run the VM you just created with VirtualBox you can use the [Vagrantfile](https://github.com/maoo/alfresco-boxes/tree/master/Vagrantfile) that you find in the root folder; before you run the first time, install the following Vagrant plugins
 
-Before you run the first time, install the needed plugins (@TODO - test without, shouldn't be used/needed anymore)
 ```
 vagrant plugin install vagrant-berkshelf
 vagrant plugin install vagrant-omnibus
-vagrant plugin install vagrant-vb
+vagrant plugin install vagrant-vbguest
 ```
 
 To run the VM type ```vagrant up```
+
+Customisations
+---
+You can read the [packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json) definition to check the default values that are used to install Alfresco; there are many other default values that are defined by the following Chef Recipes
+* [artifact-deployer](https://github.com/maoo/artifact-deployer), you can check default values in [attributes.json](https://github.com/maoo/artifact-deployer/tree/master/attributes)
+* [chef-alfresco](https://github.com/maoo/chef-alfresco), you can check default values in [attributes.json](https://github.com/maoo/chef-alfresco/tree/master/attributes)
+
+Development
+---
+If you want to test additional/external Chef recipes without triggering the Packer provisioning (and save some time), simply run ```vagrant up``` from the ```dev``` folder
+* Open http://192.168.0.23:8080/share
+* Login as admin/admin
+* Use top-right search box and type 'project'
+
+You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/dev/attributes.json) to build your logic; if you need to test an additional Chef recipe, you'll need to change the root [Berksfile](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile) (used by Packer), otherwise you can change ```config.berkshelf.berksfile_path``` in [Vagrantfile](https://github.com/maoo/alfresco-boxes/tree/master/dev/Vagrantfile)
 
 Debugging
 ---
