@@ -7,7 +7,7 @@ With this project you can
 * Build and launch Virtualbox (.vdi) Image containing Alfresco 4.2 stack
 * Build and upload an AWS AMI containing Alfresco 4.2 stack
 * Customize the VM provisioning and Alfresco configuration/deployment at any stage, simply editing a JSON file
-* Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile), or using additional [Packer provisioners](https://github.com/maoo/alfresco-boxes//tree/masterpacker-allinone.json#L127), such as ```shell```
+* Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile), or using additional [Packer provisioners](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json#L127), such as ```shell```
 * Use Vagrant to create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/dev/Vagrantfile)
 
 Configuring your host machine
