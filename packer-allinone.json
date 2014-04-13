@@ -122,6 +122,22 @@
               }
           }
       }
+    },
+    {
+        "type": "shell",
+        "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
+        "inline": [
+          "apt-get update -y",
+          "apt-get install -y linux-headers-$(uname -r) build-essential dkms",
+          "apt-get clean",
+          "mount -o loop VBoxGuestAdditions.iso /media/cdrom",
+          "sh /media/cdrom/VBoxLinuxAdditions.run",
+          "umount /media/cdrom",
+          "mkdir ~/.ssh",
+          "wget -qO- https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub >> ~/.ssh/authorized_keys",
+          "echo 'vagrant ALL=NOPASSWD:ALL' > /tmp/vagrant",
+          "chmod 0440 /tmp/vagrant",
+          "mv /tmp/vagrant /etc/sudoers.d/"]
     }],
     "post-processors": ["vagrant"]
 }

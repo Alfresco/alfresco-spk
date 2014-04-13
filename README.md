@@ -26,22 +26,28 @@ packer build  -var 'aws_access_key=YOUR ACCESS KEY'  -var 'aws_secret_key=YOUR S
 ```
 The AMI is based on an existing Ubuntu 12.04 AMI ([ami-de0d9eb7](http://thecloudmarket.com/image/ami-de0d9eb7--ubuntu-images-ebs-ubuntu-precise-12-04-amd64-server-20130222))
 
-Creating/running Virtualbox VDI
+Creating Vagrant box
 ---
 ```
 packer build -only virtualbox-iso packer-allinone.json
 ```
-If you want to check if VirtualBox is still running from previous attempps run
 
-```
-ps aux | grep VirtualBoxVM
-```
+Running VM on Vagrant
+---
 
-@TODO - Are these still used?
+Before you run the first time, install the needed plugins (@TODO - test without, shouldn't be used/needed anymore)
 ```
 vagrant plugin install vagrant-berkshelf
 vagrant plugin install vagrant-omnibus
 vagrant plugin install vagrant-vb
+```
+
+Debugging
+---
+If you want to check if VirtualBox is still running from previous attempps run
+
+```
+ps aux | grep VirtualBoxVM
 ```
 
 To reset your local environment, run the following command
@@ -49,5 +55,3 @@ To reset your local environment, run the following command
 ```
 vagrant destroy -f && killall VBoxSVC && rm -Rf .vagrant *.lock
 ```
-
-

@@ -1,5 +1,6 @@
 Berksfile.lock
 .vagrant
+*.box
 Gemfile.lock
 vendor-cookbooks
 packer_cache

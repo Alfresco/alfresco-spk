@@ -9,7 +9,8 @@ Vagrant.configure("2") do |config|
 
   # Box env configuration
   config.vm.provider :virtualbox do |vb,override|
-    override.vm.box             = "alfresco-allione"
+    override.vm.box             = "packer_virtualbox-iso_virtualbox"
+    override.vm.box_url         = "packer_virtualbox-iso_virtualbox.box"
     vb.customize ["modifyvm", :id, "--memory", 2048]
   end
 
