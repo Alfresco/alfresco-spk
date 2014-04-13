@@ -1,4 +1,4 @@
-Berksfile.lock
+*.lock
 dev/Berksfile.dev
 .vagrant
 *.box

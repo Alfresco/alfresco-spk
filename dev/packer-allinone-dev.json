@@ -1,0 +1,65 @@
+{
+    "provisioners": [
+        {
+            "json": {
+                "alfresco": {
+                    "index_subsystem": "solr",
+                    "maven": {
+                        "repo_type": "public"
+                    },
+                    "solr": {
+                        "alfresco_secureComms": "none",
+                        "solr_secureComms": "none"
+                    }
+                },
+                "artifacts": {
+                    "alfresco": {
+                        "artifactId": "alfresco-nossl",
+                        "groupId": "it.session.alfresco",
+                        "version": "4.2.f"
+                    },
+                    "solr": {
+                        "artifactId": "apache-solr-nossl",
+                        "groupId": "it.session.alfresco",
+                        "version": "1.4.1-alfresco-patched"
+                    }
+                },
+                "hostname": "alfresco-allinone",
+                "ip": "192.168.0.23",
+                "java": {
+                    "default": true,
+                    "install_flavor": "oracle",
+                    "jdk_version": "7",
+                    "oracle": {
+                        "accept_oracle_download_terms": true
+                    }
+                },
+                "maven": {
+                    "repos": {
+                        "maoo-public-cloudbees": {
+                            "url": "https://repository-maoo.forge.cloudbees.com/release"
+                        }
+                    }
+                },
+                "tomcat": {
+                    "base_version": 7,
+                    "shared": "/var/lib/tomcat7/shared",
+                    "group": "tomcat7",
+                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome",
+                    "user": "tomcat7"
+                }
+            },
+            "run_list": [
+                "apt::default",
+                "alfresco::3rdparty",
+                "alfresco::mysql_server",
+                "alfresco::mysql_createdb",
+                "tomcat::default",
+                "alfresco::repo_config",
+                "alfresco::share_config",
+                "artifact-deployer::default",
+                "alfresco::solr_config"
+            ]
+        }
+    ]
+}

@@ -3,10 +3,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# For testing purposes
-#PACKERFILE="packer-allinone-dev.json"
 
-PACKERFILE="../packer-allinone.json"
+PACKERFILE="packer-allinone-dev.json"
 BERKSFILE="Berksfile.dev"
 
 Vagrant.configure("2") do |config|

@@ -1,4 +1,4 @@
-vagrant-alfresco-boxes
+alfresco-boxes
 ================
 
 A collection of utilities for Alfresco VM provisioning and deployment using Packer and Vagrant; the deployment and installation logic is provided by [chef-alfresco](https://github.com/maoo/chef-alfresco).
@@ -6,7 +6,9 @@ A collection of utilities for Alfresco VM provisioning and deployment using Pack
 With this project you can
 * Build and launch Virtualbox (.vdi) Image containing Alfresco 4.2 stack
 * Build and upload an AWS AMI containing Alfresco 4.2 stack
-* Customize the Alfresco stack at any level, importing external Chef recipes (see [Berksfile](https://github.com/maoo/vagrant-alfresco-boxes/https://github.com/maoo/vagrant-alfresco-boxes/tree/master/Berksfile))
+* Customize the VM provisioning and Alfresco configuration/deployment at any stage, simply editing a JSON file
+* Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile), or using additional [Packer provisioners](https://github.com/maoo/alfresco-boxes//tree/masterpacker-allinone.json#L127), such as ```shell```
+* Use Vagrant to create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/dev/Vagrantfile)
 
 Configuring your host machine
 ---
@@ -16,8 +18,9 @@ Configuring your host machine
   * [Vagrant 1.3.5](http://docs.vagrantup.com/v2/installation/index.html)
   * [VirtualBox 4.3.2](https://www.virtualbox.org)
   * [Packer 0.5.2](http://www.packer.io/downloads.html)
-* Install bundler with ```gem install bundler && bundle install```
-* Run Berkshelf to resolve external chef recipes; this step will have to be executed everytime you change the Berksfile definition with ```bundle exec berks install --path vendor-cookbooks```
+* Run ```install.sh``` or
+  * Install bundler with ```gem install bundler && bundle install```
+  * Run Berkshelf to resolve external chef recipes; this step will have to be executed everytime you change the Berksfile definition with ```bundle exec berks install --path vendor-cookbooks```
 
 Uploading AMI to AWS
 ---
@@ -26,12 +29,14 @@ packer build  -var 'aws_access_key=YOUR ACCESS KEY'  -var 'aws_secret_key=YOUR S
 ```
 The AMI is based on an existing Ubuntu 12.04 AMI ([ami-de0d9eb7](http://thecloudmarket.com/image/ami-de0d9eb7--ubuntu-images-ebs-ubuntu-precise-12-04-amd64-server-20130222))
 
-Creating Vagrant box
+Creating VirtualBox/Vagrant box
 ---
 ```
 packer build -only virtualbox-iso packer-allinone.json
 ```
-This will create the file ```packer_virtualbox-iso_virtualbox.box``` in the root project folder
+This will first create and initialize a VirtualBox VM, then it will compress it into a ```packer_virtualbox-iso_virtualbox.box``` stored into the root project folder.
+
+The VirtualBox VM is deleted at the end of the process by default, to save space; if you want to keep the VM on Virtualbox, you need to add the attribute ```"keep_input_artifact": true``` into the [```vagrant``` post-processor in packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json#L144)
 
 Running VM on Vagrant
 ---
@@ -73,6 +78,13 @@ If you want to check if VirtualBox is still running from previous attempps run
 ```
 ps aux | grep VirtualBoxVM
 ps aux | grep Vbox
+```
+
+When the packer commands fail, the VirtualBox VM may get inaccessiblel check and remove them using
+
+```
+VBoxManage list vms
+VBoxManage unregistervm 22986cf8-3bad-4d22-8dc9-8983faa36422
 ```
 
 To reset your local environment, run the following command
