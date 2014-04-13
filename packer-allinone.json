@@ -84,6 +84,9 @@
             "group" : "tomcat7",
             "java_options" : "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome"
           },
+          "tomcat" : {
+            "shared" : "/usr/share/tomcat7/shared"  
+          },
           "alfresco" : {
               "maven" : {
                   "repo_type" : "public"

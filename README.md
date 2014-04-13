@@ -31,6 +31,7 @@ Creating Vagrant box
 ```
 packer build -only virtualbox-iso packer-allinone.json
 ```
+This will create the file ```packer_virtualbox-iso_virtualbox.box``` in the root project folder
 
 Running VM on Vagrant
 ---
@@ -42,7 +43,7 @@ vagrant plugin install vagrant-omnibus
 vagrant plugin install vagrant-vb
 ```
 
-To run the VM run ```vagrant up```
+To run the VM type ```vagrant up```
 
 Debugging
 ---
