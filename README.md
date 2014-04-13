@@ -34,7 +34,7 @@ packer build -only virtualbox-iso packer-allinone.json
 If you want to check if VirtualBox is still running from previous attempps run
 
 ```
-ps aux | grep VBox
+ps aux | grep VirtualBoxVM
 ```
 
 @TODO - Are these still used?

@@ -55,9 +55,15 @@
       ]
   }
 ],
-  "provisioners": [{
+
+  "provisioners": [
+      {
       "type": "chef-solo",
       "prevent_sudo" : true,
+      "prevent_sudo": false,
+      "skip_install": false,
+      "execute_command": "echo 'vagrant' | {{if .Sudo}}sudo -S{{end}} chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} -l debug",
+      "install_command": "echo 'vagrant' | {{if .Sudo}}sudo -S{{end}} bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v 11.8'",
       "cookbook_paths": [ "vendor-cookbooks" ],
       "run_list": [
           "apt::default",
