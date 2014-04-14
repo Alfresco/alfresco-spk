@@ -8,7 +8,7 @@ With this project you can
 * Build and upload an AWS AMI containing Alfresco 4.2 stack
 * Customize the VM provisioning and Alfresco configuration/deployment at any stage, simply editing a JSON file
 * Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile), or using additional [Packer provisioners](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json#L127), such as ```shell```
-* Use Vagrant to create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/dev/Vagrantfile)
+* Use Vagrant to create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Vagrantfile)
 
 Configuring your host machine
 ---
@@ -58,12 +58,12 @@ You can read the [packer-allinone.json](https://github.com/maoo/alfresco-boxes/t
 
 Development
 ---
-If you want to test additional/external Chef recipes without triggering the Packer provisioning (and save some time), simply run ```vagrant up``` from the ```dev``` folder
+If you want to test additional/external Chef recipes without triggering the Packer provisioning (and save some time), simply run ```vagrant up``` from the ```vagrant/dev``` folder
 * Open http://192.168.0.23:8080/share
 * Login as admin/admin
 * Use top-right search box and type 'project'
 
-You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/dev/attributes.json) to build your logic; if you need to test an additional Chef recipe, you'll need to change the root [Berksfile](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile) (used by Packer), otherwise you can change ```config.berkshelf.berksfile_path``` in [Vagrantfile](https://github.com/maoo/alfresco-boxes/tree/master/dev/Vagrantfile)
+You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/attributes.json) to build your logic; if you need to test an additional Chef recipe, you'll need to change the root [Berksfile](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile) (used by Packer), otherwise you can change ```config.berkshelf.berksfile_path``` in [Vagrantfile](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Vagrantfile)
 
 Debugging
 ---
