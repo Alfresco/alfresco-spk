@@ -3,12 +3,12 @@
         {
             "json": {
                 "alfresco": {
-                    "index_subsystem": "solr",
+                    "search": "solr",
                     "maven": {
                         "repo_type": "public"
                     },
                     "solr": {
-                        "alfresco_secureComms": "none"
+                        "solr_secureComms": "none"
                     },
                     "db": {
                         "host": "10.0.0.11"

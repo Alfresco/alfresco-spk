@@ -7,7 +7,7 @@
                         "repo_type": "public"
                     },
                     "solr": {
-                        "solr_secureComms": "none"
+                        "alfresco_secureComms": "none"
                     },
                     "url": {
                       "repo":{

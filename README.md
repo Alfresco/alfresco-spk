@@ -66,6 +66,19 @@ If you want to test additional/external Chef recipes without triggering the Pack
 
 You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/attributes.json) to build your logic; if you need to test an additional Chef recipe, you'll need to change the root [Berksfile](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile) (used by Packer), otherwise you can change ```config.berkshelf.berksfile_path``` in [Vagrantfile](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Vagrantfile)
 
+Multi VM
+---
+In ```vagrant/multivm``` you can find an example of Vagrant multi VM configuration; you can test it running the following commands
+
+```
+cd vagrant/multivm
+vagrant up db
+vagrant up repo
+vagrant up share
+vagrant up solr
+```
+You can access Share on http://10.0.0.31:8080/share
+
 Debugging
 ---
 For debugging purposes, prepend

@@ -31,17 +31,17 @@ Vagrant.configure("2") do |config|
     attributes[:alfresco][:maven][:password] = ENV['MVN_ALF_PASSWORD']
   end
 
+  # Vagrant plugins configuration
   config.berkshelf.enabled    = true
   config.berkshelf.berksfile_path = BERKSFILE
+  config.omnibus.chef_version = "11.8.0"
+  config.vm.provision :hosts
   
   boxes.each do |boxName, box|
     attributes = box['attributes']
     run_list = box['run_list']
     
     config.vm.define boxName do |box|
-      # Vagrant plugins configuration
-      config.omnibus.chef_version = "11.4.0"
-      config.vm.provision :hosts
 
       box.vm.provider :virtualbox do |vb,override|
         override.vm.box_url         = "http://files.vagrantup.com/precise64.box"
