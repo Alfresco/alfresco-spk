@@ -46,6 +46,7 @@ If you want to run the VM you just created with VirtualBox you can use the [Vagr
 vagrant plugin install vagrant-berkshelf
 vagrant plugin install vagrant-omnibus
 vagrant plugin install vagrant-vbguest
+vagrant plugin install vagrant-hosts
 ```
 
 To run the VM type ```vagrant up```

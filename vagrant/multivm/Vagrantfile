@@ -21,20 +21,20 @@ SOLR_MEMORY   = 1024
 
 Vagrant.configure("2") do |config|
   db_provisioner = JSON.parse(IO.read(DB_PACKERFILE))["provisioners"][0]
-  db_attributes = provisioner["json"]
-  db_run_list = provisioner["run_list"]
+  db_attributes = db_provisioner["json"]
+  db_run_list = db_provisioner["run_list"]
 
   repo_provisioner = JSON.parse(IO.read(REPO_PACKERFILE))["provisioners"][0]
-  repo_attributes = provisioner["json"]
-  repo_run_list = provisioner["run_list"]
+  repo_attributes = repo_provisioner["json"]
+  repo_run_list = repo_provisioner["run_list"]
 
   share_provisioner = JSON.parse(IO.read(SHARE_PACKERFILE))["provisioners"][0]
-  share_attributes = provisioner["json"]
-  share_run_list = provisioner["run_list"]
+  share_attributes = share_provisioner["json"]
+  share_run_list = share_provisioner["run_list"]
 
   solr_provisioner = JSON.parse(IO.read(SOLR_PACKERFILE))["provisioners"][0]
-  solr_attributes = provisioner["json"]
-  solr_run_list = provisioner["run_list"]
+  solr_attributes = solr_provisioner["json"]
+  solr_run_list = solr_provisioner["run_list"]
 
   if !ENV['MVN_ALF_USER'].nil? and !ENV['MVN_ALF_PASSWORD'].nil?
     attributes[:alfresco][:maven][:repo_type] = "private"
@@ -46,11 +46,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider :virtualbox do |vb,override|
     override.vm.box_url         = "http://files.vagrantup.com/precise64.box"
     override.vm.box             = "precise64"
-    vb.customize ["modifyvm", :id, "--memory", 2048]
   end
-
-  config.vm.network :private_network, ip:  attributes["ip"]
-  config.vm.hostname = attributes["hostname"]
 
   # Vagrant plugins configuration
   config.berkshelf.enabled    = true
@@ -64,7 +60,9 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.define "db" do |db|
+    config.vm.provision :hosts
     db.vm.provider :virtualbox do |vb,override|
+      override.vm.hostname = "alfresco-db"
       override.vm.network "private_network", ip: DB_IP
       vb.customize ["modifyvm", :id, "--memory", DB_MEMORY]
     end
@@ -77,7 +75,9 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "repo" do |repo|
-    db.vm.provider :virtualbox do |vb,override|
+    config.vm.provision :hosts
+    repo.vm.provider :virtualbox do |vb,override|
+      override.vm.hostname = "alfresco-repo"
       override.vm.network "private_network", ip: REPO_IP
       vb.customize ["modifyvm", :id, "--memory", REPO_MEMORY]
     end
@@ -90,7 +90,9 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.define "share" do |share|
-    db.vm.provider :virtualbox do |vb,override|
+    config.vm.provision :hosts
+    share.vm.provider :virtualbox do |vb,override|
+      override.vm.hostname = "alfresco-share"
       override.vm.network "private_network", ip: SHARE_IP
       vb.customize ["modifyvm", :id, "--memory", SHARE_MEMORY]
     end
@@ -102,8 +104,10 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "solr" do |share|
-    db.vm.provider :virtualbox do |vb,override|
+  config.vm.define "solr" do |solr|
+    config.vm.provision :hosts
+    solr.vm.provider :virtualbox do |vb,override|
+      override.vm.hostname = "alfresco-solr"
       override.vm.network "private_network", ip: SOLR_IP
       vb.customize ["modifyvm", :id, "--memory", SOLR_MEMORY]
     end
