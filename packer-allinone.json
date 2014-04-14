@@ -94,7 +94,7 @@
                         "version": "1.4.1-alfresco-patched"
                     },
                     "solrhome": {
-                        "enabled": true,
+                        "enabled": true
                     }
                 },
                 "hostname": "alfresco-allinone",

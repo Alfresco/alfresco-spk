@@ -68,15 +68,15 @@ You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree
 
 Multi VM
 ---
-In ```vagrant/multivm``` you can find an example of Vagrant multi VM configuration; you can test it running the following commands
+In ```vagrant/multivm``` you can find an example of Vagrant multi VM configuration; you can test it running ```run.sh``` from ```vagrant/multivm``` or
 
 ```
-cd vagrant/multivm
 vagrant up db
 vagrant up repo
 vagrant up share
 vagrant up solr
 ```
+
 You can access Share on http://10.0.0.31:8080/share
 
 Debugging
