@@ -15,7 +15,7 @@ Configuring your host machine
 * Make sure that Ruby is installed (I'm currently running on v1.9.3)
 * Checkout this project and cd into the root folder
 * Install (please respect the exact mentioned versions)
-  * [Vagrant 1.3.5](http://docs.vagrantup.com/v2/installation/index.html)
+  * [Vagrant 1.3.5](http://downloads.vagrantup.com/tags/v1.3.5)
   * [VirtualBox 4.3.2](https://www.virtualbox.org)
   * [Packer 0.5.2](http://www.packer.io/downloads.html)
 * Run ```install.sh``` or
