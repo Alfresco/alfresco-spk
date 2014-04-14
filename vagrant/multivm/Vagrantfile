@@ -4,24 +4,14 @@
 # vi: set ft=ruby :
 BERKSFILE="Berksfile.multivm"
 
-db_provisioner = JSON.parse(IO.read("packer-allinone-db.json"))["provisioners"][0]
-repo_provisioner = JSON.parse(IO.read("packer-allinone-repo.json"))["provisioners"][0]
-share_provisioner = JSON.parse(IO.read("packer-allinone-share.json"))["provisioners"][0]
-solr_provisioner = JSON.parse(IO.read("packer-allinone-solr.json"))["provisioners"][0]
-
 boxes = Hash.new
-boxes[:db] = Hash.new
-boxes[:db]['attributes'] = db_provisioner["json"]
-boxes[:db]['run_list'] = db_provisioner["run_list"]
-boxes[:repo] = Hash.new
-boxes[:repo]['attributes'] = repo_provisioner["json"]
-boxes[:repo]['run_list'] = repo_provisioner["run_list"]
-boxes[:share] = Hash.new
-boxes[:share]['attributes'] = share_provisioner["json"]
-boxes[:share]['run_list'] = share_provisioner["run_list"]
-boxes[:solr] = Hash.new
-boxes[:solr]['attributes'] = solr_provisioner["json"]
-boxes[:solr]['run_list'] = solr_provisioner["run_list"]
+boxes['db'] = JSON.parse(IO.read("packer-alfresco-db.json"))["provisioners"][0]
+boxes['repo'] = JSON.parse(IO.read("packer-alfresco-repo.json"))["provisioners"][0]
+boxes['repo2'] = JSON.parse(IO.read("packer-alfresco-repo.json"))["provisioners"][0]
+boxes['repo2']['json']['ip'] = "10.0.0.22"
+boxes['repo2']['json']['hostname'] = "alfresco-repo2"
+boxes['share'] = JSON.parse(IO.read("packer-alfresco-share.json"))["provisioners"][0]
+boxes['solr'] = JSON.parse(IO.read("packer-alfresco-solr.json"))["provisioners"][0]
 
 Vagrant.configure("2") do |config|
 
@@ -38,7 +28,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :hosts
   
   boxes.each do |boxName, box|
-    attributes = box['attributes']
+    attributes = box['json']
     run_list = box['run_list']
     
     config.vm.define boxName do |box|
