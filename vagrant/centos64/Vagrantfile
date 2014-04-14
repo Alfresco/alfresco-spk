@@ -1,0 +1,49 @@
+# Alfresco Vagrant Web Box
+#
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+PACKERFILE="packer-allinone-centos64.json"
+BERKSFILE="Berksfile.centos64"
+
+Vagrant.configure("2") do |config|
+  provisioner = JSON.parse(IO.read(PACKERFILE))["provisioners"][0]
+  attributes = provisioner["json"]
+  run_list = provisioner["run_list"]
+
+  if !ENV['MVN_ALF_USER'].nil? and !ENV['MVN_ALF_PASSWORD'].nil?
+    attributes[:alfresco][:maven][:repo_type] = "private"
+    attributes[:alfresco][:maven][:username] = ENV['MVN_ALF_USERNAME']
+    attributes[:alfresco][:maven][:password] = ENV['MVN_ALF_PASSWORD']
+  end
+
+  # Box env configuration
+  config.vm.provider :virtualbox do |vb,override|
+    override.vm.box_url         = "http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-i386-v20130731.box"
+    override.vm.box             = "centos64"
+    vb.customize ["modifyvm", :id, "--memory", 2048]
+  end
+
+  config.vm.network :private_network, ip:  attributes["ip"]
+  config.vm.hostname = attributes["hostname"]
+
+  # Vagrant plugins configuration
+  config.berkshelf.enabled    = true
+  config.berkshelf.berksfile_path = BERKSFILE
+  config.omnibus.chef_version = "11.4.0"
+
+  config.vm.provision :chef_solo do |chef|
+    # Used as Vagrant cache during build
+    chef.provisioning_path  = "/tmp/vagrant-chef-solo"
+    chef.file_cache_path    = chef.provisioning_path    
+
+    # Add this layer's Run List
+    run_list.each do |recipe|
+      chef.add_recipe "recipe[#{recipe}]"
+    end
+
+    # Pass the rest of the attributes
+    chef.json = attributes    
+  end
+end

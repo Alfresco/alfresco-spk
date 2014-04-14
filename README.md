@@ -36,7 +36,7 @@ packer build -only virtualbox-iso packer-allinone.json
 ```
 This will first create and initialize a VirtualBox VM, then it will compress it into a ```packer_virtualbox-iso_virtualbox.box``` stored into the root project folder.
 
-The VirtualBox VM is deleted at the end of the process by default, to save space; if you want to keep the VM on Virtualbox, you need to add the attribute ```"keep_input_artifact": true``` into the [```vagrant``` post-processor in packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json#L144)
+The VirtualBox VM is deleted at the end of the process by default, to save space; if you want to keep the VM on Virtualbox, you need to add the attribute ```"keep_input_artifact": true``` into the [```vagrant``` post-processor in packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json#L56)
 
 Running VM on Vagrant
 ---
