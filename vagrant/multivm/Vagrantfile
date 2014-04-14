@@ -9,16 +9,6 @@ REPO_PACKERFILE="packer-allinone-repo.json"
 SHARE_PACKERFILE="packer-allinone-share.json"
 SOLR_PACKERFILE="packer-allinone-solr.json"
 
-DB_IP     = "10.0.0.11"
-REPO_IP   = "10.0.0.21"
-SHARE_IP  = "10.0.0.31"
-SOLR_IP   = "10.0.0.41"
-
-DB_MEMORY     = 512
-REPO_MEMORY   = 2048
-SHARE_MEMORY  = 512
-SOLR_MEMORY   = 1024
-
 Vagrant.configure("2") do |config|
   db_provisioner = JSON.parse(IO.read(DB_PACKERFILE))["provisioners"][0]
   db_attributes = db_provisioner["json"]
@@ -62,9 +52,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "db" do |db|
     config.vm.provision :hosts
     db.vm.provider :virtualbox do |vb,override|
-      override.vm.hostname = "alfresco-db"
-      override.vm.network "private_network", ip: DB_IP
-      vb.customize ["modifyvm", :id, "--memory", DB_MEMORY]
+      override.vm.hostname = db_attributes['hostname']
+      override.vm.network "private_network", ip: db_attributes['ip']
+      vb.customize ["modifyvm", :id, "--memory", db_attributes['memory']]
     end
     config.vm.provision :chef_solo do |chef|
       db_run_list.each do |recipe|
@@ -77,9 +67,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "repo" do |repo|
     config.vm.provision :hosts
     repo.vm.provider :virtualbox do |vb,override|
-      override.vm.hostname = "alfresco-repo"
-      override.vm.network "private_network", ip: REPO_IP
-      vb.customize ["modifyvm", :id, "--memory", REPO_MEMORY]
+      override.vm.hostname = repo_attributes['hostname']
+      override.vm.network "private_network", ip: repo_attributes['ip']
+      vb.customize ["modifyvm", :id, "--memory", repo_attributes['memory']]
     end
     config.vm.provision :chef_solo do |chef|
       repo_run_list.each do |recipe|
@@ -92,9 +82,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "share" do |share|
     config.vm.provision :hosts
     share.vm.provider :virtualbox do |vb,override|
-      override.vm.hostname = "alfresco-share"
-      override.vm.network "private_network", ip: SHARE_IP
-      vb.customize ["modifyvm", :id, "--memory", SHARE_MEMORY]
+      override.vm.hostname = share_attributes['hostname']
+      override.vm.network "private_network", ip: share_attributes['ip']
+      vb.customize ["modifyvm", :id, "--memory", share_attributes['memory']]
     end
     config.vm.provision :chef_solo do |chef|
       share_run_list.each do |recipe|
@@ -107,9 +97,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "solr" do |solr|
     config.vm.provision :hosts
     solr.vm.provider :virtualbox do |vb,override|
-      override.vm.hostname = "alfresco-solr"
-      override.vm.network "private_network", ip: SOLR_IP
-      vb.customize ["modifyvm", :id, "--memory", SOLR_MEMORY]
+      override.vm.hostname = solr_attributes['hostname']
+      override.vm.network "private_network", ip: solr_attributes['ip']
+      vb.customize ["modifyvm", :id, "--memory", solr_attributes['memory']]
     end
     config.vm.provision :chef_solo do |chef|
       solr_run_list.each do |recipe|

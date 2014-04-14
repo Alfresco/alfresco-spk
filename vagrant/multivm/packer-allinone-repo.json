@@ -11,14 +11,14 @@
                         "alfresco_secureComms": "none"
                     },
                     "db": {
-                        "host": "192.168.0.11"
+                        "host": "10.0.0.11"
                     },
                     "url": {
                       "solr":{
-                          "host": "192.168.0.41"
+                          "host": "10.0.0.41"
                       },
                       "share":{
-                          "host": "192.168.0.31"
+                          "host": "10.0.0.31"
                       }  
                     }
                 },
@@ -34,7 +34,8 @@
                     }
                 },
                 "hostname": "alfresco-repo",
-                "ip": "192.168.0.21",
+                "ip": "10.0.0.21",
+                "memory":2048,
                 "java": {
                     "default": true,
                     "install_flavor": "oracle",

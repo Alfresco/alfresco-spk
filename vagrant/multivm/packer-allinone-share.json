@@ -8,7 +8,7 @@
                     },
                     "url": {
                       "repo":{
-                          "host": "192.168.0.21"
+                          "host": "10.0.0.21"
                       }
                     }
                 },
@@ -18,7 +18,8 @@
                     }
                 },
                 "hostname": "alfresco-share",
-                "ip": "192.168.0.31",
+                "ip": "10.0.0.31",
+                "memory":512,
                 "java": {
                     "default": true,
                     "install_flavor": "oracle",

@@ -11,7 +11,7 @@
                     },
                     "url": {
                       "repo":{
-                          "host": "192.168.0.21"
+                          "host": "10.0.0.21"
                       }
                     }
                 },
@@ -27,7 +27,8 @@
                     }
                 },
                 "hostname": "alfresco-solr",
-                "ip": "192.168.0.41",
+                "ip": "10.0.0.41",
+                "memory":1024,
                 "java": {
                     "default": true,
                     "install_flavor": "oracle",
