@@ -7,11 +7,12 @@ cookbook 'resolver'
 cookbook 'mysql'
 cookbook 'database'
 cookbook 'java'
-cookbook 'tomcat'
 cookbook 'openssl'
 cookbook 'maven'
 cookbook 'xml'
 
+#cookbook 'tomcat'
+cookbook 'tomcat',  git:    'git@github.com:bryanwb/tomcat.git'
 cookbook 'openoffice',  git:    'git://github.com/rgauss/chef-openoffice.git'
 cookbook 'swftools',    git:    'git://github.com/fnichol/chef-swftools.git'
 

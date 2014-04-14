@@ -76,14 +76,25 @@
                 },
                 "artifacts": {
                     "alfresco": {
+                        "enabled": true,
                         "artifactId": "alfresco-nossl",
                         "groupId": "it.session.alfresco",
                         "version": "4.2.f"
                     },
+                    "mysqlconnector": {
+                        "enabled": true
+                    },
+                    "share": {
+                        "enabled": true
+                    },
                     "solr": {
+                        "enabled": true,
                         "artifactId": "apache-solr-nossl",
                         "groupId": "it.session.alfresco",
                         "version": "1.4.1-alfresco-patched"
+                    },
+                    "solrhome": {
+                        "enabled": true,
                     }
                 },
                 "hostname": "alfresco-allinone",
