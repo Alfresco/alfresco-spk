@@ -4,27 +4,26 @@
 # vi: set ft=ruby :
 BERKSFILE="Berksfile.multivm"
 
-DB_PACKERFILE="packer-allinone-db.json"
-REPO_PACKERFILE="packer-allinone-repo.json"
-SHARE_PACKERFILE="packer-allinone-share.json"
-SOLR_PACKERFILE="packer-allinone-solr.json"
+db_provisioner = JSON.parse(IO.read("packer-allinone-db.json"))["provisioners"][0]
+repo_provisioner = JSON.parse(IO.read("packer-allinone-repo.json"))["provisioners"][0]
+share_provisioner = JSON.parse(IO.read("packer-allinone-share.json"))["provisioners"][0]
+solr_provisioner = JSON.parse(IO.read("packer-allinone-solr.json"))["provisioners"][0]
+
+boxes = Hash.new
+boxes[:db] = Hash.new
+boxes[:db]['attributes'] = db_provisioner["json"]
+boxes[:db]['run_list'] = db_provisioner["run_list"]
+boxes[:repo] = Hash.new
+boxes[:repo]['attributes'] = repo_provisioner["json"]
+boxes[:repo]['run_list'] = repo_provisioner["run_list"]
+boxes[:share] = Hash.new
+boxes[:share]['attributes'] = share_provisioner["json"]
+boxes[:share]['run_list'] = share_provisioner["run_list"]
+boxes[:solr] = Hash.new
+boxes[:solr]['attributes'] = solr_provisioner["json"]
+boxes[:solr]['run_list'] = solr_provisioner["run_list"]
 
 Vagrant.configure("2") do |config|
-  db_provisioner = JSON.parse(IO.read(DB_PACKERFILE))["provisioners"][0]
-  db_attributes = db_provisioner["json"]
-  db_run_list = db_provisioner["run_list"]
-
-  repo_provisioner = JSON.parse(IO.read(REPO_PACKERFILE))["provisioners"][0]
-  repo_attributes = repo_provisioner["json"]
-  repo_run_list = repo_provisioner["run_list"]
-
-  share_provisioner = JSON.parse(IO.read(SHARE_PACKERFILE))["provisioners"][0]
-  share_attributes = share_provisioner["json"]
-  share_run_list = share_provisioner["run_list"]
-
-  solr_provisioner = JSON.parse(IO.read(SOLR_PACKERFILE))["provisioners"][0]
-  solr_attributes = solr_provisioner["json"]
-  solr_run_list = solr_provisioner["run_list"]
 
   if !ENV['MVN_ALF_USER'].nil? and !ENV['MVN_ALF_PASSWORD'].nil?
     attributes[:alfresco][:maven][:repo_type] = "private"
@@ -32,82 +31,36 @@ Vagrant.configure("2") do |config|
     attributes[:alfresco][:maven][:password] = ENV['MVN_ALF_PASSWORD']
   end
 
-  # Box env configuration
-  config.vm.provider :virtualbox do |vb,override|
-    override.vm.box_url         = "http://files.vagrantup.com/precise64.box"
-    override.vm.box             = "precise64"
-  end
-
-  # Vagrant plugins configuration
   config.berkshelf.enabled    = true
   config.berkshelf.berksfile_path = BERKSFILE
-  config.omnibus.chef_version = "11.4.0"
-
-  config.vm.provision :chef_solo do |chef|
-    # Used as Vagrant cache during build
-    chef.provisioning_path  = "/tmp/vagrant-chef-solo"
-    chef.file_cache_path    = chef.provisioning_path    
-  end
   
-  config.vm.define "db" do |db|
-    config.vm.provision :hosts
-    db.vm.provider :virtualbox do |vb,override|
-      override.vm.hostname = db_attributes['hostname']
-      override.vm.network "private_network", ip: db_attributes['ip']
-      vb.customize ["modifyvm", :id, "--memory", db_attributes['memory']]
-    end
-    config.vm.provision :chef_solo do |chef|
-      db_run_list.each do |recipe|
-        chef.add_recipe "recipe[#{recipe}]"
-      end
-      chef.json = db_attributes
-    end
-  end
+  boxes.each do |boxName, box|
+    attributes = box['attributes']
+    run_list = box['run_list']
+    
+    config.vm.define boxName do |box|
+      # Vagrant plugins configuration
+      config.omnibus.chef_version = "11.4.0"
+      config.vm.provision :hosts
 
-  config.vm.define "repo" do |repo|
-    config.vm.provision :hosts
-    repo.vm.provider :virtualbox do |vb,override|
-      override.vm.hostname = repo_attributes['hostname']
-      override.vm.network "private_network", ip: repo_attributes['ip']
-      vb.customize ["modifyvm", :id, "--memory", repo_attributes['memory']]
-    end
-    config.vm.provision :chef_solo do |chef|
-      repo_run_list.each do |recipe|
-        chef.add_recipe "recipe[#{recipe}]"
+      box.vm.provider :virtualbox do |vb,override|
+        override.vm.box_url         = "http://files.vagrantup.com/precise64.box"
+        override.vm.box             = "precise64"
+        override.vm.hostname = attributes['hostname']
+        override.vm.network "private_network", ip: attributes['ip']
+        vb.customize ["modifyvm", :id, "--memory", attributes['memory']]
       end
-      chef.json = repo_attributes
+      config.vm.provision :chef_solo do |chef|
+        chef.provisioning_path  = "/tmp/vagrant-chef-solo"
+        chef.file_cache_path    = chef.provisioning_path        
+        filtered_run_list = []
+        run_list.each do |recipe|
+          filtered_run_list.push("recipe[#{recipe}]")
+        end
+        chef.run_list = filtered_run_list
+        chef.json = attributes
+      end
     end
   end
-  
-  config.vm.define "share" do |share|
-    config.vm.provision :hosts
-    share.vm.provider :virtualbox do |vb,override|
-      override.vm.hostname = share_attributes['hostname']
-      override.vm.network "private_network", ip: share_attributes['ip']
-      vb.customize ["modifyvm", :id, "--memory", share_attributes['memory']]
-    end
-    config.vm.provision :chef_solo do |chef|
-      share_run_list.each do |recipe|
-        chef.add_recipe "recipe[#{recipe}]"
-      end
-      chef.json = share_attributes
-    end
-  end
-
-  config.vm.define "solr" do |solr|
-    config.vm.provision :hosts
-    solr.vm.provider :virtualbox do |vb,override|
-      override.vm.hostname = solr_attributes['hostname']
-      override.vm.network "private_network", ip: solr_attributes['ip']
-      vb.customize ["modifyvm", :id, "--memory", solr_attributes['memory']]
-    end
-    config.vm.provision :chef_solo do |chef|
-      solr_run_list.each do |recipe|
-        chef.add_recipe "recipe[#{recipe}]"
-      end
-      chef.json = solr_attributes
-    end
-  end
-
 end
 
