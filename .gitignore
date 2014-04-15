@@ -1,3 +1,4 @@
+**/alf_data_shared
 *.lock
 dev/Berksfile.dev
 .vagrant
