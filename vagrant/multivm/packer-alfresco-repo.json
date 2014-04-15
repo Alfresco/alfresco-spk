@@ -2,26 +2,6 @@
     "provisioners": [
         {
             "json": {
-                "lb": {
-                    "balancers": {
-                        "alfresco": [{
-                            "ipaddress": "10.0.0.21",
-                            "route": "route21"
-                        },
-                        {
-                            "ipaddress": "10.0.0.22",
-                            "route": "route22"
-                        }],
-                        "share": [{
-                            "ipaddress": "10.0.0.31",
-                            "route": "route31"
-                        },
-                        {
-                            "ipaddress": "10.0.0.32",
-                            "route": "route32"
-                        }]
-                    }
-                },
                 "alfresco": {
                     "root_dir": "/alfresco/alf_data_shared",
                     "search": "solr",

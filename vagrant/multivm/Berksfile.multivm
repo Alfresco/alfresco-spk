@@ -10,9 +10,7 @@ cookbook 'java'
 cookbook 'tomcat'
 cookbook 'openssl'
 cookbook 'maven'
-cookbook 'xml'
-
-cookbook 'apache2',  git:    'git@github.com:DracoAter/lr-cluster.git', rel: 'cookbooks/apache2'
+cookbook 'apache2'
 
 cookbook 'openoffice',  git:    'git://github.com/rgauss/chef-openoffice.git'
 cookbook 'swftools',    git:    'git://github.com/fnichol/chef-swftools.git'
@@ -26,5 +24,3 @@ cookbook 'imagemagick', git:    'git://github.com/someara/imagemagick.git'
 # Use local cookbooks for dev purposes
 cookbook 'artifact-deployer',    path:   '/Users/mau/w/pers/artifact-deployer'
 cookbook 'alfresco',    path:   '/Users/mau/w/alf/chef-alfresco'
-
-cookbook 'chef-lb',    path:   './chef-lb'
