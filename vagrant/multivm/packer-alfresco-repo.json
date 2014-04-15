@@ -30,6 +30,15 @@
                         "groupId": "it.session.alfresco",
                         "version": "4.2.f"
                     },
+                    "classes": {
+                        "enabled": true,
+                        "artifactId": "classes",
+                        "groupId": "it.session.alfresco",
+                        "version": "0.1",
+                        "destination": "/var/lib/tomcat7/shared",
+                        "type": "zip",
+                        "unzip": true
+                    },
                     "mysqlconnector": {
                         "enabled": true
                     }

@@ -4,11 +4,14 @@ alfresco-boxes
 A collection of utilities for Alfresco VM provisioning and deployment using Packer and Vagrant; the deployment and installation logic is provided by [chef-alfresco](https://github.com/maoo/chef-alfresco).
 
 With this project you can
-* Build and launch Virtualbox (.vdi) Image containing Alfresco 4.2 stack
-* Build and upload an AWS AMI containing Alfresco 4.2 stack
-* Customize the VM provisioning and Alfresco configuration/deployment at any stage, simply editing a JSON file
-* Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile), or using additional [Packer provisioners](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json#L127), such as ```shell```
-* Use Vagrant to create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Vagrantfile)
+* Package with Packer (```cd packer```)
+  * Build and launch Virtualbox (.vdi) Image containing Alfresco 4.2 stack
+  * Build and upload an AWS AMI containing Alfresco 4.2 stack
+  * Use additional [Packer provisioners](https://github.com/maoo/alfresco-boxes/tree/master/packer/packer-allinone.json#L46), such as ```shell```
+* Develop and Test with Vagrant (```cd vagrant```)
+  * Customize the VM provisioning and Alfresco configuration/deployment at any stage, simply editing a JSON file
+  * Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Berksfile.dev)
+  * Create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Vagrantfile)
 
 Configuring your host machine
 ---
@@ -36,11 +39,11 @@ packer build -only virtualbox-iso packer-allinone.json
 ```
 This will first create and initialize a VirtualBox VM, then it will compress it into a ```packer_virtualbox-iso_virtualbox.box``` stored into the root project folder.
 
-The VirtualBox VM is deleted at the end of the process by default, to save space; if you want to keep the VM on Virtualbox, you need to add the attribute ```"keep_input_artifact": true``` into the [```vagrant``` post-processor in packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json#L56)
+The VirtualBox VM is deleted at the end of the process by default, to save space; if you want to keep the VM on Virtualbox, you need to add the attribute ```"keep_input_artifact": true``` into the [```vagrant``` post-processor in packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/packer-allinone.json#L56)
 
 Running VM on Vagrant
 ---
-If you want to run the VM you just created with VirtualBox you can use the [Vagrantfile](https://github.com/maoo/alfresco-boxes/tree/master/Vagrantfile) that you find in the root folder; before you run the first time, install the following Vagrant plugins
+If you want to run the VM you just created with VirtualBox you can use the [Vagrantfile](https://github.com/maoo/alfresco-boxes/tree/master/packer/Vagrantfile) that you find in the root folder; before you run the first time, install the following Vagrant plugins
 
 ```
 vagrant plugin install vagrant-berkshelf
@@ -53,7 +56,7 @@ To run the VM type ```vagrant up```
 
 Customisations
 ---
-You can read the [packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer-allinone.json) definition to check the default values that are used to install Alfresco; there are many other default values that are defined by the following Chef Recipes
+You can read the [packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/packer-allinone.json) definition to check the default values that are used to install Alfresco; there are many other default values that are defined by the following Chef Recipes
 * [artifact-deployer](https://github.com/maoo/artifact-deployer), you can check default values in [attributes.json](https://github.com/maoo/artifact-deployer/tree/master/attributes)
 * [chef-alfresco](https://github.com/maoo/chef-alfresco), you can check default values in [attributes.json](https://github.com/maoo/chef-alfresco/tree/master/attributes)
 
@@ -64,7 +67,7 @@ If you want to test additional/external Chef recipes without triggering the Pack
 * Login as admin/admin
 * Use top-right search box and type 'project'
 
-You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/attributes.json) to build your logic; if you need to test an additional Chef recipe, you'll need to change the root [Berksfile](https://github.com/maoo/alfresco-boxes/tree/master/Berksfile) (used by Packer), otherwise you can change ```config.berkshelf.berksfile_path``` in [Vagrantfile](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Vagrantfile)
+You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/attributes.json) to build your logic
 
 Multi VM
 ---
