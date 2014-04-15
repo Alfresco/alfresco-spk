@@ -26,3 +26,5 @@ cookbook 'imagemagick', git:    'git://github.com/someara/imagemagick.git'
 # Use local cookbooks for dev purposes
 cookbook 'artifact-deployer',    path:   '/Users/mau/w/pers/artifact-deployer'
 cookbook 'alfresco',    path:   '/Users/mau/w/alf/chef-alfresco'
+
+cookbook 'chef-lb',    path:   './chef-lb'

@@ -76,8 +76,10 @@ vagrant up repo
 vagrant up share
 vagrant up solr
 ```
-
 You can access Share on http://10.0.0.31:8080/share
+
+If you just run ```vagrant up``` the execution won't be successful; unfortunately you need to run the command for each and every box.
+The boxes ```repo2```, ```share2``` and ```lb``` are used for testing clustering capabilities; more on this (hopefully) soon.
 
 Debugging
 ---

@@ -1,0 +1,6 @@
+name             "chef-lb"
+maintainer       "Maurizio Pillitu"
+maintainer_email ""
+license          "Apache 2.0"
+description      "Load Balancer configuration for apache2"
+version          "0.1"
