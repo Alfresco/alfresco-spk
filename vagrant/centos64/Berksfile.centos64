@@ -19,5 +19,5 @@ cookbook 'swftools',    git:    'git://github.com/fnichol/chef-swftools.git'
 cookbook 'imagemagick', git:    'git://github.com/someara/imagemagick.git'
 #cookbook 'imagemagick', git:    'git://github.com/cookbooks/imagemagick.git'
 
-cookbook 'alfresco',   git:    'git://github.com/maoo/chef-alfresco.git', tag: 'chef-alfresco-0.1.7'
+cookbook 'alfresco',   git:    'git://github.com/maoo/chef-alfresco.git', tag: 'chef-alfresco-0.1.8'
 cookbook 'artifact-deployer',    git:    'git://github.com/maoo/artifact-deployer.git', tag: 'artifact-deployer-0.3'
