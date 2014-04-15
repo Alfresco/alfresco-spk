@@ -3,6 +3,7 @@
         {
             "json": {
                 "alfresco": {
+                    "root_dir": "/alfresco/alf_data_shared",
                     "search": "solr",
                     "maven": {
                         "repo_type": "public"

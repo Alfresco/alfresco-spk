@@ -12,6 +12,8 @@ cookbook 'openssl'
 cookbook 'maven'
 cookbook 'xml'
 
+cookbook 'apache2',  git:    'git@github.com:DracoAter/lr-cluster.git', rel: 'cookbooks/apache2'
+
 cookbook 'openoffice',  git:    'git://github.com/rgauss/chef-openoffice.git'
 cookbook 'swftools',    git:    'git://github.com/fnichol/chef-swftools.git'
 
