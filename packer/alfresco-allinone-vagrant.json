@@ -51,6 +51,11 @@
             "virtualbox_version_file": ".vbox_version"
         }
     ],
+    "post-processors": [
+        {
+            "type": "vagrant"
+        }
+    ],
     "provisioners": [
         {
             "cookbook_paths": [

@@ -10,8 +10,8 @@ With this project you can
   * Use additional [Packer provisioners](https://github.com/maoo/alfresco-boxes/tree/master/packer/packer-allinone.json#L46), such as ```shell```
 * Develop and Test with Vagrant (```cd vagrant```)
   * Customize the VM provisioning and Alfresco configuration/deployment at any stage, simply editing a JSON file
-  * Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Berksfile.dev)
-  * Create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/Vagrantfile)
+  * Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/built-with-packer/Berksfile.dev)
+  * Create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/built-with-packer/Vagrantfile)
 
 Configuring your host machine
 ---
@@ -35,7 +35,7 @@ The AMI is based on an existing Ubuntu 12.04 AMI ([ami-de0d9eb7](http://thecloud
 Creating VirtualBox/Vagrant box
 ---
 ```
-packer build -only virtualbox-iso alfresco-allinone.json
+packer build -only virtualbox-iso alfresco-allinone[-vagrant].json
 ```
 This will first create and initialize a VirtualBox VM, then it will compress it into a ```packer_virtualbox-iso_virtualbox.box``` stored into the root project folder.
 
@@ -67,7 +67,7 @@ If you want to test additional/external Chef recipes without triggering the Pack
 * Login as admin/admin
 * Use top-right search box and type 'project'
 
-You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/attributes.json) to build your logic
+You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/built-with-packer/attributes.json) to build your logic
 
 Multi VM
 ---
