@@ -4,7 +4,7 @@
 # vi: set ft=ruby :
 
 
-PACKERFILE="packer-allinone-dev.json"
+PACKERFILE="alfresco-allinone-dev.json"
 BERKSFILE="Berksfile.dev"
 
 Vagrant.configure("2") do |config|
