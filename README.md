@@ -28,18 +28,18 @@ Configuring your host machine
 Uploading AMI to AWS
 ---
 ```
-packer build -only amazon-ebs -var 'aws_access_key=YOUR ACCESS KEY' -var 'aws_secret_key=YOUR SECRET KEY' packer-allinone.json
+packer build -only amazon-ebs -var 'aws_access_key=YOUR ACCESS KEY' -var 'aws_secret_key=YOUR SECRET KEY' alfresco-allinone.json
 ```
 The AMI is based on an existing Ubuntu 12.04 AMI ([ami-de0d9eb7](http://thecloudmarket.com/image/ami-de0d9eb7--ubuntu-images-ebs-ubuntu-precise-12-04-amd64-server-20130222))
 
 Creating VirtualBox/Vagrant box
 ---
 ```
-packer build -only virtualbox-iso packer-allinone.json
+packer build -only virtualbox-iso alfresco-allinone.json
 ```
 This will first create and initialize a VirtualBox VM, then it will compress it into a ```packer_virtualbox-iso_virtualbox.box``` stored into the root project folder.
 
-The VirtualBox VM is deleted at the end of the process by default, to save space; if you want to keep the VM on Virtualbox, you need to add the attribute ```"keep_input_artifact": true``` into the [```vagrant``` post-processor in packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/packer-allinone.json#L56)
+The VirtualBox VM is deleted at the end of the process by default, to save space; if you want to keep the VM on Virtualbox, you need to add the attribute ```"keep_input_artifact": true``` into the [```vagrant``` post-processor in alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/alfresco-allinone.json#L56)
 
 Running VM on Vagrant
 ---
@@ -56,7 +56,7 @@ To run the VM type ```vagrant up```
 
 Customisations
 ---
-You can read the [packer-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/packer-allinone.json) definition to check the default values that are used to install Alfresco; there are many other default values that are defined by the following Chef Recipes
+You can read the [alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/alfresco-allinone.json) definition to check the default values that are used to install Alfresco; there are many other default values that are defined by the following Chef Recipes
 * [artifact-deployer](https://github.com/maoo/artifact-deployer), you can check default values in [attributes.json](https://github.com/maoo/artifact-deployer/tree/master/attributes)
 * [chef-alfresco](https://github.com/maoo/chef-alfresco), you can check default values in [attributes.json](https://github.com/maoo/chef-alfresco/tree/master/attributes)
 
