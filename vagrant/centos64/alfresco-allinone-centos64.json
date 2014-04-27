@@ -2,14 +2,8 @@
     "provisioners": [
         {
             "json": {                
-                "yum": {
-                    "repoforge-i386": {
-                        "enabled": true,
-                        "baseUrl": "http://pkgs.org/centos-6/repoforge-i386",
-                        "sslverify": false
-                    }
-                },
                 "alfresco": {
+                    "root_dir":"/usr/local/tomcat7/alf_data",
                     "index_subsystem": "solr",
                     "maven": {
                         "repo_type": "public"
@@ -24,13 +18,23 @@
                 },
                 "artifacts": {
                     "alfresco": {
-                        "deployed": true,
+                        "enabled": true,
                         "artifactId": "alfresco-nossl",
                         "groupId": "it.session.alfresco",
                         "version": "4.2.f"
                     },
                     "mysqlconnector": {
-                        "enabled": true
+                        "enabled": true,
+                        "destination":"/usr/local/tomcat7/lib"
+                    },
+                    "classes": {
+                        "enabled": true,
+                        "groupId":"it.session.alfresco",
+                        "artifactId":"classes",
+                        "version":"0.1",
+                        "owner":"tomcat7",
+                        "type":"jar",
+                        "destination":"/usr/local/tomcat7/lib"
                     },
                     "share": {
                         "enabled": true
@@ -46,7 +50,7 @@
                     }
                 },
                 "hostname": "alfresco-allinone-centos64",
-                "ip": "192.168.0.23",
+                "ip": "192.168.0.53",
                 "java": {
                     "default": true,
                     "install_flavor": "oracle",
@@ -63,10 +67,17 @@
                     }
                 },
                 "tomcat": {
+                    "7" : {
+                        "url": "http://apache.rediris.es/tomcat/tomcat-7/v7.0.53/bin/apache-tomcat-7.0.53.tar.gz",
+                        "checksum": "f5e79d70ca7962d11abfc753e47b68a11fdfb4a409e76e2b7bd0a945f80f87c9"
+                    },
+                    "home":"/usr/local/tomcat7",
+                    "base":"/usr/local/tomcat7",
+                    "webapps":"/usr/local/tomcat7/webapps",
                     "base_version": 7,
-                    "shared": "/var/lib/tomcat7/shared",
+                    "shared": "/usr/local/tomcat7/shared",
                     "group": "tomcat7",
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome",
+                    "jvm_opts": ["-Djava.awt.headless=true","-Xmx1500M","-XX:MaxPermSize=256M","-Dsolr.solr.home=/usr/local/tomcat7/alf_data/solrhome"],
                     "user": "tomcat7"
                 }
             },

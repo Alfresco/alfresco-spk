@@ -4,7 +4,7 @@
 # vi: set ft=ruby :
 
 
-PACKERFILE="packer-allinone-centos64.json"
+PACKERFILE="alfresco-allinone-centos64.json"
 BERKSFILE="Berksfile.centos64"
 
 Vagrant.configure("2") do |config|
@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider :virtualbox do |vb,override|
     override.vm.box_url         = "http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-i386-v20130731.box"
     override.vm.box             = "centos64"
+    override.vm.network :forwarded_port, host: 58080, guest: 8080
     vb.customize ["modifyvm", :id, "--memory", 2048]
   end
 
