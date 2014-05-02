@@ -23,7 +23,7 @@ Configuring your host machine
   * [Packer 0.5.2](http://www.packer.io/downloads.html)
 * Run ```install.sh``` or
   * Install bundler with ```gem install bundler && bundle install```
-  * Run Berkshelf to resolve external chef recipes; this step will have to be executed everytime you change the Berksfile definition with ```bundle exec berks install --path vendor-cookbooks```; the vendor-cookbooks folder will be created; it can be optionally removed from ```.gitignore``` in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
+  * Run Berkshelf to resolve external chef recipes; this step will have to be executed everytime you change the Berksfile definition with ```bundle exec berks install --path vendor-cookbooks``` (use ```bundle exec berks vendor vendor-cookbooks``` syntax as of Berkshelf 3 onwards); the vendor-cookbooks folder will be created; it can be optionally removed from ```.gitignore``` in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
 
 Uploading AMI to AWS
 ---
