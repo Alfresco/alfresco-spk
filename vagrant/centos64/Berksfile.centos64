@@ -8,15 +8,18 @@ cookbook 'database',                tag: 'v2.1.6'
 cookbook 'java',                    tag: 'v1.22.0'
 cookbook 'openssl',                 tag: 'v1.1.0'
 cookbook 'maven',                   tag: 'v1.1.0'
+cookbook 'iptables',                tag: 'v0.13.2'
 
 cookbook 'tomcat',                  git:    'git://github.com/dhartford/chef-tomcat.git'
 
-cookbook 'openoffice',              git:    'git://github.com/rgauss/chef-openoffice.git'
+cookbook 'openoffice',              git: 'git://github.com/dhartford/chef-openoffice.git'
+cookbook 'swftools',                git: 'git://github.com/dhartford/chef-swftools.git'
+
 cookbook 'swftools',                git:    'git://github.com/fnichol/chef-swftools.git',   tag: 'v0.2.4'
 cookbook 'imagemagick',             git:    'git://github.com/someara/imagemagick.git',     tag: 'v0.2.3'
 
-cookbook 'alfresco',                git:    'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.1.8'
 cookbook 'artifact-deployer',       git:    'git://github.com/maoo/artifact-deployer.git',  tag: 'artifact-deployer-0.4'
-
 #cookbook 'artifact-deployer',       path:   '/Users/mau/w/pers/artifact-deployer'
+
+cookbook 'alfresco',                git:    'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.1.9'
 #cookbook 'alfresco',                path:   '/Users/mau/w/alf/chef-alfresco'

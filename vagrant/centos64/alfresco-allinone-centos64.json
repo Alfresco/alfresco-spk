@@ -83,6 +83,7 @@
             },
             "run_list": [
                 "yum-centos::default",
+                "iptables::default",
                 "alfresco::mysql_server",
                 "alfresco::mysql_createdb",
                 "tomcat::default",
