@@ -19,6 +19,12 @@
                         "groupId": "it.session.alfresco",
                         "version": "4.2.f"
                     },
+                    "alfresco-mmt": {
+                        "enabled": true
+                    },
+                    "alfresco-spp": {
+                        "enabled": true
+                    },
                     "mysqlconnector": {
                         "enabled": true
                     },
@@ -36,7 +42,7 @@
                     }
                 },
                 "hostname": "alfresco-allinone",
-                "ip": "192.168.0.23",
+                "ip": "192.168.0.33",
                 "java": {
                     "default": true,
                     "install_flavor": "oracle",
@@ -54,7 +60,6 @@
                 },
                 "tomcat": {
                     "base_version": 7,
-                    "shared": "/var/lib/tomcat7/shared",
                     "group": "tomcat7",
                     "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome",
                     "user": "tomcat7"
@@ -62,6 +67,7 @@
             },
             "run_list": [
                 "apt::default",
+                "iptables::default",
                 "alfresco::3rdparty",
                 "alfresco::mysql_server",
                 "alfresco::mysql_createdb",
@@ -69,7 +75,8 @@
                 "alfresco::repo_config",
                 "alfresco::share_config",
                 "artifact-deployer::default",
-                "alfresco::solr_config"
+                "alfresco::solr_config",
+                "alfresco::apply_amps"
             ]
         }
     ]
