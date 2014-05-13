@@ -123,7 +123,6 @@
                     }
                 },
                 "tomcat": {
-                    "shared" : "/usr/share/tomcat7/shared",
                     "base_version": 7,
                     "group": "tomcat7",
                     "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome",
