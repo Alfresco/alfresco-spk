@@ -4,9 +4,9 @@
             "access_key": "{{user `aws_access_key`}}",
             "ami_name": "alfresco-allinone {{timestamp}}",
             "instance_type": "m1.small",
-            "region": "us-east-1",
+            "region": "us-west-1",
             "secret_key": "{{user `aws_secret_key`}}",
-            "source_ami": "ami-de0d9eb7",
+            "source_ami": "ami-a4e81fd3",
             "ssh_username": "ubuntu",
             "type": "amazon-ebs"
         },
@@ -24,7 +24,7 @@
             "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
             "guest_os_type": "Ubuntu_64",
             "headless": false,
-            "http_directory": "http",
+            "http_directory": "../common/http",
             "iso_checksum": "4d1a8b720cdd14b76ed9410c63a00d0e",
             "iso_checksum_type": "md5",
             "iso_url": "http://releases.ubuntu.com/13.10/ubuntu-13.10-server-amd64.iso",
@@ -46,20 +46,22 @@
                     "{{.Name}}",
                     "--cpus",
                     "4"
+                ],
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--nic1",
+                    "nat"
                 ]
+
             ],
             "virtualbox_version_file": ".vbox_version"
-        }
-    ],
-    "post-processors": [
-        {
-            "type": "vagrant"
         }
     ],
     "provisioners": [
         {
             "cookbook_paths": [
-                "vendor-cookbooks"
+                "../common/vendor-cookbooks"
             ],
             "execute_command": "echo 'vagrant' | {{if .Sudo}}sudo -S{{end}} chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} -l debug",
             "install_command": "echo 'vagrant' | {{if .Sudo}}sudo -S{{end}} bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v 11.8'",
@@ -80,6 +82,12 @@
                         "artifactId": "alfresco-nossl",
                         "groupId": "it.session.alfresco",
                         "version": "4.2.f"
+                    },
+                    "alfresco-mmt": {
+                        "enabled": true
+                    },
+                    "alfresco-spp": {
+                        "enabled": true
                     },
                     "mysqlconnector": {
                         "enabled": true
@@ -115,6 +123,7 @@
                     }
                 },
                 "tomcat": {
+                    "shared" : "/usr/share/tomcat7/shared",
                     "base_version": 7,
                     "group": "tomcat7",
                     "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome",
@@ -124,6 +133,7 @@
             "prevent_sudo": false,
             "run_list": [
                 "apt::default",
+                "iptables::default",
                 "alfresco::3rdparty",
                 "alfresco::mysql_server",
                 "alfresco::mysql_createdb",
@@ -131,7 +141,8 @@
                 "alfresco::repo_config",
                 "alfresco::share_config",
                 "artifact-deployer::default",
-                "alfresco::solr_config"
+                "alfresco::solr_config",
+                "alfresco::apply_amps"
             ],
             "skip_install": false,
             "type": "chef-solo"
