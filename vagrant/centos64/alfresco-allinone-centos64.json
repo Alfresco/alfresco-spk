@@ -3,13 +3,9 @@
         {
             "json": {                
                 "alfresco": {
-                    "root_dir":"/usr/local/tomcat7/alf_data",
                     "index_subsystem": "solr",
                     "maven": {
                         "repo_type": "public"
-                    },
-                    "mysql": {
-                        "service_name": "mysqld"
                     },
                     "solr": {
                         "alfresco_secureComms": "none",
@@ -23,18 +19,14 @@
                         "groupId": "it.session.alfresco",
                         "version": "4.2.f"
                     },
-                    "mysqlconnector": {
-                        "enabled": true,
-                        "destination":"/usr/local/tomcat7/lib"
+                    "alfresco-mmt": {
+                        "enabled": true
                     },
-                    "classes": {
-                        "enabled": true,
-                        "groupId":"it.session.alfresco",
-                        "artifactId":"classes",
-                        "version":"0.1",
-                        "owner":"tomcat7",
-                        "type":"jar",
-                        "destination":"/usr/local/tomcat7/lib"
+                    "alfresco-spp": {
+                        "enabled": true
+                    },
+                    "mysqlconnector": {
+                        "enabled": true
                     },
                     "share": {
                         "enabled": true
@@ -49,8 +41,8 @@
                         "enabled": true
                     }
                 },
-                "hostname": "alfresco-allinone-centos64",
-                "ip": "192.168.0.53",
+                "hostname": "alfresco-allinone",
+                "ip": "192.168.0.33",
                 "java": {
                     "default": true,
                     "install_flavor": "oracle",
@@ -67,22 +59,15 @@
                     }
                 },
                 "tomcat": {
-                    "7" : {
-                        "url": "http://apache.rediris.es/tomcat/tomcat-7/v7.0.53/bin/apache-tomcat-7.0.53.tar.gz",
-                        "checksum": "f5e79d70ca7962d11abfc753e47b68a11fdfb4a409e76e2b7bd0a945f80f87c9"
-                    },
-                    "home":"/usr/local/tomcat7",
-                    "base":"/usr/local/tomcat7",
-                    "webapps":"/usr/local/tomcat7/webapps",
+                    "manual_installation": true,
                     "base_version": 7,
-                    "shared": "/usr/local/tomcat7/shared",
                     "group": "tomcat7",
-                    "jvm_opts": ["-Djava.awt.headless=true","-Xmx1500M","-XX:MaxPermSize=256M","-Dsolr.solr.home=/usr/local/tomcat7/alf_data/solrhome"],
+                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/usr/share/tomcat7/alf_data/solrhome",
                     "user": "tomcat7"
                 }
             },
             "run_list": [
-                "yum-centos::default",
+                "apt::default",
                 "iptables::default",
                 "alfresco::mysql_server",
                 "alfresco::mysql_createdb",
@@ -90,7 +75,8 @@
                 "alfresco::repo_config",
                 "alfresco::share_config",
                 "artifact-deployer::default",
-                "alfresco::solr_config"
+                "alfresco::solr_config",
+                "alfresco::apply_amps"
             ]
         }
     ]
