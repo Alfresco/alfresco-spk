@@ -3,26 +3,24 @@
         {
             "json": {
                 "alfresco": {
-                    "root_dir": "/alfresco/alf_data_shared",
-                    "search": "solr",
+                    "properties" : {
+                        "dir.root": "/alfresco/alf_data_shared",
+                        "index.subsystem.name": "solr",
+                        "solr.secureComms": "none",
+                        "share.host": "10.0.0.31"
+                    },
+                    "solrproperties" : {
+                        "alfresco.secureComms": "none",
+                        "host":"10.0.0.41"
+                    },
                     "maven": {
                         "repo_type": "public"
                     },
-                    "solr": {
-                        "solr_secureComms": "none"
-                    },
                     "db": {
                         "host": "10.0.0.11"
-                    },
-                    "url": {
-                      "solr":{
-                          "host": "10.0.0.41"
-                      },
-                      "share":{
-                          "host": "10.0.0.31"
-                      }  
                     }
                 },
+
                 "artifacts": {
                     "alfresco": {
                         "enabled": true,

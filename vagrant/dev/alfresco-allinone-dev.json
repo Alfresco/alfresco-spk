@@ -3,13 +3,15 @@
         {
             "json": {
                 "alfresco": {
-                    "index_subsystem": "solr",
+                    "properties" : {
+                        "index.subsystem.name": "solr",
+                        "solr.secureComms": "none"
+                    },
+                    "solrproperties" : {
+                        "alfresco.secureComms": "none"
+                    },
                     "maven": {
                         "repo_type": "public"
-                    },
-                    "solr": {
-                        "alfresco_secureComms": "none",
-                        "solr_secureComms": "none"
                     }
                 },
                 "artifacts": {

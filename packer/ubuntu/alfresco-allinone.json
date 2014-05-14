@@ -67,13 +67,15 @@
             "install_command": "echo 'vagrant' | {{if .Sudo}}sudo -S{{end}} bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v 11.8'",
             "json": {
                 "alfresco": {
-                    "index_subsystem": "solr",
+                    "properties" : {
+                        "index.subsystem.name": "solr",
+                        "solr.secureComms": "none"
+                    },
+                    "solrproperties" : {
+                        "alfresco.secureComms": "none"
+                    },
                     "maven": {
                         "repo_type": "public"
-                    },
-                    "solr": {
-                        "alfresco_secureComms": "none",
-                        "solr_secureComms": "none"
                     }
                 },
                 "artifacts": {
