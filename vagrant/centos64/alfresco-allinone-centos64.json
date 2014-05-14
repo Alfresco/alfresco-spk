@@ -69,6 +69,7 @@
             "run_list": [
                 "apt::default",
                 "iptables::default",
+                "alfresco::3rdparty",
                 "alfresco::mysql_server",
                 "alfresco::mysql_createdb",
                 "tomcat::default",
