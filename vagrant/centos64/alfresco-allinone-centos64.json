@@ -39,13 +39,6 @@
                         "groupId": "it.session.alfresco",
                         "version": "1.4.1-alfresco-patched"
                     },
-                    "classes": {
-                        "enabled": true,
-                        "artifactId": "classes",
-                        "groupId": "it.session.alfresco",
-                        "version": "0.2",
-                        "type": "zip"
-                    },
                     "solrhome": {
                         "enabled": true
                     }
@@ -68,10 +61,10 @@
                     }
                 },
                 "tomcat": {
-                    "manual_installation": true,
+                    "binary_installation": true,
                     "base_version": 7,
                     "group": "tomcat7",
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/usr/share/tomcat7/alf_data/solrhome",
+                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/usr/share/tomcat7/alf_data/solrhome -Dcom.sun.management.jmxremote=true",
                     "user": "tomcat7"
                 }
             },
