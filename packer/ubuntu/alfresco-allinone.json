@@ -127,7 +127,7 @@
                 "tomcat": {
                     "base_version": 7,
                     "group": "tomcat7",
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome",
+                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/usr/share/tomcat7/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Djava.rmi.server.hostname=192.168.0.23",
                     "user": "tomcat7"
                 }
             },
