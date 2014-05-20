@@ -5,17 +5,11 @@
 
 
 PACKERFILE="alfresco-allinone-dev.json"
-BERKSFILE="Berksfile.dev"
 
 Vagrant.configure("2") do |config|
   provisioner = JSON.parse(IO.read(PACKERFILE))["provisioners"][0]
   attributes = provisioner["json"]
   run_list = provisioner["run_list"]
-
-  if !ENV['MVN_ALF_USERNAME'].nil? and !ENV['MVN_ALF_PASSWORD'].nil?
-    attributes['alfresco']['maven']['username'] = ENV['MVN_ALF_USERNAME']
-    attributes['alfresco']['maven']['password'] = ENV['MVN_ALF_PASSWORD']
-  end
 
   # Box env configuration
   config.vm.provider :virtualbox do |vb,override|
@@ -27,17 +21,13 @@ Vagrant.configure("2") do |config|
   config.vm.network :private_network, ip:  attributes["ip"]
   config.vm.hostname = attributes["hostname"]
 
-  # Vagrant plugins configuration
-  config.berkshelf.enabled    = true
-  config.berkshelf.berksfile_path = BERKSFILE
-
   config.omnibus.chef_version = "11.10.0"
 
   config.vm.provision :chef_solo do |chef|
     # Used as Vagrant cache during build
     chef.provisioning_path  = "/tmp/vagrant-chef-solo"
     chef.file_cache_path    = chef.provisioning_path
-    chef.cookbooks_path     = "vendor-cookbooks"
+    chef.cookbooks_path     = "../../common/vendor-cookbooks"
     chef.data_bags_path     = "data_bags"
     
     # Add this layer's Run List

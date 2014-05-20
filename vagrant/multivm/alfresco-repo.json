@@ -13,9 +13,6 @@
                         "alfresco.secureComms": "none",
                         "host":"10.0.0.41"
                     },
-                    "maven": {
-                        "repo_type": "public"
-                    },
                     "db": {
                         "host": "10.0.0.11"
                     }
@@ -41,13 +38,6 @@
                     "jdk_version": "7",
                     "oracle": {
                         "accept_oracle_download_terms": true
-                    }
-                },
-                "maven": {
-                    "repos": {
-                        "maoo-public-cloudbees": {
-                            "url": "https://repository-maoo.forge.cloudbees.com/release"
-                        }
                     }
                 },
                 "tomcat": {

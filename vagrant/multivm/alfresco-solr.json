@@ -12,9 +12,6 @@
                     }
                 },                
                 "alfresco": {
-                    "maven": {
-                        "repo_type": "public"
-                    },
                     "solrproperties" : {
                         "alfresco.secureComms": "none"
                     }
@@ -39,13 +36,6 @@
                     "jdk_version": "7",
                     "oracle": {
                         "accept_oracle_download_terms": true
-                    }
-                },
-                "maven": {
-                    "repos": {
-                        "maoo-public-cloudbees": {
-                            "url": "https://repository-maoo.forge.cloudbees.com/release"
-                        }
                     }
                 },
                 "tomcat": {
