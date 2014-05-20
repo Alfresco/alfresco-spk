@@ -6,7 +6,9 @@
                     "system_services": ["tomcat"],
                     "version":"4.2.f",
                     "maven": {
-                        "repo_type":"public"
+                        "repo_type":"public",
+                        "username":"",
+                        "password":""
                     },
                     "properties": {
                         "hostname.private":"192.168.0.33"

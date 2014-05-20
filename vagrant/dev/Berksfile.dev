@@ -18,8 +18,8 @@ cookbook 'imagemagick',             git: 'git://github.com/someara/imagemagick.g
 cookbook 'tomcat',                  git: 'git://github.com/maoo/tomcat.git', tag: 'chef-tomcat-0.15.12-custom'
 #cookbook 'tomcat',                  path:'/Users/mau/w/pers/chef-tomcat'
 
-cookbook 'artifact-deployer',       git: 'git://github.com/maoo/artifact-deployer.git',  tag: 'artifact-deployer-0.5.3'
+cookbook 'artifact-deployer',       git: 'git://github.com/maoo/artifact-deployer.git',  tag: 'artifact-deployer-0.6'
 #cookbook 'artifact-deployer',       path:'/Users/mau/w/pers/artifact-deployer'
 
-cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.3.1'
+cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.3.2'
 #cookbook 'alfresco',                path:'/Users/mau/w/alf/chef-alfresco'

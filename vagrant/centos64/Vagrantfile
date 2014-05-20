@@ -12,6 +12,11 @@ Vagrant.configure("2") do |config|
   attributes = provisioner["json"]
   run_list = provisioner["run_list"]
 
+  if !ENV['MVN_ALF_USERNAME'].nil? and !ENV['MVN_ALF_PASSWORD'].nil?
+    attributes['alfresco']['maven']['username'] = ENV['MVN_ALF_USERNAME']
+    attributes['alfresco']['maven']['password'] = ENV['MVN_ALF_PASSWORD']
+  end
+
   # Box env configuration
   config.vm.provider :virtualbox do |vb,override|
     override.vm.box_url         = "http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-i386-v20130731.box"

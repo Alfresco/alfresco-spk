@@ -13,12 +13,8 @@ Vagrant.configure("2") do |config|
   run_list = provisioner["run_list"]
 
   if !ENV['MVN_ALF_USERNAME'].nil? and !ENV['MVN_ALF_PASSWORD'].nil?
-    attributes['alfresco'] = {}
-    attributes['alfresco']['maven'] = {}
-    attributes['alfresco']['maven']['repo_type'] = "private"
     attributes['alfresco']['maven']['username'] = ENV['MVN_ALF_USERNAME']
     attributes['alfresco']['maven']['password'] = ENV['MVN_ALF_PASSWORD']
-    attributes['alfresco']['version'] = "4.2.1"
   end
 
   # Box env configuration
