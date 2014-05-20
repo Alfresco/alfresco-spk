@@ -4,7 +4,7 @@ alfresco-boxes
 A collection of utilities for Alfresco VM provisioning and deployment using Packer and Vagrant; the deployment and installation logic is provided by [chef-alfresco](https://github.com/maoo/chef-alfresco).
 
 With this project you can
-* Build ISO/AMI boxes with Packer (```cd packer```)
+* Build ISO/AMI boxes with Packer (```cd packer/ubuntu```)
   * Build and launch Virtualbox (.vdi) Image containing a complete Alfresco 4.2 stack
   * Build and upload an AWS AMI containing a complete Alfresco 4.2 stack
   * Use additional [Packer provisioners](https://github.com/maoo/alfresco-boxes/tree/master/packer/ubuntu/alfresco-allinone.json#L136), such as ```shell```
@@ -34,7 +34,7 @@ packer build -only virtualbox-iso alfresco-allinone.json
 ```
 This will create a output-virtualbox-iso/<box-name>.ovf and output-virtualbox-iso/<box-name>.vdmk, ready to be imported into VirtualBox.
 After importing - and before launching your VM - change the Network settings: switch the network card type from ```NAT``` to ```bridged```
-
+The user/password to login (and check the local IP - ifconfig - that is assigned by DHCP) is vagrant/vagrant
 You can also create a Vagrant box by adding a Packer post-processor in alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/ubuntu/alfresco-allinone.json#L150)
 
 Uploading AMI to AWS

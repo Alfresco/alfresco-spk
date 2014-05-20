@@ -17,4 +17,4 @@ cookbook 'imagemagick',             git: 'git://github.com/someara/imagemagick.g
 
 cookbook 'tomcat',                  git: 'git://github.com/maoo/tomcat.git',             tag: 'chef-tomcat-0.15.12-custom'
 cookbook 'artifact-deployer',       git: 'git://github.com/maoo/artifact-deployer.git',  tag: 'artifact-deployer-0.7'
-cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.3.2'
+cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.3.3'
