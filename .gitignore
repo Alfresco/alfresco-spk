@@ -1,5 +1,6 @@
 **/alf_data_shared
 **/internal.json
+*/internal.json
 internal.json
 *.lock
 dev/Berksfile.dev
