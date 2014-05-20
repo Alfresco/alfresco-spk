@@ -50,3 +50,11 @@ Customisations
 You can read the [alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/ubuntu/alfresco-allinone.json) definition to check the default values that are used to install Alfresco; there are many other default values that are defined by the following Chef Recipes
 * [artifact-deployer](https://github.com/maoo/artifact-deployer), you can check default values in [attributes.json](https://github.com/maoo/artifact-deployer/tree/master/attributes)
 * [chef-alfresco](https://github.com/maoo/chef-alfresco), you can check default values in [attributes.json](https://github.com/maoo/chef-alfresco/tree/master/attributes)
+
+Updating/Customising Chef Cookbooks
+---
+Everytime that a new version of the Chef recipes is released, it is necessary to update the ```vendor-cookbooks``` folder:
+* Edit Berksfile and update the chef cookbook list
+* ```rm -Rf alfresco-boxes/common/vendor-cookbooks```
+* ```bundle exec berks install --path vendor-cookbooks```
+
