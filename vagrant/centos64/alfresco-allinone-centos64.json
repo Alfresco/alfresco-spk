@@ -57,10 +57,10 @@
                     "files_cookbook": "alfresco",
                     "base_version": 7,
                     "deploy_manager_apps": false,
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/usr/share/tomcat/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Djava.rmi.server.hostname=192.168.0.33 -Dsun.security.ssl.allowUnsafeRenegotiation=true"                }
+                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/usr/share/tomcat/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Djava.rmi.server.hostname=192.168.0.33 -Dsun.security.ssl.allowUnsafeRenegotiation=true"
+                }
             },
             "run_list": [
-                "apt::default",
                 "iptables::default",
                 "alfresco::3rdparty",
                 "alfresco::mysql_server",
