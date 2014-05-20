@@ -3,23 +3,18 @@
         {
             "json": {                
                 "alfresco": {
-                    "properties" : {
-                        "index.subsystem.name": "solr",
-                        "solr.secureComms": "none"
-                    },
-                    "solrproperties" : {
-                        "alfresco.secureComms": "none"
-                    },
+                    "system_services": ["tomcat"],
+                    "version":"4.2.f",
                     "maven": {
-                        "repo_type": "public"
+                        "repo_type":"public"
+                    },
+                    "properties": {
+                        "hostname.private":"192.168.0.33"
                     }
                 },
                 "artifacts": {
                     "alfresco": {
-                        "enabled": true,
-                        "artifactId": "alfresco-nossl",
-                        "groupId": "it.session.alfresco",
-                        "version": "4.2.f"
+                        "enabled": true
                     },
                     "alfresco-mmt": {
                         "enabled": true
@@ -34,10 +29,7 @@
                         "enabled": true
                     },
                     "solr": {
-                        "enabled": true,
-                        "artifactId": "apache-solr-nossl",
-                        "groupId": "it.session.alfresco",
-                        "version": "1.4.1-alfresco-patched"
+                        "enabled": true
                     },
                     "solrhome": {
                         "enabled": true
@@ -47,6 +39,7 @@
                 "ip": "192.168.0.33",
                 "java": {
                     "default": true,
+                    "accept_license_agreement": true,
                     "install_flavor": "oracle",
                     "jdk_version": "7",
                     "oracle": {
@@ -61,11 +54,16 @@
                     }
                 },
                 "tomcat": {
-                    "binary_installation": true,
+                    "files_cookbook": "alfresco",
                     "base_version": 7,
-                    "group": "tomcat7",
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/usr/share/tomcat7/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Djava.rmi.server.hostname=192.168.0.33",
-                    "user": "tomcat7"
+                    "deploy_manager_apps": false,
+                    "java_options": "
+                    -Xmx1500M 
+                    -XX:MaxPermSize=256M 
+                    -Dsolr.solr.home=/usr/share/tomcat/alf_data/solrhome 
+                    -Dcom.sun.management.jmxremote=true 
+                    -Djava.rmi.server.hostname=192.168.0.33 
+                    -Dsun.security.ssl.allowUnsafeRenegotiation=true"
                 }
             },
             "run_list": [
@@ -75,10 +73,11 @@
                 "alfresco::mysql_server",
                 "alfresco::mysql_createdb",
                 "tomcat::default",
+                "tomcat::users",
                 "alfresco::repo_config",
                 "alfresco::share_config",
-                "artifact-deployer::default",
                 "alfresco::solr_config",
+                "artifact-deployer::default",
                 "alfresco::apply_amps"
             ]
         }
