@@ -13,18 +13,20 @@ With this project you can
   * Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/common/Berksfile)
   * Create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/alfresco-allinone-dev.json)
 
-Configuring your host machine
+Installation
 ---
-* Make sure that Ruby is installed (I'm currently running on v1.9.3)
-* Install (should also work with latest versions, but have not been tested yet)
-  * [Vagrant 1.3.5](http://downloads.vagrantup.com/tags/v1.3.5)
-  * [VirtualBox 4.3.2](https://www.virtualbox.org)
-  * [Packer 0.5.2](http://www.packer.io/downloads.html)
-* Checkout this project
+* Make sure that
+  * Ruby is installed (I'm currently running on v1.9.3, test with ```ruby -v```)
+  * If you run on OSX, install XCode (version 5 or higher)
+* Install
+  * [Vagrant](http://downloads.vagrantup.com) - tested with version 1.6.2
+  * [VirtualBox](https://www.virtualbox.org) - tested with version 4.3.12-93733-OSX
+  * [Packer](http://www.packer.io/downloads.html) - tested with version 0.5.2
+* Checkout this project ```git clone git@github.com:maoo/alfresco-boxes.git alfresco-boxes```
 * ```cd alfresco-boxes/common```
 * Run ```install.sh``` or
   * Install bundler with ```gem install bundler && bundle install```
-  * Run Berkshelf to resolve external chef recipes; this step will have to be executed everytime you change the Berksfile definition with ```bundle exec berks install --path vendor-cookbooks``` (use ```bundle exec berks vendor vendor-cookbooks``` syntax as of Berkshelf 3 onwards); the vendor-cookbooks folder will be created; it can be optionally removed from ```.gitignore``` in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
+  * Run Berkshelf to resolve external chef recipes ```bundle exec berks install --path vendor-cookbooks``` (use ```bundle exec berks vendor vendor-cookbooks``` syntax as of Berkshelf 3 onwards)
 
 Creating VirtualBox/Vagrant box
 ---
@@ -58,3 +60,4 @@ Everytime that a new version of the Chef recipes is released, it is necessary to
 * ```rm -Rf alfresco-boxes/common/vendor-cookbooks```
 * ```bundle exec berks install --path vendor-cookbooks```
 
+The vendor-cookbooks folder can be optionally removed from ```.gitignore``` in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
