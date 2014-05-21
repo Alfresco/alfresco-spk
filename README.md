@@ -8,7 +8,7 @@ With this project you can
   * Build and launch Virtualbox (.vdi) Image containing a complete Alfresco 4.2 stack
   * Build and upload an AWS AMI containing a complete Alfresco 4.2 stack
   * Use additional [Packer provisioners](https://github.com/maoo/alfresco-boxes/tree/master/packer/ubuntu/alfresco-allinone.json#L136), such as ```shell```
-* Develop and Test with Vagrant (check the [README](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/README.md) to know more)
+* Develop and Run with Vagrant (check the [README](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/README.md) to know more)
   * Customize the VM provisioning and Alfresco configuration/deployment at any stage, simply editing a JSON file
   * Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/common/Berksfile)
   * Create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/alfresco-allinone-dev.json)
@@ -19,14 +19,15 @@ Installation
   * Ruby is installed (I'm currently running on v1.9.3, test with ```ruby -v```)
   * If you run on OSX, install XCode (version 5 or higher)
 * Install
-  * [Vagrant](http://downloads.vagrantup.com) - tested with version 1.6.2
   * [VirtualBox](https://www.virtualbox.org) - tested with version 4.3.12-93733-OSX
-  * [Packer](http://www.packer.io/downloads.html) - tested with version 0.5.2
+  * Optional, if you want to *run VMs* with [Vagrant](http://downloads.vagrantup.com) - tested with version 1.6.2
+  * Optional, if you want to *build boxes* with [Packer](http://www.packer.io/downloads.html) - tested with version 0.5.2
 * Checkout this project ```git clone git@github.com:maoo/alfresco-boxes.git alfresco-boxes```
 * ```cd alfresco-boxes/common```
 * Run ```install.sh``` or
   * Install bundler with ```gem install bundler && bundle install```
   * Run Berkshelf to resolve external chef recipes ```bundle exec berks install --path vendor-cookbooks``` (use ```bundle exec berks vendor vendor-cookbooks``` syntax as of Berkshelf 3 onwards)
+  * (Optional - if you use Vagrant) ```vagrant plugin install vagrant-omnibus ; vagrant plugin install vagrant-vbguest ; vagrant plugin install vagrant-hosts```
 
 Creating VirtualBox/Vagrant box
 ---
@@ -58,6 +59,6 @@ Updating/Customising Chef Cookbooks
 Everytime that a new version of the Chef recipes is released, it is necessary to update the ```vendor-cookbooks``` folder:
 * Edit Berksfile and update the chef cookbook list
 * ```rm -Rf alfresco-boxes/common/vendor-cookbooks```
-* ```bundle exec berks install --path vendor-cookbooks```
+* ```cd alfresco-boxes/common && bundle exec berks install --path vendor-cookbooks```
 
 The vendor-cookbooks folder can be optionally removed from ```.gitignore``` in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
