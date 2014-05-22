@@ -36,10 +36,8 @@ Installation
   * Optional, if you want to *build boxes* with [Packer](http://www.packer.io/downloads.html) - tested with version 0.5.2
 * Checkout this project ```git clone git@github.com:maoo/alfresco-boxes.git alfresco-boxes```
 * ```cd alfresco-boxes/common```
-* Run ```install.sh``` or
-  * Install bundler with ```gem install bundler && bundle install```
-  * Run Berkshelf to resolve external chef recipes ```bundle exec berks install --path vendor-cookbooks``` (use ```bundle exec berks vendor vendor-cookbooks``` syntax as of Berkshelf 3 onwards)
-  * (Optional - if you use Vagrant) ```vagrant plugin install vagrant-omnibus ; vagrant plugin install vagrant-vbguest ; vagrant plugin install vagrant-hosts```
+* Install bundler and Vagrant plugins with ```./install.sh```
+* Run Berkshelf to resolve external chef recipes ```./create-vendor-cookbooks.sh```
 
 Creating VirtualBox/Vagrant box
 ---
