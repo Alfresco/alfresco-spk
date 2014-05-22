@@ -17,11 +17,12 @@
                 "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>",
                 "hostname={{ .Name }} <wait>",
                 "fb=false debconf/frontend=noninteractive <wait>",
-                "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
+                "netcfg/choose_interface=eth0 keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
                 "initrd=/install/initrd.gz -- <enter><wait>"
             ],
+            "vm_name":"ubuntu12-alfresco43-allinone",
             "boot_wait": "4s",
-            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+            "guest_additions_path": "/home/vagrant/VBoxGuestAdditions_{{.Version}}.iso",
             "guest_os_type": "Ubuntu_64",
             "headless": false,
             "http_directory": "../../common/http",
@@ -52,8 +53,19 @@
                     "{{.Name}}",
                     "--nic1",
                     "nat"
+                ],
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--nic2",
+                    "bridged"
+                ],
+                [
+                  "modifyvm",
+                  "{{.Name}}",
+                  "--bridgeadapter2",
+                  "en1"
                 ]
-
             ],
             "virtualbox_version_file": ".vbox_version"
         }
@@ -70,7 +82,7 @@
                 "alfresco": {
                     "version":"4.3.0-SNAPSHOT",
                     "properties": {
-                        "hostname.private":"192.168.0.33"
+                        "hostname.private":"192.168.1.223"
                     }
                 },
                 "maven": {
@@ -103,7 +115,7 @@
                     }
                 },
                 "hostname": "alfresco-allinone",
-                "ip": "192.168.0.33",
+                "ip": "192.168.1.223",
                 "java": {
                     "default": true,
                     "accept_license_agreement": true,
@@ -117,7 +129,7 @@
                     "files_cookbook": "alfresco",
                     "base_version": 7,
                     "deploy_manager_apps": false,
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Dsun.security.ssl.allowUnsafeRenegotiation=true"
+                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Djava.rmi.server.hostname=192.168.1.223 -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Dsun.security.ssl.allowUnsafeRenegotiation=true"
                 }
             },
             "run_list": [
@@ -139,22 +151,14 @@
             "type": "chef-solo"
         },
         {
-            "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
-            "inline": [
-                "apt-get update -y",
-                "apt-get install -y linux-headers-$(uname -r) build-essential dkms",
-                "apt-get clean",
-                "mount -o loop VBoxGuestAdditions.iso /media/cdrom",
-                "sh /media/cdrom/VBoxLinuxAdditions.run",
-                "umount /media/cdrom",
-                "mkdir ~/.ssh",
-                "wget -qO- https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub >> ~/.ssh/authorized_keys",
-                "echo 'vagrant ALL=NOPASSWD:ALL' > /tmp/vagrant",
-                "chmod 0440 /tmp/vagrant",
-                "mv /tmp/vagrant /etc/sudoers.d/",
-                "rm -Rf /usr/local/maven* /root/.m2"
-            ],
-            "type": "shell"
+          "type": "shell",
+          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
+          "scripts": [
+            "../../common/scripts/purge-maven-folders.sh",
+            "../../common/scripts/static-ip.sh",
+            "../../common/scripts/vagrant-ssh-key.sh",
+            "../../common/scripts/vbox-additions.sh"
+          ]
         }
     ],
     "variables": {

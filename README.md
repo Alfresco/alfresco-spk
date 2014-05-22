@@ -13,6 +13,18 @@ With this project you can
   * Add custom logic, either via external [Chef cookbooks](https://github.com/maoo/alfresco-boxes/tree/master/common/Berksfile)
   * Create [your own VM from scratch](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/dev/alfresco-allinone-dev.json)
 
+Features
+---
+* Supports Community and Enterprise editions
+* Tested with 4.2 version(s)
+* Installs and configures Repository, Share and Solr
+* Tested on CentOS and Ubuntu (different versions)
+* Handles Tomcat SSL keystore installation
+* Supports AMP installation (via MMT)
+* Supports Maven credentials encryption
+* Can be configured for any (maven-repository-hosted) Alfresco WAR(s) version/distro
+* Auto-generate and/or patch property files (alfresco-global, log4j.properties, solrcore.properties) without the need to maintain pre-defined templates
+
 Installation
 ---
 * Make sure that
@@ -36,7 +48,7 @@ cd alfresco-boxes/packer/ubuntu
 packer build -only virtualbox-iso alfresco-allinone.json
 ```
 This will create a output-virtualbox-iso/<box-name>.ovf and output-virtualbox-iso/<box-name>.vdmk, ready to be imported into VirtualBox.
-After importing - and before launching your VM - change the Network settings: switch the network card type from ```NAT``` to ```bridged```
+
 The user/password to login (and check the local IP - ifconfig - that is assigned by DHCP) is vagrant/vagrant
 You can also create a Vagrant box by adding a Packer post-processor in alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/ubuntu/alfresco-allinone.json#L150)
 
