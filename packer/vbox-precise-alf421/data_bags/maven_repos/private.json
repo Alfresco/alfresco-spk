@@ -1,0 +1,6 @@
+{
+  "id":"private",
+  "url": "https://artifacts.alfresco.com/nexus/content/groups/private",
+  "username":"your_user",
+  "password":"{your_enc_password}"
+}

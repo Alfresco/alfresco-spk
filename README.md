@@ -38,6 +38,23 @@ Installation
 * ```cd alfresco-boxes/common```
 * Install bundler and Vagrant plugins with ```./install.sh```
 * Run Berkshelf to resolve external chef recipes ```./create-vendor-cookbooks.sh```
+* (Optional) Install Docker:
+```
+brew install boot2init
+brew install docker
+boot2docker up
+boot2docker init #Starts the docker daemon
+export DOCKER_HOST=tcp://localhost:4243 #Identifies the docker server
+```
+
+```
+sudo su
+curl https://raw.githubusercontent.com/noplay/docker-osx/0.11.1/docker-osx > /usr/local/bin/docker-osx
+docker-osx shell
+docker-osx start
+```
+
+For more info on Docker installation ckeck the [Docker docs](http://docs.docker.io/installation/)
 
 Creating VirtualBox/Vagrant box
 ---

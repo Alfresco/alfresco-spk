@@ -1,0 +1,6 @@
+{
+  "id":"repo",
+  "name": "CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB",
+  "roles": ["repository"],
+  "password":"null"
+}
