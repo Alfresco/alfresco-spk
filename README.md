@@ -36,7 +36,7 @@ Installation
   * Optional, if you want to *build boxes* with [Packer](http://www.packer.io/downloads.html) - tested with version 0.5.2
 * Checkout this project ```git clone git@github.com:maoo/alfresco-boxes.git alfresco-boxes```
 * ```cd alfresco-boxes/common```
-* Install bundler and Vagrant plugins with ```./install.sh```
+* Install bundler and Vagrant plugins with ```./install.sh```; if you get a ```Gem::FilePermissionError```, use ```sudo ./install.sh```
 * Run Berkshelf to resolve external chef recipes ```./create-vendor-cookbooks.sh```
 * (Optional) Install Docker:
 ```
