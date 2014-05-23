@@ -44,7 +44,7 @@ brew install boot2init
 brew install docker
 boot2docker up
 boot2docker init #Starts the docker daemon
-export DOCKER_HOST=tcp://localhost:4243 #Identifies the docker server
+export DOCKER_HOST=tcp://localhost:4243 #Identifies the docker server; must be done on the same shell where the ```packer``` command is executed
 ```
 
 ```
