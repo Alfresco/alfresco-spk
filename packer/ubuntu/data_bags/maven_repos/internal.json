@@ -1,6 +1,0 @@
-{
-  "id":"internal",
-  "url": "https://artifacts.alfresco.com/nexus/content/groups/internal",
-  "username":"your_user",
-  "password":"{your_enc_password}"
-}
