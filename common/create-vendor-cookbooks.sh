@@ -1,7 +1,8 @@
 #!/bin/bash
 
-rm -Rf vendor-cookbooks
+rm -Rf vendor-cookbooks *.lock
 
 # Run berkshelf
-# use ```bundle exec berks vendor vendor-cookbooks``` syntax as of Berkshelf 3 onwards
-bundle exec berks install --path vendor-cookbooks
+# use the following for Berkshelf 2 or earliear
+# bundle exec berks install --path vendor-cookbooks
+bundle exec berks vendor vendor-cookbooks
