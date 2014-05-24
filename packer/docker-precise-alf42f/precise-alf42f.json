@@ -78,25 +78,6 @@
             "prevent_sudo": false,
             "skip_install": false,
             "type": "chef-solo"
-        },
-        {
-          "type": "file",
-          "source": "../../common/scripts/common.sh",
-          "destination": "/tmp/common.sh"
-        },
-        {
-          "type": "shell",
-          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
-          "scripts": [
-            "../../common/scripts/purge-maven-folders.sh",
-            "../../common/scripts/vagrant-ssh-key.sh",
-            "../../common/scripts/vbox-additions.sh"
-          ]
-        },
-        {
-          "type": "shell",
-          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
-          "inline": ["../../common/scripts/static-ip.sh 192.168.1.223 192.168.1.1 255.255.255.0"]
         }
     ],
     "variables": {
