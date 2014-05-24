@@ -67,8 +67,6 @@
                 "apt::default",
                 "iptables::default",
                 "alfresco::3rdparty",
-                "alfresco::mysql_server",
-                "alfresco::mysql_createdb",
                 "tomcat::default",
                 "tomcat::users",
                 "alfresco::repo_config",
@@ -77,9 +75,14 @@
                 "artifact-deployer::default",
                 "alfresco::apply_amps"
             ],
-            "prevent_sudo": true,
+            "prevent_sudo": false,
             "skip_install": false,
             "type": "chef-solo"
+        },
+        {
+          "type": "file",
+          "source": "../../common/scripts/common.sh",
+          "destination": "/tmp/common.sh"
         },
         {
           "type": "shell",

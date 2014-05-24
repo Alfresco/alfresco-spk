@@ -1,0 +1,31 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "pandrew/ubuntu-lts",
+            "export_path": "db.tar"
+        }
+    ],
+    "provisioners": [
+        {
+            "cookbook_paths": [
+                "../../common/vendor-cookbooks"
+            ],
+            "json": {
+                "hostname": "db"
+            },
+            "run_list": [
+                "apt::default",
+                "iptables::default",
+                "alfresco::mysql_server"
+            ],
+            "prevent_sudo": false,
+            "skip_install": false,
+            "type": "chef-solo"
+        }
+    ],
+    "variables": {
+        "aws_access_key": "",
+        "aws_secret_key": ""
+    }
+}

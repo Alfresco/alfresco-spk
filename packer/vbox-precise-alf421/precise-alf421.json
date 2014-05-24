@@ -141,6 +141,11 @@
             "type": "chef-solo"
         },
         {
+          "type": "file",
+          "source": "../../common/scripts/common.sh",
+          "destination": "/tmp/common.sh"
+        },
+        {
           "type": "shell",
           "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
           "scripts": [
