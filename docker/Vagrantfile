@@ -1,0 +1,16 @@
+# Alfresco Vagrant Web Box
+#
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  
+  # Box env configuration
+  config.vm.provider :virtualbox do |vb,override|
+    override.vm.box             = "ubuntu1404"
+    override.vm.box_url         = "http://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    vb.customize ["modifyvm", :id, "--memory", 4096]
+  end
+  config.vm.hostname = "docker"  
+  config.vm.provision "shell", path: "install.sh"
+end
