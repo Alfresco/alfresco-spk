@@ -1,0 +1,18 @@
+// find the backup folder - create if not already exists
+var backupFolder = space.childByNamePath("Backup");
+if (backupFolder == null && space.hasPermission("CreateChildren"))
+{
+   // create the folder for the first time
+   backupFolder = space.createFolder("Backup");
+}
+if (backupFolder != null && backupFolder.hasPermission("CreateChildren"))
+{
+   // copy the doc into the backup folder
+   var copy = document.copy(backupFolder);
+   if (copy != null)
+   {
+      // change the name so we know it's a backup
+      copy.name = "Backup of " + copy.name;
+      copy.save();
+   }
+}

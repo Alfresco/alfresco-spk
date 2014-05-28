@@ -1,0 +1,32 @@
+// find the backup folder - create if not already exists
+var backupFolder = space.childByNamePath("Backup");
+if (backupFolder == null && space.hasPermission("CreateChildren"))
+{
+   // create the folder for the first time
+   backupFolder = space.createFolder("Backup");
+}
+if (backupFolder != null && backupFolder.hasPermission("CreateChildren"))
+{
+   // copy the doc into the backup folder
+   var copy = document.copy(backupFolder);
+   if (copy != null)
+   {
+      // change the name so we know it's a backup
+      var backupName = "Backup of " + copy.name;
+      copy.name = backupName;
+      copy.save();
+   }
+   
+   // record the time of the backup to a log file
+   var logFile = backupFolder.childByNamePath("backuplog.txt");
+   if (logFile == null)
+   {
+      logFile = backupFolder.createFile("backuplog.txt");
+   }
+   if (logFile != null)
+   {
+      logFile.content += "File: " + backupName +
+                         "\tDate: " + new Date().toGMTString() +
+                         "\tSize: " + copy.size + "\r\n";
+   }
+}

@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
     override.vm.box_url         = "http://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     vb.customize ["modifyvm", :id, "--memory", 4096]
   end
+  config.vm.synced_folder "..", "/alfboxes"
   config.vm.hostname = "docker"  
   config.vm.provision "shell", path: "install.sh"
 end

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component>
+  <guid>page.component-1-1.site~swsdp~dashboard</guid>
+  <scope>page</scope>
+  <region-id>component-1-1</region-id>
+  <source-id>site/swsdp/dashboard</source-id>
+  <url>/components/dashlets/site-profile</url>
+</component>

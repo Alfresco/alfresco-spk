@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<page> 
+  <title>Collaboration Site Dashboard</title>  
+  <title-id>page.siteDashboard.title</title-id>  
+  <description>Collaboration site's dashboard page</description>  
+  <description-id>page.siteDashboard.description</description-id>  
+  <authentication>user</authentication>  
+  <template-instance>dashboard-2-columns-wide-right</template-instance>  
+  <properties> 
+    <sitePages>[{"sitePageTitle":"Project Library","pageId":"documentlibrary"},{"sitePageTitle":"Project Wiki","pageId":"wiki-page"},{"sitePageTitle":"Project FAQ","pageId":"discussions-topiclist"},{"sitePageTitle":"Project Links","pageId":"links"},{"sitePageTitle":"Project Lists","pageId":"data-lists"}]</sitePages> 
+  </properties>  
+  <page-type-id>generic</page-type-id>
+</page>

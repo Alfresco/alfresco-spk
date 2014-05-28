@@ -1,15 +1,31 @@
 Docker
 ---
 
-### Docker Images
+## Using Vagrant (recommended)
+```
+cd docker
+vagrant up
+vagrant ssh
+```
 
-"image": "pandrew/ubuntu-lts",
-stackbrew/ubuntu:precise
-stackbrew/ubuntu:raring
-"image": "ubuntu/13.10",
-"image": "stackbrew/ubuntu:raring",
-            
-### Install
+## Creating Data-only containers
+```docker run -u 102 --name mysql-data -d -v $PWD/data/mysql:/var/lib/mysql stackbrew/busybox```
+
+## Running Alfresco MySQL Container
+```docker run -d -p 3306:3306 --volumes-from mysql-data -e MYSQL_PASS="alfresco" tutum/mysql```
+
+### Debugging Alfresco MySQL Container
+```docker run -i -t -e MYSQL_PASS="alfresco" --volumes-from mysql-data tutum/mysql bash```
+
+## Building Alfresco Allinone Container
+```packer build precise-alf42f.json```
+
+### Importing/Running Alfresco Container
+```docker import - maoo/alf-precise:latest < precise-alf42f.tar```
+```docker run -i -t -p 8080:8080 -v $PWD/data/contentstore:/var/lib/tomcat7/alf_data/contentstore maoo/alf-precise bash```
+```/etc/init.d/tomcat7 start```
+
+## (OSX, Optional) Installing and using boot2docker
 
 ```
 brew install boot2init
@@ -32,12 +48,3 @@ sshfs -o allow_root,uid=1000,gid=100 mau@192.168.1.23:/var/folders /var/folders
 ```192.168.1.23``` is my Host Private IP and ```mau``` the user on the Host machine
 
 For more info on Docker installation ckeck the [Docker docs](http://docs.docker.io/installation/)
-
-### Running Alfresco MySQL Container
-```docker run -d -p 3306:3306 -e MYSQL_PASS="alfresco" tutum/mysql```
-
-### Debugging Alfresco MySQL Container
-```docker run -i -t -e MYSQL_PASS="alfresco" tutum/mysql bash```
-
-### Running Alfresco Allinone Container
-```packer build precise-alf42f.json```
