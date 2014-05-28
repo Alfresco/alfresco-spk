@@ -12,18 +12,21 @@ vagrant ssh
 ```docker run -u 102 --name mysql-data -d -v $PWD/data/mysql:/var/lib/mysql stackbrew/busybox```
 
 ## Running Alfresco MySQL Container
-```docker run -d -p 3306:3306 --volumes-from mysql-data -e MYSQL_PASS="alfresco" tutum/mysql```
+```docker run -u 102 -d -p 3306:3306 --volumes-from mysql-data -e MYSQL_PASS="alfresco" tutum/mysql```
 
 ### Debugging Alfresco MySQL Container
-```docker run -i -t -e MYSQL_PASS="alfresco" --volumes-from mysql-data tutum/mysql bash```
+```docker run -u 102 -i -t -e MYSQL_PASS="alfresco" --volumes-from mysql-data tutum/mysql bash```
 
 ## Building Alfresco Allinone Container
 ```packer build precise-alf42f.json```
 
 ### Importing/Running Alfresco Container
-```docker import - maoo/alf-precise:latest < precise-alf42f.tar```
-```docker run -i -t -p 8080:8080 -v $PWD/data/contentstore:/var/lib/tomcat7/alf_data/contentstore maoo/alf-precise bash```
-```/etc/init.d/tomcat7 start```
+```
+docker import - maoo/alf-precise:latest < precise-alf42f.tar
+docker run -i -t -p 8080:8080 -v $PWD/data/contentstore:/var/lib/tomcat7/alf_data/contentstore maoo/alf-precise bash
+/etc/init.d/tomcat7 start
+```
+(TODO - use supervisord to avoid the manual launch)
 
 ## (OSX, Optional) Installing and using boot2docker
 
