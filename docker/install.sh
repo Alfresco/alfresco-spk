@@ -1,7 +1,7 @@
 #To install latest Docker version
 sudo bash -c 'echo export PATH=/opt/packer:$PATH > /etc/profile.d/packer-path.sh'
 sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
-sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > > /etc/apt/sources.list.d/docker.list"
+sudo sh -c "touch /etc/apt/sources.list.d/docker.list; echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
 
 #Installing docker, unzip and packer
 sudo apt-get  -qqy update
