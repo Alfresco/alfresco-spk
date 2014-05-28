@@ -146,6 +146,11 @@
           "destination": "/tmp/common.sh"
         },
         {
+          "type": "file",
+          "source": "../../common/scripts/static-ip.sh",
+          "destination": "/tmp/static-ip.sh"
+        },
+        {
           "type": "shell",
           "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
           "scripts": [
@@ -157,7 +162,7 @@
         {
           "type": "shell",
           "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
-          "inline": ["../../common/scripts/static-ip.sh 192.168.1.223 192.168.1.1 255.255.255.0"]
+          "inline": ["/tmp/static-ip.sh 192.168.1.223 192.168.1.1 255.255.255.0"]
         }
     ],
     "variables": {

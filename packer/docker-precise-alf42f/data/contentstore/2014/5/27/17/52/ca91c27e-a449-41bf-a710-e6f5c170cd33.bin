@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component> 
+  <guid>page.component-1-4.site~swsdp~dashboard</guid>  
+  <scope>page</scope>  
+  <region-id>component-1-4</region-id>  
+  <source-id>site/swsdp/dashboard</source-id>  
+  <url>/components/dashlets/site-datalists</url>  
+  <properties> 
+    <height>110</height> 
+  </properties> 
+</component>

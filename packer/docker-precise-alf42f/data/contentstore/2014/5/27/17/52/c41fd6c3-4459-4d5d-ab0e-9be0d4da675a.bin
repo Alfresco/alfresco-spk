@@ -1,0 +1,67 @@
+var id = companyhome.id;
+var name = companyhome.name;
+var type = companyhome.type;
+var noderef = companyhome.nodeRef;
+var childList = companyhome.children;
+var properties = companyhome.properties;
+var assocs = companyhome.assocs;
+
+// test various access mechanisms to get the same value
+var childname1 = childList[0].name;             // special helper for common 'name' property
+var childname2 = childList[0].properties.name
+var childname3 = childList[0].properties["name"];
+var childname4 = childList[0].properties["cm:name"];
+
+// test accessing current document properties and modifying them
+var docname = document.name.substring(0, document.name.lastIndexOf('.'));
+document.properties.name = "12345 " + document.properties.name;
+document.save();
+
+// modify the parent space name
+space.name = space.name + " 1";
+space.save();
+
+// test accessing document content
+var content = document.content;
+
+// update the content by appending a string
+document.content = content + "\r\nHere is another line added from a script!";
+
+// create a new file in the same space
+var fileNode = space.createFile(docname + " - added by script.txt");
+fileNode.content = "I am some content added by a script";
+
+// create a new folder in the same space
+var folderNode = space.createFolder(docname + " - added by script");
+
+// copy the doc into the newly created folder node
+var copy = document.copy(folderNode);
+
+// move the folder node to companyhome
+folderNode.move(companyhome);
+
+// how to add a blank aspect to a node
+copy.addAspect("cm:translatable");
+
+// this is how to add an aspect with "mandatory" properties supplied
+var props = new Array(1);
+props["cm:template"] = fileNode.nodeRef;
+document.addAspect("cm:templatable", props);
+
+// and how to add one and set the properties individually later
+copy.addAspect("cm:templatable", null);
+copy.properties["cm:template"] = fileNode.nodeRef;
+copy.save();
+
+// example of hasAspect() and hasPermission() API functions
+if (copy.hasAspect("cm:templatable") && copy.hasPermission("Write"))
+{
+   copy.name = "templatable " + copy.name;
+   copy.save();
+}
+
+function result()
+{
+   return (childname1 == childname2 && childname2 == childname3 && childname3 == childname4);
+}
+result();

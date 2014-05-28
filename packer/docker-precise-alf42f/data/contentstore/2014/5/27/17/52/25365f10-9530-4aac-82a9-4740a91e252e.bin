@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component>
+  <guid>page.component-2-1.site~swsdp~dashboard</guid>
+  <scope>page</scope>
+  <region-id>component-2-2</region-id>
+  <source-id>site/swsdp/dashboard</source-id>
+  <url>/components/dashlets/docsummary</url>
+  <properties>
+    <height>165</height>
+  </properties>
+</component>

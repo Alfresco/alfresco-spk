@@ -1,0 +1,11 @@
+if (document.hasPermission("Write"))
+{
+   if (document.mimetype == "text/plain")
+   {
+      document.content += "\r\n\r\nCopyright (C) " + new Date().getFullYear();
+   }
+   else if (document.mimetype == "text/html")
+   {
+      document.content += "<br><br><small>Copyright &copy; " + new Date().getFullYear() + "</small>";
+   }
+}

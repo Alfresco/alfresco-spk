@@ -2,7 +2,7 @@
     "builders": [
         {
             "type": "docker",
-            "image": "pandrew/ubuntu-lts",
+            "image": "maoo/alf-precise-base",
             "export_path": "precise-alf42f.tar"
         }
     ],
@@ -14,9 +14,16 @@
             "data_bags_path": "data_bags",
             "json": {
                 "alfresco": {
+                    "db" : {
+                        "root_user":"admin",
+                        "server_root_password":"alfresco",
+                        "repo_hosts":["172.17.0.3"]
+                    },
                     "version":"4.2.f",
                     "properties": {
-                        "hostname.private":"192.168.1.223"
+                        "db.username":"admin",
+                        "db.host":"172.17.0.2",
+                        "hostname.private":"172.17.0.3"
                     }
                 },
                 "artifacts": {
@@ -46,7 +53,7 @@
                     }
                 },
                 "hostname": "precise-alf42f",
-                "ip": "192.168.1.223",
+                "ip": "172.17.0.3",
                 "java": {
                     "default": true,
                     "accept_license_agreement": true,
@@ -57,15 +64,17 @@
                     }
                 },
                 "tomcat": {
+                    "start_service": false,
                     "files_cookbook": "alfresco",
                     "base_version": 7,
                     "deploy_manager_apps": false,
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Djava.rmi.server.hostname=192.168.1.223 -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Dsun.security.ssl.allowUnsafeRenegotiation=true"
+                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Djava.rmi.server.hostname=172.17.0.3 -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Dsun.security.ssl.allowUnsafeRenegotiation=true"
                 }
             },
             "run_list": [
                 "apt::default",
                 "iptables::default",
+                "alfresco::mysql_createdb",
                 "alfresco::3rdparty",
                 "tomcat::default",
                 "tomcat::users",
@@ -79,9 +88,5 @@
             "skip_install": false,
             "type": "chef-solo"
         }
-    ],
-    "variables": {
-        "aws_access_key": "",
-        "aws_secret_key": ""
-    }
+    ]
 }
