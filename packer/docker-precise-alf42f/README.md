@@ -2,28 +2,35 @@ Docker
 ---
 
 ## Using Vagrant (recommended)
+
+* Creating the Docker container
 ```
 cd docker
 vagrant up
 vagrant ssh
 ```
 
-## Creating Data-only containers
-```docker run -u 102 --name mysql-data -d -v $PWD/data/mysql:/var/lib/mysql stackbrew/busybox```
-
-## Running Alfresco MySQL Container
-```docker run -u 102 -d -p 3306:3306 --volumes-from mysql-data -e MYSQL_PASS="alfresco" tutum/mysql```
-
-### Debugging Alfresco MySQL Container
-```docker run -u 102 -i -t -e MYSQL_PASS="alfresco" --volumes-from mysql-data tutum/mysql bash```
-
-## Building Alfresco Allinone Container
-```packer build precise-alf42f.json```
-
-### Importing/Running Alfresco Container
+* Building Alfresco Allinone Container
+* Importing Alfresco Container
 ```
+cd /alfboxes
+packer build precise-alf42f.json
 docker import - maoo/alf-precise:latest < precise-alf42f.tar
-docker run -i -t -p 8080:8080 -v $PWD/data/contentstore:/var/lib/tomcat7/alf_data/contentstore maoo/alf-precise bash
+```
+
+* Creating Data-only containers
+* Running Alfresco MySQL Container
+* Creating MySQL empty DB
+* Running Alfresco Container
+
+```
+docker run -d --name alfresco_data -v /var/lib/mysql,/var/lib/tomcat7/alf_data/contentstore busybox /bin/sh
+docker run -d -p 3306:3306 --volumes-from alfresco_data -e MYSQL_PASS="alfresco" tutum/mysql
+
+mysql -uadmin -h 172.17.0.2 -p
+CREATE DATABASE IF NOT EXISTS alfresco CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+docker run -i -t -p 8080:8080 --volumes-from alfresco_data maoo/alf-precise bash
 /etc/init.d/tomcat7 start
 ```
 (TODO - use supervisord to avoid the manual launch)
