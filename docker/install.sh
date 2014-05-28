@@ -6,7 +6,9 @@ sudo sh -c "touch /etc/apt/sources.list.d/docker.list; echo deb http://get.docke
 #Installing docker, unzip and packer
 sudo apt-get  -qqy update
 sudo apt-get  -qqy install lxc-docker
-sudo nohup docker -d &
+sudo apt-get  -qqy install mysql-client
+sudo service docker restart
+sudo update-rc.d docker defaults
 sudo chmod 777 /var/run/docker.sock
 
 #Installing Packer
