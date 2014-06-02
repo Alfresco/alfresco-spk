@@ -20,7 +20,7 @@ vagrant ssh
 * Building Alfresco Allinone Container
 * Importing Alfresco Container
 ```
-cd /alfboxes
+cd /alfboxes/docker
 packer build precise-alf422.json
 docker import - maoo/alf-precise:latest < precise-alf422.tar
 ```
