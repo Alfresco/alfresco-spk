@@ -18,3 +18,8 @@ sudo mkdir -p /opt/packer; sudo unzip 0.6.0_linux_amd64.zip -d /opt/packer
 
 #Add packer bins in PATH
 sudo touch /etc/profile.d/packer-path.sh
+
+#Download Docker images
+docker pull tutum/mysql:latest
+docker pull maoo/alf-precise-base
+docker pull busybox
