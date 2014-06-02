@@ -39,7 +39,7 @@ Installation
   * [VirtualBox](https://www.virtualbox.org) - tested with version 4.3.12-93733-OSX
   * Optional, if you want to *run VMs* with [Vagrant](http://downloads.vagrantup.com) - tested with version 1.6.2
   * Optional, if you want to *build boxes* with [Packer](http://www.packer.io/downloads.html) - tested with version 0.5.2
-* Checkout this project ```git clone https://github.com/maoo/alfresco-boxes.gitub alfresco-boxes```
+* Checkout this project ```git clone -b alfresco-boxes-<last_tag> https://github.com/maoo/alfresco-boxes.gitub alfresco-boxes```
 * ```cd alfresco-boxes/common```
 * Install bundler and Vagrant plugins with ```./install.sh```; if you get a ```Gem::FilePermissionError```, use ```sudo ./install.sh```
 * Run Berkshelf to resolve external chef recipes ```./create-vendor-cookbooks.sh```
