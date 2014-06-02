@@ -55,7 +55,7 @@ docker rm `docker ps --no-trunc -a -q`
 ```
 
 
-## (OSX, Optional) Installing and using boot2docker
+## (OSX - Alternative method) Using boot2docker
 
 ```
 brew install boot2init
