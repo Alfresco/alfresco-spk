@@ -42,7 +42,7 @@ Installation
 
 Creating VirtualBox/Vagrant box
 ---
-Edit file ```vbox-precise-421/precise-alf421.json``` to choose an IP that can be bridged to one of your host Network Interfaces:
+Edit file ```alfresco-boxes/packer/vbox-precise-421/precise-alf421.json``` to choose an IP that can be bridged to one of your host Network Interfaces:
 ```
 {
   "type": "shell",
