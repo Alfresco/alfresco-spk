@@ -52,6 +52,14 @@ Edit file ```alfresco-boxes/packer/vbox-precise-421/precise-alf421.json``` to ch
 ```
 
 You also need to set your access credentials (that can be requested by Alfresco Customers via the Alfresco Support Portal) to [artifacts.alfresco.com](https://artifacts.alfresco.com) by editing [packer/vbox-precise-alf421/data_bags/maven_repos/private.json](https://github.com/maoo/alfresco-boxes/blob/master/packer/vbox-precise-alf421/data_bags/maven_repos/private.json)
+```
+{
+  "id":"private",
+  "url": "https://artifacts.alfresco.com/nexus/content/groups/private",
+  "username":"your_user",
+  "password":"{your_enc_password}"
+}
+```
 
 You can optionally use your Maven encryped password and set your Maven Master password in ```precise-alf421.json```:
 ```
