@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     chef.provisioning_path  = "/tmp/vagrant-chef-solo"
     chef.file_cache_path    = chef.provisioning_path
     chef.cookbooks_path     = "../../common/vendor-cookbooks"
-    chef.data_bags_path     = "data_bags"
+    chef.data_bags_path     = "../../common/data_bags"
     
     # Add this layer's Run List
     run_list.each do |recipe|
