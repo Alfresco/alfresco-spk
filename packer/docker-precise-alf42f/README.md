@@ -1,5 +1,12 @@
 Docker
 ---
+This document explains
+1. how to run a Docker Server using Vagrant (recommended) or boot2docker
+2. walk through the build/import of an alfresco allinone docker container (using packer)
+3. execution of a docker data-only container to store /var/lib/mysql and contentstore volumes
+4. execution of 1 mysql docker contaner and 1 alfresco allinone container (previously built/imported)
+
+If you're not familiar with Docker yet, this [Youtube video](https://www.youtube.com/watch?v=VeiUjkiqo9E) will explain you what it does and how to use it.
 
 ## Using Vagrant (recommended)
 
@@ -14,8 +21,8 @@ vagrant ssh
 * Importing Alfresco Container
 ```
 cd /alfboxes
-packer build precise-alf42f.json
-docker import - maoo/alf-precise:latest < precise-alf42f.tar
+packer build precise-alf422.json
+docker import - maoo/alf-precise:latest < precise-alf422.tar
 ```
 
 * Creating Data-only containers
@@ -24,16 +31,29 @@ docker import - maoo/alf-precise:latest < precise-alf42f.tar
 * Running Alfresco Container
 
 ```
-docker run -d --name alfresco_data -v /var/lib/mysql,/var/lib/tomcat7/alf_data/contentstore busybox /bin/sh
+docker run -i -t --name alfresco_data -v /var/lib/mysql -v /var/lib/tomcat7/alf_data/contentstore busybox /bin/sh
+
+# To map an existing folders to data volumes
+#docker run -d --name alfresco_data -v $PWD/data/mysql:/var/lib/mysql -v $PWD/data/contentstore:/var/lib/tomcat7/alf_data/contentstore busybox /bin/sh
+
 docker run -d -p 3306:3306 --volumes-from alfresco_data -e MYSQL_PASS="alfresco" tutum/mysql
 
+# Comment the following if previous line if existing /var/lib/mysql is provided
 mysql -uadmin -h 172.17.0.2 -p
 CREATE DATABASE IF NOT EXISTS alfresco CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 docker run -i -t -p 8080:8080 --volumes-from alfresco_data maoo/alf-precise bash
-/etc/init.d/tomcat7 start
+docker run -i -t -p 8081:8080 --volumes-from alfresco_data maoo/alf-precise bash
+/etc/init.d/tomcat7 start #TODO this should start at boot time; fix it in the chef recipe
 ```
-(TODO - use supervisord to avoid the manual launch)
+To access Alfresco, you can edit the VirtualBox "Network settings > Port Forwarding" and map host/guest ports 8080/8080 and 8081/8081
+
+Useful commands
+```
+# Remove all stopped Docker containers
+docker rm `docker ps --no-trunc -a -q`
+```
+
 
 ## (OSX, Optional) Installing and using boot2docker
 

@@ -71,6 +71,7 @@
             "json": {
                 "alfresco": {
                     "version":"4.2.1",
+                    "allinone": true,
                     "properties": {
                         "hostname.private":"192.168.1.223"
                     }
@@ -78,48 +79,8 @@
                 "maven": {
                   "master_password":"{your_mvn_master_password}"
                 },
-                "artifacts": {
-                    "alfresco": {
-                        "enabled": true
-                    },
-                    "keystore": {
-                        "enabled": true
-                    },
-                    "alfresco-mmt": {
-                        "enabled": true
-                    },
-                    "alfresco-spp": {
-                        "enabled": true
-                    },
-                    "mysqlconnector": {
-                        "enabled": true
-                    },
-                    "share": {
-                        "enabled": true
-                    },
-                    "solr": {
-                        "enabled": true
-                    },
-                    "solrhome": {
-                        "enabled": true
-                    }
-                },
-                "hostname": "precise-alf421",
-                "ip": "192.168.1.223",
-                "java": {
-                    "default": true,
-                    "accept_license_agreement": true,
-                    "install_flavor": "oracle",
-                    "jdk_version": "7",
-                    "oracle": {
-                        "accept_oracle_download_terms": true
-                    }
-                },
                 "tomcat": {
-                    "files_cookbook": "alfresco",
-                    "base_version": 7,
-                    "deploy_manager_apps": false,
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Djava.rmi.server.hostname=192.168.1.223 -Dsolr.solr.home=/var/lib/tomcat7/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Dsun.security.ssl.allowUnsafeRenegotiation=true"
+                    "base_version": 7
                 }
             },
             "run_list": [
