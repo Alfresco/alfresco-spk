@@ -46,9 +46,9 @@ Installation
 
 Try it!
 ---
-If you want to build with Packer, follow [packer/README.md](https://github.com/maoo/alfresco-boxes/tree/master/packer)
-If you want to run with Vagrant, follow [vagrant/README.md](https://github.com/maoo/alfresco-boxes/tree/master/vagrant)
-If you want to provision with Docker, follow [docker/README.md](https://github.com/maoo/alfresco-boxes/tree/master/docker)
+* If you want to _build_ with Packer, follow [packer/README.md](https://github.com/maoo/alfresco-boxes/tree/master/packer)
+* If you want to _run_ with Vagrant, follow [vagrant/README.md](https://github.com/maoo/alfresco-boxes/tree/master/vagrant)
+* If you want to _provision_ with Docker, follow [docker/README.md](https://github.com/maoo/alfresco-boxes/tree/master/docker)
 
 Customisations
 ---
