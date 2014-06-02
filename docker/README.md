@@ -20,7 +20,7 @@ vagrant ssh
 * Building Alfresco Allinone Container
 * Importing Alfresco Container
 ```
-cd /alfboxes
+cd /alfboxes/docker
 packer build precise-alf422.json
 docker import - maoo/alf-precise:latest < precise-alf422.tar
 ```
@@ -36,7 +36,7 @@ docker run -i -t --name alfresco_data -v /var/lib/mysql -v /var/lib/tomcat7/alf_
 # To map an existing folders to data volumes
 #docker run -d --name alfresco_data -v $PWD/data/mysql:/var/lib/mysql -v $PWD/data/contentstore:/var/lib/tomcat7/alf_data/contentstore busybox /bin/sh
 
-docker run -d -p 3306:3306 --volumes-from alfresco_data -e MYSQL_PASS="alfresco" tutum/mysql
+docker run -d -p 3306:3306 --volumes-from alfresco_data -e MYSQL_PASS="alfresco" tutum/mysql:latest
 
 # Comment the following if previous line if existing /var/lib/mysql is provided
 mysql -uadmin -h 172.17.0.2 -p
