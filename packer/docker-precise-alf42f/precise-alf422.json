@@ -1,0 +1,55 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "maoo/alf-precise-base",
+            "export_path": "precise-alf42f.tar"
+        }
+    ],
+    "provisioners": [
+        {
+            "cookbook_paths": [
+                "../../common/vendor-cookbooks"
+            ],
+            "data_bags_path": "data_bags",
+            "json": {
+                "alfresco": {
+                    "start_service": false,
+                    "allinone": true,
+                    "default_hostname": "172.17.0.3",
+                    "db" : {
+                        "root_user":"admin",
+                        "server_root_password":"alfresco",
+                        "repo_hosts":["172.17.0.3"]
+                    },
+                    "version":"4.2.2",
+                    "properties": {
+                        "db.username":"admin",
+                        "db.host":"172.17.0.2"
+                    }
+                },
+                "tomcat" : {
+                    "base_version": 7
+                },
+                "maven": {
+                  "master_password":"{S481/dqWXeAHHc75gpS8PM8fs2cxzGRd/JxwZ36q//4=}"
+                }
+            },
+            "run_list": [
+                "apt::default",
+                "iptables::default",
+                "alfresco::3rdparty",
+                "tomcat::default",
+                "tomcat::users",
+                "alfresco::repo_config",
+                "alfresco::share_config",
+                "alfresco::solr_config",
+                "artifact-deployer::default",
+                "alfresco::apply_amps"
+            ],
+            "prevent_sudo": false,
+            "skip_install": false,
+            "type": "chef-solo"
+        }
+    ]
+}
