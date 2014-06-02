@@ -11,7 +11,7 @@
             "cookbook_paths": [
                 "../../common/vendor-cookbooks"
             ],
-            "data_bags_path": "data_bags",
+            "data_bags_path": "../../common/data_bags",
             "json": {
                 "alfresco": {
                     "start_service": false,

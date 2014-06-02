@@ -1,6 +1,0 @@
-{
-  "id":"client",
-  "name": "CN=Alfresco Repository Client, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB",
-  "roles": ["repoclient"],
-  "password":"null"
-}

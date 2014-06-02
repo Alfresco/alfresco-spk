@@ -16,9 +16,9 @@
             "guest_os_type": "Ubuntu_64",
             "headless": false,
             "http_directory": "../../common/http",
-            "iso_checksum": "e83adb9af4ec0a039e6a5c6e145a34de",
+            "iso_checksum": "c7f439e864d28d9e5ca2aa885c4ec4cb",
             "iso_checksum_type": "md5",
-            "iso_url": "http://releases.ubuntu.com/12.04.4/ubuntu-12.04.4-server-amd64.iso",
+            "iso_url": "http://releases.ubuntu.com/12.04.4/ubuntu-12.04.4-desktop-amd64.iso",
             "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
             "ssh_password": "vagrant",
             "ssh_port": 22,
@@ -30,7 +30,7 @@
                     "modifyvm",
                     "{{.Name}}",
                     "--memory",
-                    "4096"
+                    "6000"
                 ],
                 [
                     "modifyvm",
@@ -38,24 +38,54 @@
                     "--cpus",
                     "4"
                 ],
-                [
+		        [
+		           "modifyvm",
+		           "{{.Name}}",
+		           "--vram",
+		           "128"
+		         ],
+		         [
+		           "modifyvm",
+		           "{{.Name}}",
+		           "--ioapic",
+		           "on"
+		         ],
+		         [
+		           "modifyvm",
+		           "{{.Name}}",
+		           "--rtcuseutc",
+		           "on"
+		         ],
+		         [
+		           "modifyvm",
+		           "{{.Name}}",
+		           "--accelerate3d",
+		           "on"
+		         ],
+		         [
+		           "modifyvm",
+		           "{{.Name}}",
+		           "--clipboard",
+		           "bidirectional"
+		         ],
+                 [
                     "modifyvm",
                     "{{.Name}}",
                     "--nic1",
                     "nat"
-                ],
-                [
+                 ],
+                 [
                     "modifyvm",
                     "{{.Name}}",
                     "--nic2",
                     "bridged"
-                ],
-                [
+                 ],
+                 [
                   "modifyvm",
                   "{{.Name}}",
                   "--bridgeadapter2",
                   "en1"
-                ]
+                 ]
             ],
             "virtualbox_version_file": ".vbox_version"
         }
@@ -70,7 +100,7 @@
             "install_command": "echo 'vagrant' | {{if .Sudo}}sudo -S{{end}} bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v 11.8'",
             "json": {
                 "alfresco": {
-                    "version":"4.2.1",
+                    "version":"4.2.f",
                     "allinone": true,
                     "properties": {
                         "hostname.private":"192.168.1.223"
