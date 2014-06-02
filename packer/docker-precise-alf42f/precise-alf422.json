@@ -32,7 +32,7 @@
                     "base_version": 7
                 },
                 "maven": {
-                  "master_password":"{S481/dqWXeAHHc75gpS8PM8fs2cxzGRd/JxwZ36q//4=}"
+                  "master_password":"{your_mvn_master_password}"
                 }
             },
             "run_list": [
