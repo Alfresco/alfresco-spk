@@ -61,3 +61,7 @@ Updating/Customising Chef Cookbooks
 Everytime that a new version of the Chef recipes is released, it is necessary to update the ```vendor-cookbooks``` folder using ```./create-vendor-cookbooks.sh``` script.
 
 The vendor-cookbooks folder can be optionally removed from ```.gitignore``` in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
+
+Known Issues
+---
+If you're using Ubuntu, you must ensure that [port 11371 is open](http://support.gpgtools.org/kb/faq/im-behind-a-firewall-eg-in-a-big-company-and-cant-reach-any-key-server-what-now)
