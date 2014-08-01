@@ -57,6 +57,21 @@
     ],
     "provisioners": [
         {
+          "type": "file",
+          "source": "../common/scripts/common.sh",
+          "destination": "/home/vagrant/common.sh"
+        },
+        {
+          "type": "file",
+          "source": "../common/scripts/static-ip.sh",
+          "destination": "/home/vagrant/static-ip.sh"
+        },
+        {
+          "type": "shell",
+          "execute_command": "echo 'vagrant' | sudo -E -S sh '{{ .Path }}'",
+          "inline": ["chmod 755 /home/vagrant/static-ip.sh && /home/vagrant/static-ip.sh 192.168.23.23 192.168.23.1 255.255.255.0"]
+        },
+        {
             "cookbook_paths": [
                 "../common/vendor-cookbooks"
             ],
@@ -97,16 +112,6 @@
             "type": "chef-solo"
         },
         {
-          "type": "file",
-          "source": "../common/scripts/common.sh",
-          "destination": "/home/vagrant/common.sh"
-        },
-        {
-          "type": "file",
-          "source": "../common/scripts/static-ip.sh",
-          "destination": "/home/vagrant/static-ip.sh"
-        },
-        {
           "type": "shell",
           "execute_command": "echo 'vagrant' | sudo -E -S sh '{{ .Path }}'",
           "scripts": [
@@ -114,11 +119,6 @@
             "../common/scripts/vagrant-ssh-key.sh",
             "../common/scripts/vbox-additions.sh"
           ]
-        },
-        {
-          "type": "shell",
-          "execute_command": "echo 'vagrant' | sudo -E -S sh '{{ .Path }}'",
-          "inline": ["chmod 755 /home/vagrant/static-ip.sh && /home/vagrant/static-ip.sh 192.168.1.223 192.168.1.1 255.255.255.0"]
         }
     ]
 }
