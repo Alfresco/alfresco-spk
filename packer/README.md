@@ -43,9 +43,9 @@ To generate the box:
 cd alfresco-boxes/packer
 packer build -only virtualbox-iso precise-alf421.json
 ```
-This will create a output-virtualbox-iso/<box-name>.ovf and output-virtualbox-iso/<box-name>.vdmk, ready to be imported into VirtualBox.
+This will create a ```output-virtualbox-iso/<box-name>.ovf``` and ```output-virtualbox-iso/<box-name>.vdmk```, ready to be imported into VirtualBox.
 
-The user/password to login (and check the local IP - ifconfig - that is assigned by DHCP) is vagrant/vagrant
+The user/password to login is vagrant/vagrant
 You can also create a Vagrant box by adding a Packer post-processor in [alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/precise-alf421.json#L168)
 
 Uploading AMI to AWS
