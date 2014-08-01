@@ -15,7 +15,7 @@
             "guest_additions_path": "/home/vagrant/VBoxGuestAdditions_{{.Version}}.iso",
             "guest_os_type": "Ubuntu_64",
             "headless": false,
-            "http_directory": "../../common/http",
+            "http_directory": "../common/http",
             "iso_checksum": "e83adb9af4ec0a039e6a5c6e145a34de",
             "iso_checksum_type": "md5",
             "iso_url": "http://releases.ubuntu.com/12.04.4/ubuntu-12.04.4-server-amd64.iso",
@@ -48,14 +48,9 @@
                     "modifyvm",
                     "{{.Name}}",
                     "--nic2",
-                    "bridged"
-                ],
-                [
-                  "modifyvm",
-                  "{{.Name}}",
-                  "--bridgeadapter2",
-                  "en1"
-                ]
+                    "hostonly",
+                    "--hostonlyadapter2",
+                    "vboxnet0"]
             ],
             "virtualbox_version_file": ".vbox_version"
         }
@@ -63,21 +58,21 @@
     "provisioners": [
         {
             "cookbook_paths": [
-                "../../common/vendor-cookbooks"
+                "../common/vendor-cookbooks"
             ],
-            "data_bags_path": "../../common/data_bags",
+            "data_bags_path": "../common/data_bags",
             "execute_command": "echo 'vagrant' | {{if .Sudo}}sudo -S{{end}} chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}} -l debug",
             "install_command": "echo 'vagrant' | {{if .Sudo}}sudo -S{{end}} bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v 11.8'",
             "json": {
                 "alfresco": {
-                    "version":"4.2.1",
+                    "version":"5.0.a",
                     "allinone": true,
                     "properties": {
                         "hostname.private":"192.168.1.223"
                     }
                 },
                 "maven": {
-                  "master_password":"{your_mvn_master_password}"
+                  "master_password":"{not needed}"
                 },
                 "tomcat": {
                     "base_version": 7
@@ -103,31 +98,27 @@
         },
         {
           "type": "file",
-          "source": "../../common/scripts/common.sh",
-          "destination": "/tmp/common.sh"
+          "source": "../common/scripts/common.sh",
+          "destination": "/home/vagrant/common.sh"
         },
         {
           "type": "file",
-          "source": "../../common/scripts/static-ip.sh",
-          "destination": "/tmp/static-ip.sh"
+          "source": "../common/scripts/static-ip.sh",
+          "destination": "/home/vagrant/static-ip.sh"
         },
         {
           "type": "shell",
-          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
+          "execute_command": "echo 'vagrant' | sudo -E -S sh '{{ .Path }}'",
           "scripts": [
-            "../../common/scripts/purge-maven-folders.sh",
-            "../../common/scripts/vagrant-ssh-key.sh",
-            "../../common/scripts/vbox-additions.sh"
+            "../common/scripts/purge-maven-folders.sh",
+            "../common/scripts/vagrant-ssh-key.sh",
+            "../common/scripts/vbox-additions.sh"
           ]
         },
         {
           "type": "shell",
-          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'",
-          "inline": ["/tmp/static-ip.sh 192.168.1.223 192.168.1.1 255.255.255.0"]
+          "execute_command": "echo 'vagrant' | sudo -E -S sh '{{ .Path }}'",
+          "inline": ["chmod 755 /home/vagrant/static-ip.sh && /home/vagrant/static-ip.sh 192.168.1.223 192.168.1.1 255.255.255.0"]
         }
-    ],
-    "variables": {
-        "aws_access_key": "",
-        "aws_secret_key": ""
-    }
+    ]
 }
