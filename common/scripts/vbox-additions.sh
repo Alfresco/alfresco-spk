@@ -1,5 +1,5 @@
 #!/bin/bash
-. /tmp/common.sh
+. /home/vagrant/common.sh
 set -x
 if [ ! -e /home/vagrant/.vbox_version ] ; then
     exit 0

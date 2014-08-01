@@ -26,11 +26,11 @@ You can optionally use your Maven encryped password and set your Maven Master pa
 }
 ```
 
-If you don't have credentials to artifacts.alfresco.com you can test it using the Community edition: change [alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/precise-alf421.json#L73) ```version``` attribute from ```4.2.1``` to ```4.2.f```
+If you don't have credentials to artifacts.alfresco.com you can test it using the Community edition: change [alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/precise-alf421.json#L73) ```version``` attribute to ```5.0.a```
 
 To generate the box:
 ```
-cd alfresco-boxes/packer/vbox-precise-421
+cd alfresco-boxes/packer
 packer build -only virtualbox-iso precise-alf421.json
 ```
 This will create a output-virtualbox-iso/<box-name>.ovf and output-virtualbox-iso/<box-name>.vdmk, ready to be imported into VirtualBox.
