@@ -1,5 +1,5 @@
 #!/bin/bash
-. /tmp/common.sh
+. /home/vagrant/common.sh
 
 # kernel source is needed for vbox additions
 if [ -f /etc/redhat-release ] ; then

@@ -33,6 +33,7 @@ Features
 Installation
 ---
 * Make sure that
+  * [ChefDK](http://downloads.getchef.com/chef-dk) is installed
   * Ruby is installed (I'm currently running on v1.9.3, test with ```ruby -v```)
   * If you run on OSX, install XCode (version 5 or higher)
 * Checkout this project ```git clone -b alfresco-boxes-<last_tag> https://github.com/maoo/alfresco-boxes.gitub alfresco-boxes```
