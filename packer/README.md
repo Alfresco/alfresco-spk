@@ -10,7 +10,7 @@ Now assign an IP to this interface with a subnet that doesn't conflict with your
 vboxmanage hostonlyif ipconfig vboxnet0 --ip 192.168.23.1 --netmask 255.255.255.0
 ```
 
-Edit file ```alfresco-boxes/packer/precise-alf421.json``` to choose an IP that can be bridged to one of your host Network Interfaces:
+Edit file ```packer/precise-alf421.json``` to choose an IP that can be bridged to one of your host Network Interfaces:
 ```
 {
   "type": "shell",
@@ -40,10 +40,10 @@ If you don't have credentials to artifacts.alfresco.com you can test it using th
 
 To generate the box:
 ```
-cd alfresco-boxes/packer
+cd packer
 packer build -only virtualbox-iso precise-alf421.json
 ```
-This will create a ```output-virtualbox-iso/<box-name>.ovf``` and ```output-virtualbox-iso/<box-name>.vdmk```, ready to be imported into VirtualBox.
+This will create a ```packer/output-virtualbox-iso``` folder containing ```<box-name>.ovf``` and ```<box-name>.vdmk```, ready to be imported into VirtualBox.
 
 The user/password to login is vagrant/vagrant
 You can also create a Vagrant box by adding a Packer post-processor in [alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/precise-alf421.json#L168)
@@ -51,7 +51,7 @@ You can also create a Vagrant box by adding a Packer post-processor in [alfresco
 Uploading AMI to AWS
 ---
 ```
-cd alfresco-boxes/packer
+cd packer
 packer build -only amazon-ebs -var 'aws_access_key=YOUR ACCESS KEY' -var 'aws_secret_key=YOUR SECRET KEY' aws-precise-alf421.json
 ```
 The AMI is based on an existing Ubuntu 12.04 AMI ([ami-de0d9eb7](http://thecloudmarket.com/image/ami-de0d9eb7--ubuntu-images-ebs-ubuntu-precise-12-04-amd64-server-20130222))
