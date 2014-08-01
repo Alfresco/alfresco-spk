@@ -51,8 +51,8 @@ You can also create a Vagrant box by adding a Packer post-processor in [alfresco
 Uploading AMI to AWS
 ---
 ```
-cd alfresco-boxes/packer/vbox-precise-421
-packer build -only amazon-ebs -var 'aws_access_key=YOUR ACCESS KEY' -var 'aws_secret_key=YOUR SECRET KEY' alfresco-allinone.json
+cd alfresco-boxes/packer
+packer build -only amazon-ebs -var 'aws_access_key=YOUR ACCESS KEY' -var 'aws_secret_key=YOUR SECRET KEY' aws-precise-alf421.json
 ```
 The AMI is based on an existing Ubuntu 12.04 AMI ([ami-de0d9eb7](http://thecloudmarket.com/image/ami-de0d9eb7--ubuntu-images-ebs-ubuntu-precise-12-04-amd64-server-20130222))
 
