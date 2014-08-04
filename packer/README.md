@@ -52,9 +52,9 @@ Uploading AMI to AWS
 ---
 ```
 cd packer
-packer build -only amazon-ebs -var 'aws_access_key=YOUR ACCESS KEY' -var 'aws_secret_key=YOUR SECRET KEY' aws-precise-alf421.json
+packer build -only amazon-ebs -var 'aws_access_key=YOUR ACCESS KEY' -var 'aws_secret_key=YOUR SECRET KEY' precise-alf421.json
 ```
-The AMI is based on an existing Ubuntu 12.04 AMI ([ami-de0d9eb7](http://thecloudmarket.com/image/ami-de0d9eb7--ubuntu-images-ebs-ubuntu-precise-12-04-amd64-server-20130222))
+The AMI is based on an existing Ubuntu 12.04 AMI ([ami-a4e81fd3](http://thecloudmarket.com/image/ami-a4e81fd3--ubuntu-images-ebs-ubuntu-lucid-10-04-i386-server-20140127))
 
 Running Packer VM on Vagrant
 ---
