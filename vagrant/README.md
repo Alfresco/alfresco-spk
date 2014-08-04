@@ -1,14 +1,30 @@
-Development
+Configure Vagrant
 ---
-If you want to test additional/external Chef recipes without triggering the Packer provisioning (and save some time), simply run ```vagrant up``` from the ```vagrant/dev``` folder
+Install Vagrant Plugins using ```common/install-vagrant-plugins.sh``` and make sure that Vagrant is properly installed running ```vagrant -v```
+Alternatively, you can install your vagrant plugins manually using
+
+```
+vagrant plugin install vagrant-omnibus
+vagrant plugin install vagrant-vbguest
+vagrant plugin install vagrant-hosts
+```
+
+Run Vagrant
+---
+```
+cd vagrant/dev
+vagrant up
+```
+
+You can now
 * Open http://192.168.0.33:8080/share
 * Login as admin/admin
 * Use top-right search box and type 'project'
 
-You can change the [attributes.json](https://github.com/maoo/alfresco-boxes/tree/master/vagrant/built-with-packer/attributes.json) to build your logic
-
 Multi VM
 ---
+The MultiVM environment on Vagrant is very experimental, since Vagrant is not the most suited technology for this, Docker is more indicated for this use-case.
+
 In ```vagrant/multivm``` you can find an example of Vagrant multi VM configuration; you can test it running ```run.sh``` from ```vagrant/multivm``` or
 
 ```
@@ -35,13 +51,6 @@ If you want to check if VirtualBox is still running from previous attempps run
 ```
 ps aux | grep VirtualBoxVM
 ps aux | grep Vbox
-```
-
-When the packer commands fail, the VirtualBox VM may get inaccessiblel check and remove them using
-
-```
-VBoxManage list vms
-VBoxManage unregistervm 22986cf8-3bad-4d22-8dc9-8983faa36422
 ```
 
 To reset your local environment, run the following command
