@@ -1,3 +1,7 @@
+Install Packer
+---
+Download [Vagrant installer](https://www.vagrantup.com/downloads.html)
+
 Configure Vagrant
 ---
 Install Vagrant Plugins using ```common/install-vagrant-plugins.sh``` and make sure that Vagrant is properly installed running ```vagrant -v```
