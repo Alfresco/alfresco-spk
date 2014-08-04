@@ -32,14 +32,10 @@ Features
 
 Installation
 ---
-* Make sure that [ChefDK](http://downloads.getchef.com/chef-dk) is installed
-* Checkout the latest tag of this project ```git clone -b alfresco-boxes-<last_tag> https://github.com/maoo/alfresco-boxes.gitub alfresco-boxes```
-* ```cd alfresco-boxes/common```
-* Resolve external chef recipes ```./create-vendor-cookbooks.sh```
-* Install
-  * [VirtualBox](https://www.virtualbox.org) - latest tested version 4.3.14.r95030
-  * Optional, if you want to *run VMs* with [Vagrant](http://downloads.vagrantup.com) - tested with version 1.6.2
-  * Optional, if you want to *build boxes* with [Packer](http://www.packer.io/downloads.html) - tested with version 0.5.2
+* Install [ChefDK](http://downloads.getchef.com/chef-dk)
+* Checkout this project with ```git https://github.com/maoo/alfresco-boxes.gitub alfresco-boxes```
+* Install [VirtualBox](https://www.virtualbox.org) - latest tested version 4.3.14.r95030 (you can optionally use VMWare Player/Fusion)
+* Install Vendor Chef Cookbooks with ```cd alfresco-boxes/common && ./create-vendor-cookbooks.sh```
 
 Creating a box
 ---
@@ -61,4 +57,4 @@ The vendor-cookbooks folder can be optionally removed from ```.gitignore``` in o
 
 Known Issues
 ---
-If you're using Ubuntu, you must ensure that [port 11371 is open](http://support.gpgtools.org/kb/faq/im-behind-a-firewall-eg-in-a-big-company-and-cant-reach-any-key-server-what-now)
+If you're using Ubuntu as guest machines, you must ensure that [port 11371 is open](http://support.gpgtools.org/kb/faq/im-behind-a-firewall-eg-in-a-big-company-and-cant-reach-any-key-server-what-now)

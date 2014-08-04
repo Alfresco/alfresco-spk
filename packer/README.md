@@ -1,3 +1,7 @@
+Install Packer
+---
+Follow [Packer's installation page](http://www.packer.io/intro/getting-started/setup.html)
+
 Creating a Packer box
 ---
 Create a host-only network interface for VirtualBox (unless ```ifconfig -a``` already lists ```vboxnet0```)
