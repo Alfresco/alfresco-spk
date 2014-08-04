@@ -32,20 +32,16 @@ Features
 
 Installation
 ---
-* Make sure that
-  * [ChefDK](http://downloads.getchef.com/chef-dk) is installed
-  * Ruby is installed (I'm currently running on v1.9.3, test with ```ruby -v```)
-  * If you run on OSX, install XCode (version 5 or higher)
-* Checkout this project ```git clone -b alfresco-boxes-<last_tag> https://github.com/maoo/alfresco-boxes.gitub alfresco-boxes```
+* Make sure that [ChefDK](http://downloads.getchef.com/chef-dk) is installed
+* Checkout the latest tag of this project ```git clone -b alfresco-boxes-<last_tag> https://github.com/maoo/alfresco-boxes.gitub alfresco-boxes```
 * ```cd alfresco-boxes/common```
-* Install bundler and Vagrant plugins with ```./install.sh```; if you get a ```Gem::FilePermissionError```, use ```sudo ./install.sh```
-* Run Berkshelf to resolve external chef recipes ```./create-vendor-cookbooks.sh```
+* Resolve external chef recipes ```./create-vendor-cookbooks.sh```
 * Install
-  * [VirtualBox](https://www.virtualbox.org) - tested with version 4.3.12-93733-OSX
+  * [VirtualBox](https://www.virtualbox.org) - latest tested version 4.3.14.r95030
   * Optional, if you want to *run VMs* with [Vagrant](http://downloads.vagrantup.com) - tested with version 1.6.2
   * Optional, if you want to *build boxes* with [Packer](http://www.packer.io/downloads.html) - tested with version 0.5.2
 
-Try it!
+Creating a box
 ---
 * If you want to _build_ with Packer, follow [packer/README.md](https://github.com/maoo/alfresco-boxes/tree/master/packer)
 * If you want to _run_ with Vagrant, follow [vagrant/README.md](https://github.com/maoo/alfresco-boxes/tree/master/vagrant)
