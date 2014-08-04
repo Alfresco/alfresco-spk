@@ -48,4 +48,4 @@ Creating a box
 
 Known Issues
 ---
-If you're using Ubuntu as guest machines, you must ensure that [port 11371 is open](http://support.gpgtools.org/kb/faq/im-behind-a-firewall-eg-in-a-big-company-and-cant-reach-any-key-server-what-now)
+If you're using Ubuntu as guest machines and you're running alfresco-boxes behind a firewall, you must ensure that [port 11371 is open/reachable](http://support.gpgtools.org/kb/faq/im-behind-a-firewall-eg-in-a-big-company-and-cant-reach-any-key-server-what-now)
