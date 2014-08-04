@@ -1,6 +1,20 @@
 {
     "builders": [
         {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "ami_name": "alfresco-allinone {{timestamp}}",
+            "instance_type": "m1.small",
+            "region": "us-west-1",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "source_ami": "ami-a4e81fd3",
+            "ssh_username": "ubuntu"
+        },
+        {
+            "type": "virtualbox-iso",
+            "iso_url": "http://releases.ubuntu.com/12.04.4/ubuntu-12.04.4-server-amd64.iso",
+            "iso_checksum": "e83adb9af4ec0a039e6a5c6e145a34de",
+            "iso_checksum_type": "md5",
             "boot_command": [
                 "<esc><esc><enter><wait>",
                 "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
@@ -16,15 +30,12 @@
             "guest_os_type": "Ubuntu_64",
             "headless": false,
             "http_directory": "../common/http",
-            "iso_checksum": "e83adb9af4ec0a039e6a5c6e145a34de",
-            "iso_checksum_type": "md5",
-            "iso_url": "http://releases.ubuntu.com/12.04.4/ubuntu-12.04.4-server-amd64.iso",
             "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
             "ssh_password": "vagrant",
             "ssh_port": 22,
             "ssh_username": "vagrant",
             "ssh_wait_timeout": "10000s",
-            "type": "virtualbox-iso",
+            "virtualbox_version_file": ".vbox_version",
             "vboxmanage": [
                 [
                     "modifyvm",
@@ -51,8 +62,7 @@
                     "hostonly",
                     "--hostonlyadapter2",
                     "vboxnet0"]
-            ],
-            "virtualbox_version_file": ".vbox_version"
+            ]
         }
     ],
     "provisioners": [
@@ -120,5 +130,9 @@
             "../common/scripts/vbox-additions.sh"
           ]
         }
-    ]
+    ],
+    "variables": {
+        "aws_access_key": "",
+        "aws_secret_key": ""
+    }
 }
