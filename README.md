@@ -36,24 +36,15 @@ Installation
 * Checkout this project with ```git https://github.com/maoo/alfresco-boxes.gitub alfresco-boxes```
 * Install [VirtualBox](https://www.virtualbox.org) - latest tested version 4.3.14.r95030 (you can optionally use VMWare Player/Fusion)
 * Install Vendor Chef Cookbooks with ```cd alfresco-boxes/common && ./create-vendor-cookbooks.sh```
+  * This step needs to be executed everytime that ```common/Berksfile``` is edited
+  * Cookbooks are fetched and locally cached into ```common/vendor-cookbooks``` folder
+  * By default ```common/vendor-cookbooks``` folder is git-ignored (via ```.gitignore```), but it could be pushed in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
 
 Creating a box
 ---
 * If you want to _build_ with Packer, follow [packer/README.md](https://github.com/maoo/alfresco-boxes/tree/master/packer)
 * If you want to _run_ with Vagrant, follow [vagrant/README.md](https://github.com/maoo/alfresco-boxes/tree/master/vagrant)
 * If you want to _provision_ with Docker, follow [docker/README.md](https://github.com/maoo/alfresco-boxes/tree/master/docker)
-
-Customisations
----
-You can read the [alfresco-allinone.json](https://github.com/maoo/alfresco-boxes/tree/master/packer/precise-alf421.json) definition to check the default values that are used to install Alfresco; there are many other default values that are defined by the following Chef Recipes
-* [artifact-deployer](https://github.com/maoo/artifact-deployer), you can check default values in [attributes.json](https://github.com/maoo/artifact-deployer/tree/master/attributes)
-* [chef-alfresco](https://github.com/maoo/chef-alfresco), you can check default values in [attributes.json](https://github.com/maoo/chef-alfresco/tree/master/attributes)
-
-Updating/Customising Chef Cookbooks
----
-Everytime that a new version of the Chef recipes is released, it is necessary to update the ```vendor-cookbooks``` folder using ```./create-vendor-cookbooks.sh``` script.
-
-The vendor-cookbooks folder can be optionally removed from ```.gitignore``` in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
 
 Known Issues
 ---
