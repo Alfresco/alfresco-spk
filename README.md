@@ -38,7 +38,7 @@ Installation
 * Install Vendor Chef Cookbooks with ```cd alfresco-boxes/common && ./create-vendor-cookbooks.sh```
   * This step needs to be executed everytime that ```common/Berksfile``` is edited
   * Cookbooks are fetched and locally cached into ```common/vendor-cookbooks``` folder
-  * By default ```common/vendor-cookbooks``` folder is git-ignored (via ```.gitignore```), but it could be pushed in order to be used by other provizioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
+  * By default ```common/vendor-cookbooks``` folder is git-ignored (via ```.gitignore```), but it could be pushed in order to be used by other provisioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
 
 Creating a box
 ---
