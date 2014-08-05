@@ -1,0 +1,31 @@
+{
+    "provisioners": [
+        {
+            "json": {
+                "ip": "192.168.0.34",
+                "hostname": "alfresco-allinone",
+                "alfresco": {
+                    "version":"5.0.a",
+                    "allinone": true
+                },
+                "tomcat": {
+                    "base_version": 7
+                }
+            },
+            "run_list": [
+                "apt::default",
+                "iptables::default",
+                "alfresco::3rdparty",
+                "alfresco::mysql_server",
+                "alfresco::mysql_createdb",
+                "tomcat::default",
+                "tomcat::users",
+                "alfresco::repo_config",
+                "alfresco::share_config",
+                "alfresco::solr_config",
+                "artifact-deployer::default",
+                "alfresco::apply_amps"
+            ]
+        }
+    ]
+}

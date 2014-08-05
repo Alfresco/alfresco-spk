@@ -1,6 +1,7 @@
 Install Packer
 ---
-Download [Vagrant installer](https://www.vagrantup.com/downloads.html)
+* Download [Vagrant installer](https://www.vagrantup.com/downloads.html)
+* Install [Ruby and Bundler](http://bundler.io) (if you're in OSX, you can just install [XCode](https://developer.apple.com/xcode))
 
 Configure Vagrant
 ---
@@ -25,9 +26,14 @@ You can now
 * Login as admin/admin
 * Use top-right search box and type 'project'
 
+You can optionally define an alternative JSON file and/or select a different OS (only ```centos64``` and ```precise64``` are supported for now)
+```
+JSON=alfresco-allinone-ent.json BOX_OS=centos64 vagrant up
+```
+
 Multi VM
 ---
-The MultiVM environment on Vagrant is very experimental, since Vagrant is not the most suited technology for this, Docker is more indicated for this use-case.
+The MultiVM environment is still experimental, since Vagrant is not the most suited technology for this, Docker is more indicated for this use-case.
 
 In ```vagrant/multivm``` you can find an example of Vagrant multi VM configuration; you can test it running ```run.sh``` from ```vagrant/multivm``` or
 
