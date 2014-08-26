@@ -69,6 +69,13 @@ docker run --name repo1 -d -p 8080:8080 -p 5701 -v $PWD/license:/alflicense --li
 docker run --name repo2 -d -p 8081:8080 -p 5701 -v $PWD/license:/alflicense --link db:db --volumes-from data maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 ```
 
+### Validate Installation
+
+You should now be able to access the Alfresco Cluster from your host machine:
+* [http://localhost:38080/share](http://localhost:38080/share)
+* [http://localhost:38081/share](http://localhost:38081/share)
+
+
 ## Useful commands
 
 ```
