@@ -75,7 +75,6 @@ You should now be able to access the Alfresco Cluster from your host machine:
 * [http://localhost:38080/share](http://localhost:38080/share)
 * [http://localhost:38081/share](http://localhost:38081/share)
 
-
 ## Useful commands
 
 ```
