@@ -15,6 +15,6 @@ cookbook 'swftools',                git: 'git://github.com/dhartford/chef-swftoo
 cookbook 'openoffice',              git: 'git://github.com/dhartford/chef-openoffice.git'
 cookbook 'imagemagick',             git: 'git://github.com/someara/imagemagick.git',     tag: 'v0.2.3'
 
-cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.3.9'
+cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.3.10'
 cookbook 'artifact-deployer',       git: 'git://github.com/maoo/artifact-deployer.git',  tag: 'artifact-deployer-0.7.3'
 cookbook 'tomcat',                  git: 'git://github.com/maoo/tomcat.git',             tag: 'chef-tomcat-0.15.12-custom-2'
