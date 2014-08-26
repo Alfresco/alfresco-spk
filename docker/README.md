@@ -28,59 +28,46 @@ vagrant up
 vagrant ssh
 ```
 
-* Building Alfresco Allinone Container
-* Importing Alfresco Container
+### Building/Importing Alfresco Allinone Container
+
 ```
 cd /alfboxes/docker
 /opt/packer/packer build precise-alf422.json
 docker import - maoo/alf-precise:latest < precise-alf422.tar
 ```
 
-* Run a MySQL DB instance (user admin, password alfresco); guest port 3306 is mapped to port 33306
+### Setting up a data instance (keeps mysql data and contentstore)
 ```
-docker run -d --name db -p 3306:3306 -e MYSQL_PASS="alfresco" tutum/mysql:latest
+docker run --name data -v /var/lib/tomcat7/alf_data/contentstore -v /var/lib/mysql -d busybox /bin/sh -c "chmod -R 777 /var/lib/tomcat7/alf_data/contentstore ; watch top"
 ```
 
-* From the host machine, log into mysql (pwd is ```alfresco```) and create an empty DB; skip this step if /var/lib/mysql is mounted (WIP)
+### Setting up DB instance
+
+* Run a MySQL DB instance (user admin, password alfresco); guest port 3306 is mapped to port 33306
+```
+docker run -d --name db -p 3306:3306 --volumes-from data -e MYSQL_PASS="alfresco" tutum/mysql:latest
+```
+
+* From the host machine, log into mysql (pwd is ```alfresco```) and create an empty DB
 ```
 mysql -u admin --port=33306 -h 127.0.0.1 -p
 CREATE DATABASE alfresco CHARACTER SET utf8 COLLATE utf8_general_ci;
 GRANT ALL PRIVILEGES ON alfresco.* TO 'alfresco' IDENTIFIED BY 'alfresco';
 ```
 
-* Run 2 repo instances, linked to the DB instance
+### Running a 2-nodes Alfresco Repository cluster (linked to db and data instances)
 ```
-docker run --name repo1 -d -p 8080:8080 --link db:db maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
-docker run --name repo2 -d -p 8081:8080 --link db:db maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
+docker run --name repo1 -d -p 8080:8080 --link db:db --volumes-from data maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
+docker run --name repo2 -d -p 8081:8080 --link db:db --volumes-from data maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 ```
 
-Useful commands
+## Useful commands
+
 ```
 # Remove all stopped Docker containers
 docker rm `docker ps --no-trunc -a -q`
+
+# Run an interactive Alfresco repo instance (for debugging purposes)
+docker run --name repoX -t -i -p 18080:8080 --volumes-from data --link db:db maoo/alf-precise /bin/bash
+
 ```
-
-
-## (OSX - Alternative method) Using boot2docker
-
-```
-brew install boot2init
-brew install docker
-boot2docker up
-boot2docker init #Starts the docker daemon
-export DOCKER_HOST=tcp://localhost:4243 #Identifies the docker server; must be done on the same shell where the `packer' command is executed
-```
-
-For simplicity, open VirtualBox and add a new Network interface that is bridged to one of your host network interfaces.
-
-Due to a [docker issue](https://github.com/mitchellh/packer/issues/901), it is necessary to do the following activities on the boot2docker vm
-```
-boot2docker ssh (pwd is `tcuser`)
-tce-load -w -i sshfs-fuse.tcz bash.tcz
-sudo bash -c 'echo user_allow_other > /etc/fuse.conf'
-mkdir /var/folders
-sshfs -o allow_root,uid=1000,gid=100 mau@192.168.1.23:/var/folders /var/folders
-```
-```192.168.1.23``` is my Host Private IP and ```mau``` the user on the Host machine
-
-For more info on Docker installation ckeck the [Docker docs](http://docs.docker.io/installation/)
