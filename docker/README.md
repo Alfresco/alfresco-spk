@@ -23,7 +23,7 @@ If you're not familiar with Docker yet, this [Youtube video](https://www.youtube
 ```
 Note that this file is part of .gitignore
 
-* Creating the Docker container
+* Creating the Docker container and logging into the CoreOS box
 ```
 cd docker
 vagrant up
