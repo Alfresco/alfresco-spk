@@ -8,7 +8,18 @@ This document explains
 
 If you're not familiar with Docker yet, this [Youtube video](https://www.youtube.com/watch?v=VeiUjkiqo9E) will explain you what it does and how to use it.
 
-## Using Vagrant (recommended)
+## Using Vagrant to run CoreOS (recommended)
+
+* Setup your Alfresco Private Repository credentials; create ```common/data_bags/maven_repos/private.json```
+```
+{
+  "id":"private",
+  "url": "https://artifacts.alfresco.com/nexus/content/groups/private",
+  "username":"<your_username>",
+  "password":"<your_password>"
+}
+```
+Note that this file is part of .gitignore
 
 * Creating the Docker container
 ```
@@ -21,7 +32,7 @@ vagrant ssh
 * Importing Alfresco Container
 ```
 cd /alfboxes/docker
-packer build precise-alf422.json
+/opt/packer/packer build precise-alf422.json
 docker import - maoo/alf-precise:latest < precise-alf422.tar
 ```
 
@@ -46,7 +57,26 @@ docker run -i -t -p 8080:8080 --volumes-from alfresco_data maoo/alf-precise bash
 docker run -i -t -p 8081:8080 --volumes-from alfresco_data maoo/alf-precise bash
 /etc/init.d/tomcat7 start #TODO this should start at boot time; fix it in the chef recipe
 ```
-To access Alfresco, you can edit the VirtualBox "Network settings > Port Forwarding" and map host/guest ports 8080/8080 and 8081/8081
+
+Using coreOS (WIP)
+---
+
+Run a MySQL DB instance (user admin, password alfresco); guest port 3306 is mapped to port 33306
+```
+docker run -d --name db -p 3306:3306 -e MYSQL_PASS="alfresco" tutum/mysql:latest
+```
+
+From the host machine, create an empty DB; skip this step if /var/lib/mysql is mounted (WIP)
+```
+mysql -u admin --port=33306 -h 127.0.0.1 -p
+CREATE DATABASE alfresco CHARACTER SET utf8 COLLATE utf8_general_ci;
+```
+
+Run 2 repo instances, linked to the DB instance
+```
+docker run --name repo1 -d -p 8080:8080 --link db:db maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
+docker run --name repo2 -d -p 8081:8080 --link db:db maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
+```
 
 Useful commands
 ```
