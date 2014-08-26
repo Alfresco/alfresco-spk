@@ -19,7 +19,8 @@
                     "allinone": true,
                     "version":"4.2.2",
                     "properties": {
-                        "db.host":"db"
+                        "db.host":"db",
+                        "dir.license.external" : "/alflicense"
                     }
                 },
                 "tomcat" : {
@@ -27,7 +28,7 @@
                     "jvm_memory" : "-Xmx2500M -XX:MaxPermSize=512M"
                 },
                 "maven": {
-                  "master_password":"{your_mvn_master_password}"
+                  "master_password":"{your_optional_mvn_master_password}"
                 }
             },
             "run_list": [

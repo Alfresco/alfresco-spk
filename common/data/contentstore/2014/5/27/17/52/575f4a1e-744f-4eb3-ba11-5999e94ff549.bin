@@ -1,7 +1,0 @@
-var scriptResult = "This is a script result"; 
- 
-function result() 
-{ 
-   return (scriptResult); 
-} 
-result();
