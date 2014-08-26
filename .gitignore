@@ -1,7 +1,5 @@
 **/alf_data_shared
-**/internal.json
-*/internal.json
-internal.json
+**/maven_repos/private.json
 *.lock
 dev/Berksfile.dev
 .vagrant
