@@ -36,43 +36,19 @@ cd /alfboxes/docker
 docker import - maoo/alf-precise:latest < precise-alf422.tar
 ```
 
-* Creating Data-only containers
-* Running Alfresco MySQL Container
-* Creating MySQL empty DB
-* Running Alfresco Container
-
-```
-docker run -i -t --name alfresco_data -v /var/lib/mysql -v /var/lib/tomcat7/alf_data/contentstore busybox /bin/sh
-
-# To map an existing folders to data volumes
-#docker run -d --name alfresco_data -v $PWD/data/mysql:/var/lib/mysql -v $PWD/data/contentstore:/var/lib/tomcat7/alf_data/contentstore busybox /bin/sh
-
-docker run -d -p 3306:3306 --volumes-from alfresco_data -e MYSQL_PASS="alfresco" tutum/mysql:latest
-
-# Comment the following if previous line if existing /var/lib/mysql is provided
-mysql -uadmin -h 172.17.0.2 -p
-CREATE DATABASE IF NOT EXISTS alfresco CHARACTER SET utf8 COLLATE utf8_general_ci;
-
-docker run -i -t -p 8080:8080 --volumes-from alfresco_data maoo/alf-precise bash
-docker run -i -t -p 8081:8080 --volumes-from alfresco_data maoo/alf-precise bash
-/etc/init.d/tomcat7 start #TODO this should start at boot time; fix it in the chef recipe
-```
-
-Using coreOS (WIP)
----
-
-Run a MySQL DB instance (user admin, password alfresco); guest port 3306 is mapped to port 33306
+* Run a MySQL DB instance (user admin, password alfresco); guest port 3306 is mapped to port 33306
 ```
 docker run -d --name db -p 3306:3306 -e MYSQL_PASS="alfresco" tutum/mysql:latest
 ```
 
-From the host machine, create an empty DB; skip this step if /var/lib/mysql is mounted (WIP)
+* From the host machine, log into mysql (pwd is ```alfresco```) and create an empty DB; skip this step if /var/lib/mysql is mounted (WIP)
 ```
 mysql -u admin --port=33306 -h 127.0.0.1 -p
 CREATE DATABASE alfresco CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON alfresco.* TO 'alfresco' IDENTIFIED BY 'alfresco';
 ```
 
-Run 2 repo instances, linked to the DB instance
+* Run 2 repo instances, linked to the DB instance
 ```
 docker run --name repo1 -d -p 8080:8080 --link db:db maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 docker run --name repo2 -d -p 8081:8080 --link db:db maoo/alf-precise /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"

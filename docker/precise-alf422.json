@@ -3,33 +3,28 @@
         {
             "type": "docker",
             "image": "maoo/alf-precise-base",
-            "export_path": "precise-alf42f.tar"
+            "export_path": "precise-alf422.tar"
         }
     ],
     "provisioners": [
         {
             "cookbook_paths": [
-                "../../common/vendor-cookbooks"
+                "../common/vendor-cookbooks"
             ],
-            "data_bags_path": "../../common/data_bags",
+            "data_bags_path": "../common/data_bags",
             "json": {
                 "alfresco": {
+                    "default_hostname" : "localhost",
                     "start_service": false,
                     "allinone": true,
-                    "default_hostname": "172.17.0.3",
-                    "db" : {
-                        "root_user":"admin",
-                        "server_root_password":"alfresco",
-                        "repo_hosts":["172.17.0.3"]
-                    },
                     "version":"4.2.2",
                     "properties": {
-                        "db.username":"admin",
-                        "db.host":"172.17.0.2"
+                        "db.host":"db"
                     }
                 },
                 "tomcat" : {
-                    "base_version": 7
+                    "base_version": 7,
+                    "jvm_memory" : "-Xmx2500M -XX:MaxPermSize=512M"
                 },
                 "maven": {
                   "master_password":"{your_mvn_master_password}"
