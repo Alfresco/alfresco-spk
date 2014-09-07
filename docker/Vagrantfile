@@ -28,9 +28,10 @@ end
 
 Vagrant.configure("2") do |config|
   config.vm.box = "coreos-%s" % $update_channel
-  config.vm.box_version = ">= 308.0.1"
+  #config.vm.box_version = ">= 367.0.0"
+  config.vm.box_version = ">= 308.0.0"
   config.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant.json" % $update_channel
-  config.vm.synced_folder "..", "/alfboxes"
+  config.vm.synced_folder "../", "/alfboxes/", :nfs => true, :mount_options => ['nolock,timeo=6000']
 
   config.vm.provider :vmware_fusion do |vb, override|
     override.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant_vmware_fusion.json" % $update_channel
@@ -89,9 +90,12 @@ Vagrant.configure("2") do |config|
       ip = "172.17.8.#{i+100}"
       config.vm.network :private_network, ip: ip
 
+      config.vm.network "forwarded_port", guest: 80,   host: 30080
+      config.vm.network "forwarded_port", guest: 8000, host: 38000
       config.vm.network "forwarded_port", guest: 3306, host: 33306
       config.vm.network "forwarded_port", guest: 8080, host: 38080
       config.vm.network "forwarded_port", guest: 8081, host: 38081
+      config.vm.network "forwarded_port", guest: 8082, host: 38082
 
       # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
       #config.vm.synced_folder ".", "/home/core/share", id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
@@ -100,7 +104,10 @@ Vagrant.configure("2") do |config|
         config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
       end
-      config.vm.provision "shell", path: "install.sh"
+      config.vm.provision "shell", path: "scripts/install-packer.sh"
+      config.vm.provision "shell", path: "scripts/pull-docker-images.sh"
+      config.vm.provision "shell", path: "scripts/build-docker-images.sh"
+      config.vm.provision "shell", path: "scripts/run-community.sh"
     end
   end
 end

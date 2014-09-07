@@ -1,0 +1,66 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "maoo/alfresco-base:latest",
+            "export_path": "apache-lb.tar"
+        }
+    ],
+    "provisioners": [
+        {
+            "cookbook_paths": [
+                "../../../../common/vendor-cookbooks"
+            ],
+            "data_bags_path": "../../../../common/data_bags",
+            "json": {
+              "lb" : {
+                "balancers" : {
+                  "alfresco" : [
+                    {
+                      "ipaddress" : "alf1.alf-precise.demo.acme.com",
+                      "route" : "repo1",
+                      "protocol" : "http"
+                    },
+                    {
+                      "ipaddress" : "alf2.alf-precise.demo.acme.com",
+                      "route" : "repo2",
+                      "protocol" : "http"
+                    }
+                  ],
+                  "share" : [
+                    {
+                      "ipaddress" : "alf1.alf-precise.demo.acme.com",
+                      "route" : "share1",
+                      "protocol" : "http"
+                    },
+                    {
+                      "ipaddress" : "alf2.alf-precise.demo.acme.com",
+                      "route" : "share2",
+                      "protocol" : "http"
+                    }
+                  ],
+                  "solr" : [
+                    {
+                      "ipaddress" : "alf1.alf-precise.demo.acme.com",
+                      "route" : "solr1",
+                      "protocol" : "http"
+                    },
+                    {
+                      "ipaddress" : "alf2.alf-precise.demo.acme.com",
+                      "route" : "solr2",
+                      "protocol" : "http"
+                    }
+                  ]
+                }
+              }
+            },
+            "run_list": [
+                "apache2::default",
+                "alfresco::apachelb"
+            ],
+            "prevent_sudo": false,
+            "skip_install": false,
+            "type": "chef-solo"
+        }
+    ]
+}
