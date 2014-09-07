@@ -9,4 +9,6 @@ vendor-cookbooks
 packer_cache
 output-virtualbox-iso
 *.lic
+*.tar
 bootstrap-data
+license

@@ -1,0 +1,63 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "maoo/alfresco-web-base:latest",
+            "export_path": "alfresco-solr.tar"
+        }
+    ],
+    "provisioners": [
+        {
+            "cookbook_paths": [
+                "../../../../common/vendor-cookbooks"
+            ],
+            "data_bags_path": "../../../../common/data_bags",
+            "json": {
+                "alfresco": {
+                    "default_hostname"  : "localhost",
+                    "start_service"     : false,
+                    "version"           : "4.2.2",
+                    "properties": {
+                        "db.host"               : "db.mysql.demo.acme.com",
+                        "dir.license.external"  : "/alflicense"
+                    }
+                },
+                "artifacts" : {
+                  "alfresco" : {
+                    "enabled": true
+                  },
+                  "alfresco-mmt" : {
+                    "enabled": true
+                  },
+                  "alfresco-spp" : {
+                    "enabled": true
+                  },
+                  "mysqlconnector" : {
+                    "enabled": true
+                  },
+                  "classes" : {
+                    "enabled": true
+                  },
+                  "solr" : {
+                    "enabled": true
+                  },
+                  "solrhome" : {
+                    "enabled": true
+                  }
+                },
+                "tomcat" : {
+                    "base_version": 7
+                }
+            },
+            "run_list": [
+                "alfresco::repo_config",
+                "alfresco::solr_config",
+                "artifact-deployer::default",
+                "alfresco::apply_amps"
+            ],
+            "prevent_sudo": false,
+            "skip_install": false,
+            "type": "chef-solo"
+        }
+    ]
+}

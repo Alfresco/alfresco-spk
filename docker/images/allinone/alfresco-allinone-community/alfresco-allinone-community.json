@@ -2,41 +2,31 @@
     "builders": [
         {
             "type": "docker",
-            "image": "maoo/alf-precise-base",
-            "export_path": "precise-alf422.tar"
+            "image": "maoo/alfresco-repo-base:latest",
+            "export_path": "alfresco-allinone-community.tar"
         }
     ],
     "provisioners": [
         {
             "cookbook_paths": [
-                "../common/vendor-cookbooks"
+                "../../../../common/vendor-cookbooks"
             ],
-            "data_bags_path": "../common/data_bags",
+            "data_bags_path": "../../../../common/data_bags",
             "json": {
                 "alfresco": {
                     "default_hostname" : "localhost",
                     "start_service": false,
                     "allinone": true,
-                    "version":"4.2.2",
+                    "version":"5.0.a",
                     "properties": {
-                        "db.host":"db",
-                        "dir.license.external" : "/alflicense"
+                        "db.host":"db.mysql.demo.acme.com"
                     }
                 },
                 "tomcat" : {
-                    "base_version": 7,
-                    "jvm_memory" : "-Xmx2500M -XX:MaxPermSize=512M"
-                },
-                "maven": {
-                  "master_password":"{your_optional_mvn_master_password}"
+                    "base_version": 7
                 }
             },
             "run_list": [
-                "apt::default",
-                "iptables::default",
-                "alfresco::3rdparty",
-                "tomcat::default",
-                "tomcat::users",
                 "alfresco::repo_config",
                 "alfresco::share_config",
                 "alfresco::solr_config",
