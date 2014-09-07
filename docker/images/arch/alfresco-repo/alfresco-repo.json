@@ -27,12 +27,6 @@
                   "alfresco" : {
                     "enabled": true
                   },
-                  "alfresco-mmt" : {
-                    "enabled": true
-                  },
-                  "alfresco-spp" : {
-                    "enabled": true
-                  },
                   "mysqlconnector" : {
                     "enabled": true
                   },

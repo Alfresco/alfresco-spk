@@ -106,7 +106,9 @@ Vagrant.configure("2") do |config|
       end
       config.vm.provision "shell", path: "scripts/install-packer.sh"
       config.vm.provision "shell", path: "scripts/pull-docker-images.sh"
-      config.vm.provision "shell", path: "scripts/build-docker-images.sh"
+      config.vm.provision "shell", path: "scripts/build-base-images.sh"
+      config.vm.provision "shell", path: "scripts/build-allinone-images.sh"
+      config.vm.provision "shell", path: "scripts/build-arch-images.sh"
       config.vm.provision "shell", path: "scripts/run-community.sh"
     end
   end

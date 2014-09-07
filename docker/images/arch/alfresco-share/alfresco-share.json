@@ -2,7 +2,7 @@
     "builders": [
         {
             "type": "docker",
-            "image": "maoo/alfresco-web-base:latest",
+            "image": "maoo/alfresco-repo-base:latest",
             "export_path": "alfresco-share.tar"
         }
     ],

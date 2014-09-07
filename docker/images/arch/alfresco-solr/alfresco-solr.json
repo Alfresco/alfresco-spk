@@ -2,7 +2,7 @@
     "builders": [
         {
             "type": "docker",
-            "image": "maoo/alfresco-web-base:latest",
+            "image": "maoo/alfresco-repo-base:latest",
             "export_path": "alfresco-solr.tar"
         }
     ],
@@ -24,12 +24,6 @@
                 },
                 "artifacts" : {
                   "alfresco" : {
-                    "enabled": true
-                  },
-                  "alfresco-mmt" : {
-                    "enabled": true
-                  },
-                  "alfresco-spp" : {
                     "enabled": true
                   },
                   "mysqlconnector" : {
