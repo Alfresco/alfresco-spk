@@ -12,6 +12,7 @@ Host/CoreOS port mapping is configured as follows:
 * Host Port 38080 mapped to CoreOS 8080
 * Host Port 38081 mapped to CoreOS 8081
 * Host Port 38082 mapped to CoreOS 8082
+
 Can also be configured via VirtualBox GUI, selecting `Network > Adapter 1 > Port Forwarding`
 
 ## Enterprise Version and License (.lic) file
