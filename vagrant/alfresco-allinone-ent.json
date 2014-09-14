@@ -1,67 +1,25 @@
 {
-    "provisioners": [
-        {
-            "json": {
-                "alfresco": {
-                    "version":"4.2.1",
-                    "properties": {
-                        "hostname.private":"192.168.0.33"
-                    }
-                },
-                "artifacts": {
-                    "alfresco": {
-                        "enabled": true
-                    },
-                    "alfresco-mmt": {
-                        "enabled": true
-                    },
-                    "alfresco-spp": {
-                        "enabled": true
-                    },
-                    "mysqlconnector": {
-                        "enabled": true
-                    },
-                    "share": {
-                        "enabled": true
-                    },
-                    "solr": {
-                        "enabled": true
-                    },
-                    "solrhome": {
-                        "enabled": true
-                    }
-                },
-                "hostname": "alfresco-allinone",
-                "ip": "192.168.0.33",
-                "java": {
-                    "default": true,
-                    "accept_license_agreement": true,
-                    "install_flavor": "oracle",
-                    "jdk_version": "7",
-                    "oracle": {
-                        "accept_oracle_download_terms": true
-                    }
-                },
-                "tomcat": {
-                    "files_cookbook": "alfresco",
-                    "base_version": 7,
-                    "deploy_manager_apps": false,
-                    "java_options": "-Xmx1500M -XX:MaxPermSize=256M -Dsolr.solr.home=/usr/share/tomcat/alf_data/solrhome -Dcom.sun.management.jmxremote=true -Djava.rmi.server.hostname=192.168.0.33 -Dsun.security.ssl.allowUnsafeRenegotiation=true"
-                }
-            },
-            "run_list": [
-                "iptables::default",
-                "alfresco::3rdparty",
-                "alfresco::mysql_server",
-                "alfresco::mysql_createdb",
-                "tomcat::default",
-                "tomcat::users",
-                "alfresco::repo_config",
-                "alfresco::share_config",
-                "alfresco::solr_config",
-                "artifact-deployer::default",
-                "alfresco::apply_amps"
-            ]
+  "provisioners": [
+    {
+      "json": {
+        "hostname": "alfresco-allinone",
+        "ip": "192.168.0.32",
+        "alfresco": {
+          "components" : ["mysql","tomcat","transform","repo","share","solr"],
+          "start_service": true,
+          "version":"4.2.3",
+          "properties": {
+            "hostname.private":"192.168.0.32"
+          }
+        },
+        "tomcat": {
+          "base_version": 7
         }
-    ]
+      },
+      "run_list": [
+        "apt::default",
+        "alfresco::default"
+      ]
+    }
+  ]
 }

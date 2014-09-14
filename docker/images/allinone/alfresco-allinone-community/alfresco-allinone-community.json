@@ -1,41 +1,34 @@
 {
     "builders": [
-        {
-            "type": "docker",
-            "image": "maoo/alfresco-repo-base:latest",
-            "export_path": "alfresco-allinone-community.tar"
-        }
+      {
+        "type": "docker",
+        "image": "maoo/alfresco-repo-base:latest",
+        "export_path": "alfresco-allinone-community.tar"
+      }
     ],
     "provisioners": [
-        {
-            "cookbook_paths": [
-                "../../../../common/vendor-cookbooks"
-            ],
-            "data_bags_path": "../../../../common/data_bags",
-            "json": {
-                "alfresco": {
-                    "default_hostname" : "localhost",
-                    "start_service": false,
-                    "allinone": true,
-                    "version":"5.0.a",
-                    "properties": {
-                        "db.host":"db.mysql.demo.acme.com"
-                    }
-                },
-                "tomcat" : {
-                    "base_version": 7
-                }
-            },
-            "run_list": [
-                "alfresco::repo_config",
-                "alfresco::share_config",
-                "alfresco::solr_config",
-                "artifact-deployer::default",
-                "alfresco::apply_amps"
-            ],
-            "prevent_sudo": false,
-            "skip_install": false,
-            "type": "chef-solo"
-        }
+      {
+        "json": {
+          "alfresco": {
+            "components" : ["tomcat","transform","repo","share","solr"],
+            "properties": {
+              "db.host":"db.mysql.demo.acme.com"
+            }
+          },
+          "tomcat" : {
+            "base_version": 7
+          }
+        },
+        "cookbook_paths": [
+          "../../../../common/vendor-cookbooks"
+        ],
+        "data_bags_path": "../../../../common/data_bags",
+        "run_list": [
+          "alfresco::default"
+        ],
+        "prevent_sudo": false,
+        "skip_install": false,
+        "type": "chef-solo"
+      }
     ]
 }
