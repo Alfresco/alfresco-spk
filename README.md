@@ -20,15 +20,16 @@ With this project you can
 Features
 ---
 * Supports Community and Enterprise editions
-* Tested with 4.2 version(s)
-* Installs and configures Repository, Share and Solr
-* Tested on CentOS and Ubuntu (different versions)
-* Runs on Vagrant, AWS and Docker, sharing the same set of Chef cookbooks
+* Tested with latest 4.2.3 and 5.0.a versions
+* Installs and configures Repository, Share and Solr application
+* Tested on CentOS and Ubuntu
+* Runs on Vagrant, Packer and Docker, sharing the same set of Chef cookbooks
+* Compatible with AWS, DigitalOcean, OpenStack and many other cloud provisioning services
 * Handles Tomcat SSL keystore installation
 * Supports AMP installation (via MMT)
-* Supports Maven credentials encryption
-* Can be configured for any (maven-repository-hosted) Alfresco WAR(s) version/distro
-* Auto-generate and/or patch property files (alfresco-global, log4j.properties, solrcore.properties) without the need to maintain pre-defined templates
+* Supports custom Maven repositories (and credentials encryption)
+* Can be configured for any Alfresco WAR(s) version/distro; artifacts can be resolved by (local FS) path, url or Maven coordinates
+* Auto-generate and/or patch property files (alfresco-global.properties, share-config-custom.xml, log4j.properties, solrcore.properties) without the need to maintain pre-defined templates
 
 Installation
 ---

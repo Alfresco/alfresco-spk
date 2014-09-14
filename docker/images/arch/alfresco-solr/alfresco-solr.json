@@ -1,57 +1,36 @@
 {
-    "builders": [
-        {
-            "type": "docker",
-            "image": "maoo/alfresco-repo-base:latest",
-            "export_path": "alfresco-solr.tar"
+  "builders": [
+    {
+      "type": "docker",
+      "image": "maoo/alfresco-repo-base:latest",
+      "export_path": "alfresco-solr.tar"
+    }
+  ],
+  "provisioners": [
+    {
+      "json": {
+        "alfresco": {
+          "components" : ["repo","solr"],
+          "version"    : "4.2.3",
+          "properties" : {
+            "db.host"               : "db.mysql.demo.acme.com",
+            "dir.license.external"  : "/alflicense"
+          }
+        },
+        "tomcat" : {
+          "base_version": 7
         }
-    ],
-    "provisioners": [
-        {
-            "cookbook_paths": [
-                "../../../../common/vendor-cookbooks"
-            ],
-            "data_bags_path": "../../../../common/data_bags",
-            "json": {
-                "alfresco": {
-                    "default_hostname"  : "localhost",
-                    "start_service"     : false,
-                    "version"           : "4.2.2",
-                    "properties": {
-                        "db.host"               : "db.mysql.demo.acme.com",
-                        "dir.license.external"  : "/alflicense"
-                    }
-                },
-                "artifacts" : {
-                  "alfresco" : {
-                    "enabled": true
-                  },
-                  "mysqlconnector" : {
-                    "enabled": true
-                  },
-                  "classes" : {
-                    "enabled": true
-                  },
-                  "solr" : {
-                    "enabled": true
-                  },
-                  "solrhome" : {
-                    "enabled": true
-                  }
-                },
-                "tomcat" : {
-                    "base_version": 7
-                }
-            },
-            "run_list": [
-                "alfresco::repo_config",
-                "alfresco::solr_config",
-                "artifact-deployer::default",
-                "alfresco::apply_amps"
-            ],
-            "prevent_sudo": false,
-            "skip_install": false,
-            "type": "chef-solo"
-        }
-    ]
+      },
+      "cookbook_paths": [
+        "../../../../common/vendor-cookbooks"
+      ],
+      "data_bags_path": "../../../../common/data_bags",
+      "run_list": [
+        "alfresco::default"
+      ],
+      "prevent_sudo": false,
+      "skip_install": false,
+      "type": "chef-solo"
+    }
+  ]
 }

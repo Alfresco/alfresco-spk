@@ -13,9 +13,12 @@
             ],
             "data_bags_path": "../../../../common/data_bags",
             "json": {
+              "alfresco": {
+                "components": ["3rdparty"]
+              }
             },
             "run_list": [
-                "alfresco::3rdparty"
+                "alfresco::default"
             ],
             "prevent_sudo": false,
             "skip_install": false,

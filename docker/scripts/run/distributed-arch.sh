@@ -10,8 +10,8 @@ docker run -d -v /var/run/docker.sock:/docker.sock --name skydock crosbymichael/
 
 sleep 3
 
-#Running Data Container (data.busybox.demo.acme.com)
-docker run --name data --dns $DNS_IP -v /var/lib/tomcat7/alf_data/contentstore -d busybox /bin/sh -c "chmod -R 777 /var/lib/tomcat7/alf_data/contentstore ; watch top"
+#Running Data Container (data.ubuntu.demo.acme.com)
+docker run --name data --dns $DNS_IP -v /var/lib/tomcat7/alf_data/contentstore -d ubuntu:12.04 /bin/sh -c "chmod -R 777 /var/lib/tomcat7/alf_data/contentstore ; watch top"
 
 #Running DB (db.mysql.demo.acme.com)
 docker run -d --name db --dns $DNS_IP -e MYSQL_DATABASE="alfresco" -e MYSQL_USER="alfresco" -e MYSQL_PASSWORD="alfresco" orchardup/mysql

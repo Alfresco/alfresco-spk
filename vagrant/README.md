@@ -17,9 +17,10 @@ vagrant plugin install vagrant-hosts
 Run Vagrant
 ---
 ```
-cd vagrant/dev
+cd vagrant
 vagrant up
 ```
+This command will run - by default - `alfresco-allinone-dev.json`
 
 You can now
 * Open http://192.168.0.33:8080/share
@@ -30,23 +31,6 @@ You can optionally define an alternative JSON file and/or select a different OS 
 ```
 JSON=alfresco-allinone-ent.json BOX_OS=centos64 vagrant up
 ```
-
-Multi VM
----
-The MultiVM environment is still experimental, since Vagrant is not the most suited technology for this, Docker is more indicated for this use-case.
-
-In ```vagrant/multivm``` you can find an example of Vagrant multi VM configuration; you can test it running ```run.sh``` from ```vagrant/multivm``` or
-
-```
-vagrant up db
-vagrant up repo
-vagrant up share
-vagrant up solr
-```
-You can access Share on http://10.0.0.31:8080/share
-
-If you just run ```vagrant up``` the execution won't be successful; unfortunately you need to run the command for each and every box.
-The boxes ```repo2```, ```share2``` and ```lb``` are used for testing clustering capabilities; more on this (hopefully) soon.
 
 Debugging
 ---

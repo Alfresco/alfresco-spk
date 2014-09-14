@@ -1,54 +1,39 @@
 {
-    "builders": [
-        {
-            "type": "docker",
-            "image": "maoo/alfresco-repo-base:latest",
-            "export_path": "alfresco-repo.tar"
+  "builders": [
+    {
+      "type": "docker",
+      "image": "maoo/alfresco-repo-base:latest",
+      "export_path": "alfresco-repo.tar"
+    }
+  ],
+  "provisioners": [
+    {
+      "cookbook_paths": [
+        "../../../../common/vendor-cookbooks"
+      ],
+      "data_bags_path": "../../../../common/data_bags",
+      "json": {
+        "alfresco": {
+          "components" : ["repo"],
+          "default_hostname"  : "localhost",
+          "start_service"     : false,
+          "version"           : "4.2.3",
+          "properties": {
+            "db.host"               : "db.mysql.demo.acme.com",
+            "dir.license.external"  : "/alflicense",
+            "index.subsystem.name"  : "noindex"
+          }
+        },
+        "tomcat" : {
+          "base_version": 7
         }
-    ],
-    "provisioners": [
-        {
-            "cookbook_paths": [
-                "../../../../common/vendor-cookbooks"
-            ],
-            "data_bags_path": "../../../../common/data_bags",
-            "json": {
-                "alfresco": {
-                    "default_hostname"  : "localhost",
-                    "start_service"     : false,
-                    "version"           : "4.2.2",
-                    "properties": {
-                        "db.host"               : "db.mysql.demo.acme.com",
-                        "dir.license.external"  : "/alflicense",
-                        "index.subsystem.name"  : "noindex"
-                    }
-                },
-                "artifacts" : {
-                  "alfresco" : {
-                    "enabled": true
-                  },
-                  "mysqlconnector" : {
-                    "enabled": true
-                  },
-                  "classes" : {
-                    "enabled": true
-                  },
-                  "solrhome" : {
-                    "enabled": true
-                  }
-                },
-                "tomcat" : {
-                    "base_version": 7
-                }
-            },
-            "run_list": [
-                "alfresco::repo_config",
-                "artifact-deployer::default",
-                "alfresco::apply_amps"
-            ],
-            "prevent_sudo": false,
-            "skip_install": false,
-            "type": "chef-solo"
-        }
-    ]
+      },
+      "run_list": [
+        "alfresco::default"
+      ],
+      "prevent_sudo": false,
+      "skip_install": false,
+      "type": "chef-solo"
+    }
+  ]
 }

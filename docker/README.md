@@ -58,7 +58,7 @@ The following Docker Images are developed using [chef-alfresco](https://github.c
 #### 3rd-party Docker Images
 
 - orchardup/mysql:latest
-- busybox:latest
+- ubuntu:12.04
 - crosbymichael/skydns
 - crosbymichael/skydock
 
@@ -92,7 +92,7 @@ You can run one of the following architectures:
 
 All mentioned architectures include the following containers:
 - `skydns`, `skydock` - Used for DNS service discovery
-- `data` (busybox) - Data Container that holds /var/lib/tomcat7/alf_data/contentstore
+- `data` (ubuntu:12.04) - Data Container that holds /var/lib/tomcat7/alf_data/contentstore
 - `db` (mysql) - A MySQL Server with an empty database called `alfresco` (user/pwd is alfresco/alfresco)
 Check `scripts/run-*.sh` for more info.
 
