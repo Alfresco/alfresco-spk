@@ -91,6 +91,7 @@ Script: `/alfboxes/docker/scripts/run-community.sh`
 #### Alfresco Enterprise Balanced Cluster
 
 Runs a 2 nodes cluster of alfresco-allinone-enterprise; Share and Repository are load-balanced for fault-tolerance and an `lb` container balances requests
+
 Script: `/alfboxes/docker/scripts/run-balanced-arch.sh`
 
 ![Balanced Architecture](https://raw.githubusercontent.com/maoo/alfresco-boxes/master/docker/scripts/run/balanced-arch.png)
@@ -98,6 +99,7 @@ Script: `/alfboxes/docker/scripts/run-balanced-arch.sh`
 #### Alfresco Enterprise Distributed Cluster
 
 Runs a cluster with one Repo-only (Bulk), one Share+Repo (Frontend) and one Solr+Repo (Search) container
+
 Script: `/alfboxes/docker/scripts/run-distributed-arch.sh`
 
 ![Distributed Architecture](https://raw.githubusercontent.com/maoo/alfresco-boxes/master/docker/scripts/run/distributed-arch.png)
