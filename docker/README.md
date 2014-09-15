@@ -100,7 +100,7 @@ Script: `/alfboxes/docker/scripts/run-balanced-arch.sh`
 Runs a cluster with one Repo-only (Bulk), one Share+Repo (Frontend) and one Solr+Repo (Search) container
 Script: `/alfboxes/docker/scripts/run-distributed-arch.sh`
 
-![Distributed Architecture](https://raw.githubusercontent.com/maoo/alfresco-boxes/master/docker/scripts/run/balanced-arch.png)
+![Distributed Architecture](https://raw.githubusercontent.com/maoo/alfresco-boxes/master/docker/scripts/run/distributed-arch.png)
 
 All mentioned architectures include the following containers:
 - `skydns`, `skydock` - Used for DNS service discovery
