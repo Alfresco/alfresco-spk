@@ -53,42 +53,54 @@ The process could take some time (15minutes, up to hours, depending on your Inte
 
 ### Docker Images
 
-The following Docker Images are developed using [chef-alfresco](https://github.com/maoo/chef-alfresco) and published on [Docker Registry Hub](https://hub.docker.com/u/maoo/); check `scripts/pull-docker-images.sh` for more info.
+The following Docker Images are developed using [chef-alfresco](https://github.com/maoo/chef-alfresco) and published on [Docker Registry Hub](https://hub.docker.com/u/maoo); check `scripts/pull-docker-images.sh` for more info.
 
 #### 3rd-party Docker Images
 
-- orchardup/mysql:latest
-- ubuntu:12.04
-- crosbymichael/skydns
-- crosbymichael/skydock
+- [orchardup/mysql:latest](https://registry.hub.docker.com/u/orchardup/mysql)
+- [ubuntu:12.04](https://registry.hub.docker.com/_/ubuntu)
+- [crosbymichael/skydns and crosbymichael/skydock](https://github.com/crosbymichael/skydock)
 
 #### Base Docker Images
 
-- maoo/alfresco-base:latest
-- maoo/alfresco-web-base:latest
-- maoo/alfresco-repo-base:latest
+- [maoo/alfresco-base:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/base/alfresco-base)
+- [maoo/alfresco-web-base:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/base/alfresco-web-base)
+- [maoo/alfresco-repo-base:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/base/alfresco-repo-base)
 
 #### Allinone Docker Images
 
-- maoo/alfresco-allinone-community:latest
-- maoo/alfresco-allinone-enterprise:latest
+- [maoo/alfresco-allinone-community:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/allinone/alfresco-allinone-community)
+- [maoo/alfresco-allinone-enterprise:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/allinone/alfresco-allinone-enterprise)
 
 #### Architecture-specific Docker Images
 
-- maoo/apache-lb:latest
-- maoo/alfresco-base:latest
-- maoo/alfresco-web-base:latest
-- maoo/alfresco-repo-base:latest
-- maoo/alfresco-repo:latest
-- maoo/alfresco-share:latest
-- maoo/alfresco-solr:latest
+- [maoo/apache-lb:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/arch/apache-lb)
+- [maoo/alfresco-repo:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/arch/alfresco-repo)
+- [maoo/alfresco-share:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/arch/alfresco-share)
+- [maoo/alfresco-solr:latest](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/arch/alfresco-solr)
 
 ### Docker Architectures
 
-You can run one of the following architectures:
-- `/alfboxes/docker/scripts/run-community.sh` - Runs an alfresco-allinone-community containing all you need
-- `/alfboxes/docker/scripts/run-balanced-arch.sh` - Runs a 2 nodes cluster of alfresco-allinone-enterprise; Share and Repository are load-balanced for fault-tolerance and an `lb` container balances requests
-- `/alfboxes/docker/scripts/run-distributed-arch.sh` - Runs a cluster with one Repo-only (Bulk), one Share+Repo (Frontend) and one Solr+Repo (Search) container
+You can run one of the following architectures
+
+#### Alfresco Community Allinone
+
+Runs an alfresco-allinone-community containing Alfresco Repository, Share and Solr applications.
+Script: `/alfboxes/docker/scripts/run-community.sh`
+
+#### Alfresco Enterprise Balanced Cluster
+
+Runs a 2 nodes cluster of alfresco-allinone-enterprise; Share and Repository are load-balanced for fault-tolerance and an `lb` container balances requests
+Script: `/alfboxes/docker/scripts/run-balanced-arch.sh`
+
+![Balanced Architecture](https://raw.githubusercontent.com/maoo/alfresco-boxes/master/docker/scripts/run/balanced-arch.png)
+
+#### Alfresco Enterprise Distributed Cluster
+
+Runs a cluster with one Repo-only (Bulk), one Share+Repo (Frontend) and one Solr+Repo (Search) container
+Script: `/alfboxes/docker/scripts/run-distributed-arch.sh`
+
+![Distributed Architecture](https://raw.githubusercontent.com/maoo/alfresco-boxes/master/docker/scripts/run/balanced-arch.png)
 
 All mentioned architectures include the following containers:
 - `skydns`, `skydock` - Used for DNS service discovery
