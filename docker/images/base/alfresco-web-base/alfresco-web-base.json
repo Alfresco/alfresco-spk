@@ -14,7 +14,6 @@
                 },
                 "tomcat" : {
                     "base_version": 7,
-                    "start_service": false,
                     "jvm_memory" : "-Xmx2500M -XX:MaxPermSize=512M"
                 }
             },

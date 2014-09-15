@@ -15,7 +15,9 @@
         "json": {
           "alfresco": {
             "version"           : "4.2.3",
-            "components"        : ["tomcat","transform","repo","share","solr"],
+            "default_hostname"  : "lb.apache-lb.demo.acme.com",
+            "default_port"      : "80",
+            "components"        : ["repo","share","solr"],
             "properties" : {
               "db.host"               :"db.mysql.demo.acme.com",
               "dir.license.external"  : "/alflicense",

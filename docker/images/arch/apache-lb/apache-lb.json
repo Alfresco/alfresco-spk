@@ -16,38 +16,45 @@
           "balancers" : {
             "alfresco" : [
               {
-                "ipaddress" : "alf1.alf-precise.demo.acme.com",
+                "ipaddress" : "alf1.alfresco-allinone-enterprise.demo.acme.com",
                 "route" : "repo1",
-                "protocol" : "http"
+                "protocol" : "http",
+                "port"  : "8080"
               },
               {
-                "ipaddress" : "alf2.alf-precise.demo.acme.com",
+                "ipaddress" : "alf2.alfresco-allinone-enterprise.demo.acme.com",
                 "route" : "repo2",
-                "protocol" : "http"
+                "protocol" : "http",
+                "port"  : "8080"
+
               }
             ],
             "share" : [
               {
-                "ipaddress" : "alf1.alf-precise.demo.acme.com",
+                "ipaddress" : "alf1.alfresco-allinone-enterprise.demo.acme.com",
                 "route" : "share1",
-                "protocol" : "http"
+                "protocol" : "http",
+                "port"  : "8080"
               },
               {
-                "ipaddress" : "alf2.alf-precise.demo.acme.com",
+                "ipaddress" : "alf2.alfresco-allinone-enterprise.demo.acme.com",
                 "route" : "share2",
-                "protocol" : "http"
+                "protocol" : "http",
+                "port"  : "8080"
               }
             ],
             "solr" : [
               {
-                "ipaddress" : "alf1.alf-precise.demo.acme.com",
+                "ipaddress" : "alf1.alfresco-allinone-enterprise.demo.acme.com",
                 "route" : "solr1",
-                "protocol" : "http"
+                "protocol" : "http",
+                "port"  : "8080"
               },
               {
-                "ipaddress" : "alf2.alf-precise.demo.acme.com",
+                "ipaddress" : "alf2.alfresco-allinone-enterprise.demo.acme.com",
                 "route" : "solr2",
-                "protocol" : "http"
+                "protocol" : "http",
+                "port"  : "8080"
               }
             ]
           }

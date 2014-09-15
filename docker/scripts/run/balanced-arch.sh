@@ -28,3 +28,6 @@ docker run --name alf1 --dns $DNS_IP -d -p 8080:8080 -p 5701 -v /alfboxes/docker
 sleep 30
 
 docker run --name alf2 --dns $DNS_IP -d -p 8081:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-allinone-enterprise:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
+
+#Interactive instance
+# docker run --name alf3 -t -i maoo/alfresco-allinone-enterprise:latest /bin/bash

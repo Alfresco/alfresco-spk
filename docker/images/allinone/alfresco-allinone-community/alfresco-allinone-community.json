@@ -10,7 +10,7 @@
       {
         "json": {
           "alfresco": {
-            "components" : ["tomcat","transform","repo","share","solr"],
+            "components" : ["repo","share","solr"],
             "properties": {
               "db.host":"db.mysql.demo.acme.com"
             }
