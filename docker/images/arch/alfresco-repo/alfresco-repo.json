@@ -15,8 +15,6 @@
       "json": {
         "alfresco": {
           "components" : ["repo"],
-          "default_hostname"  : "localhost",
-          "start_service"     : false,
           "version"           : "4.2.3",
           "properties": {
             "db.host"               : "db.mysql.demo.acme.com",

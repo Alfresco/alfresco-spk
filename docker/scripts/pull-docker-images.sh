@@ -10,11 +10,11 @@ docker pull crosbymichael/skydock:latest
 # docker pull maoo/alfresco-repo-base:latest
 
 # Built by build-allinone-images.sh
-# docker pull maoo/alfresco-allinone-community:latest
-# docker pull maoo/alfresco-allinone-enterprise:latest
+docker pull maoo/alfresco-allinone-community:latest
+docker pull maoo/alfresco-allinone-enterprise:latest
 
 # Built by build-arch-images.sh
-# docker pull maoo/alfresco-lb:latest
-# docker pull maoo/alfresco-repo:latest
-# docker pull maoo/alfresco-share:latest
-# docker pull maoo/alfresco-solr:latest
+docker pull maoo/apache-lb:latest
+docker pull maoo/alfresco-repo:latest
+docker pull maoo/alfresco-share:latest
+docker pull maoo/alfresco-solr:latest

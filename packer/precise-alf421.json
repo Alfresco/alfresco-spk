@@ -29,7 +29,7 @@
       "guest_additions_path": "/home/vagrant/VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Ubuntu_64",
       "headless": false,
-      "http_directory": "../common/http",
+      "http_directory": "./http",
       "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -69,12 +69,12 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "../common/scripts/common.sh",
+      "source": "./scripts/common.sh",
       "destination": "/home/vagrant/common.sh"
     },
     {
       "type": "file",
-      "source": "../common/scripts/static-ip.sh",
+      "source": "./scripts/static-ip.sh",
       "destination": "/home/vagrant/static-ip.sh"
     },
     {
@@ -112,9 +112,8 @@
       "type": "shell",
       "execute_command": "echo 'vagrant' | sudo -E -S sh '{{ .Path }}'",
       "scripts": [
-        "../common/scripts/purge-maven-folders.sh",
-        "../common/scripts/vagrant-ssh-key.sh",
-        "../common/scripts/vbox-additions.sh"
+        "./scripts/vagrant-ssh-key.sh",
+        "./scripts/vbox-additions.sh"
       ]
     }
   ],
