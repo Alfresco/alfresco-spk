@@ -1,0 +1,30 @@
+{
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "source_ami": "ami-a4e81fd3",
+      ...
+    },
+    {
+      "type": "virtualbox-iso",
+      "iso_url": "http://releases.ubuntu.com/12.04.4/ubuntu-12.04.4-server-amd64.iso",
+      ...
+    }
+  ],
+  "provisioners": [
+    {
+      "cookbook_paths": ["../common/vendor-cookbooks"],
+      "data_bags_path": "../common/data_bags",
+      "json": {
+        "alfresco": {
+          "start_service": true,
+          "properties": {
+            "hostname.private":"192.168.1.223"
+          }
+        }
+      },
+      "run_list": ["apt::default", "alfresco::default"],
+      ...
+    }
+  ]
+}
