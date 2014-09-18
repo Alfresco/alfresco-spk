@@ -10,7 +10,7 @@ With this project you can
 * Build Alfresco (custom) images of [any nature](http://www.packer.io/docs/templates/builders.html) with Packer, without worrying about the provisioning part
 * Run on-the-fly [Vagrant boxes](http://www.vagrantup.com) with Alfresco stack fully configured
 * Integrate additional provisioning logic using [Packer provisioners](http://www.packer.io/docs/templates/provisioners.html)
-* Setup a complete Provisioning solution using [Alfresco-boxes images for Docker](https://hub.docker.com/u/maoo)
+* Run a clustered environment using [Alfresco-boxes images for Docker](https://hub.docker.com/u/maoo)
 * Build your custom [hierarchy]() of Alfresco images
 
 Features
@@ -20,12 +20,14 @@ Features
 * Installs and configures Repository, Share and Solr application
 * Tested on CentOS and Ubuntu
 * Runs on Vagrant, Packer and Docker, sharing the same set of Chef cookbooks
-* Compatible with AWS, DigitalOcean, OpenStack and many other cloud provisioning services
+* Compatible with AWS, DigitalOcean, OpenStack and many other services
 * Handles Tomcat SSL keystore installation
 * Supports AMP installation (via MMT)
 * Supports custom Maven repositories (and credentials encryption)
 * Can be configured for any Alfresco WAR(s) version/distro; artifacts can be resolved by (local FS) path, url or Maven coordinates
 * Auto-generate and/or patch property files (alfresco-global.properties, share-config-custom.xml, log4j.properties, solrcore.properties) without the need to maintain pre-defined templates
+
+Check [chef-alfresco](https://github.com/maoo/chef-alfresco) docs for a full overview of provisioning features.
 
 Installation
 ---
@@ -41,7 +43,7 @@ Creating a box
 ---
 * If you want to _build_ with Packer, follow [packer/README.md](https://github.com/maoo/alfresco-boxes/tree/master/packer)
 * If you want to _run_ with Vagrant, follow [vagrant/README.md](https://github.com/maoo/alfresco-boxes/tree/master/vagrant)
-* If you want to _provision_ with Docker, follow [docker/README.md](https://github.com/maoo/alfresco-boxes/tree/master/docker)
+* If you want to _virtualise_ with Docker, follow [docker/README.md](https://github.com/maoo/alfresco-boxes/tree/master/docker)
 
 Known Issues
 ---
