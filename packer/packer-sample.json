@@ -13,6 +13,7 @@
   ],
   "provisioners": [
     {
+      "type": "chef-solo",
       "cookbook_paths": ["../common/vendor-cookbooks"],
       "data_bags_path": "../common/data_bags",
       "json": {
