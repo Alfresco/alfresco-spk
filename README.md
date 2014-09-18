@@ -1,7 +1,7 @@
 alfresco-boxes
 ================
 
-A collection of examples for the creation, provisioning and virtualization of Alfresco boxes (VMs, images, bare-metal, ...) that sits on top of:
+A collection of examples for the creation, provisioning and virtualization of machine images that sits on top of:
 - [Packer](http://www.packer.io), for creation
 - [chef-alfresco](https://github.com/maoo/chef-alfresco), for provisioning
 - [Docker](https://www.docker.io), for (smart) virtualization
