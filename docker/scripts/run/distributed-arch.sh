@@ -18,21 +18,18 @@ docker run -d --name db --dns $DNS_IP -e MYSQL_DATABASE="alfresco" -e MYSQL_USER
 
 sleep 3
 
-#Running Alfresco Enterprise Repository only  (repo1.alfresco-repo.demo.acme.com)
-docker run --name repo1 --dns $DNS_IP -d -p 8080:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-repo:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
+#Running Alfresco Enterprise Repository, only repository WAR  (repo1.alfresco-repo.demo.acme.com)
+docker run --name bulk --dns $DNS_IP -d -p 8080:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-repo:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 
 #Alfresco needs some time to bootstrap db and contentstore
 sleep 30
 
-#Running Alfresco Enterprise Share only  (share1.alfresco-share.demo.acme.com)
+#Running Alfresco Enterprise Share  (share1.alfresco-share.demo.acme.com)
 docker run --name share1 --dns $DNS_IP -d -p 8081:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-share:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
+docker run --name share2 --dns $DNS_IP -d -p 8082:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-share:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 
-#Running Alfresco Enterprise Solr only  (solr1.alfresco-solr.demo.acme.com)
-docker run --name solr1 --dns $DNS_IP -d -p 8082:8080 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-solr:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
+#Running Alfresco Enterprise Solr  (solr1.alfresco-solr.demo.acme.com)
+docker run --name solr1 --dns $DNS_IP -d -p 8083:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-solr:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 
-
-# For debugging purposes, run this manually
-# docker run --name alf1 --dns $DNS_IP -t -i -p 8080:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alf-precise:4.2.2 /bin/bash
-# docker run --name lb --dns $DNS_IP -t -i -p 80:80 maoo/apache-lb:latest /bin/bash
-
-# docker run --name alf1 --dns $DNS_IP -t -i -p 8080:8080 --volumes-from data maoo/alf-precise:5.0.a /bin/bash
+# Using HA Proxy balancer
+# docker run --name lb --dns $DNS_IP -d -v /alfboxes/common/haproxy:/haproxy-override -p 80:80 dockerfile/haproxy:latest

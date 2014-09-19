@@ -3,6 +3,7 @@ docker pull ubuntu:12.04
 docker pull orchardup/mysql:latest
 docker pull crosbymichael/skydns:latest
 docker pull crosbymichael/skydock:latest
+docker pull dockerfile/haproxy:latest
 
 # Built by build-base-images.sh
 # docker pull maoo/alfresco-base:latest
@@ -14,7 +15,7 @@ docker pull maoo/alfresco-allinone-community:latest
 docker pull maoo/alfresco-allinone-enterprise:latest
 
 # Built by build-arch-images.sh
-docker pull maoo/apache-lb:latest
+docker pull maoo/apache-lb:latest #Will be replace by haproxy
 docker pull maoo/alfresco-repo:latest
 docker pull maoo/alfresco-share:latest
 docker pull maoo/alfresco-solr:latest
