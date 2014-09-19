@@ -32,4 +32,8 @@ docker run --name share2 --dns $DNS_IP -d -p 8082:8080 -p 5701 -v /alfboxes/dock
 docker run --name solr1 --dns $DNS_IP -d -p 8083:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-solr:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 
 # Using HA Proxy balancer
-# docker run --name lb --dns $DNS_IP -d -v /alfboxes/common/haproxy:/haproxy-override -p 80:80 dockerfile/haproxy:latest
+docker run --name lb --dns $DNS_IP -d -v /alfboxes/common/haproxy:/haproxy-override -p 80:80 dockerfile/haproxy /bin/sh -c "chmod +x /haproxy-start; /haproxy-start ; tail -f /var/log/bootstrap.log"
+
+# Debugging
+# docker run --name lb --dns $DNS_IP -t -i -v /alfboxes/common/haproxy:/haproxy-override -p 80:80 dockerfile/haproxy /bin/bash
+# docker run --name share3 --dns $DNS_IP -t -i -p 8084:8080 -p 5701 -v /alfboxes/docker/license/alf42.lic:/alflicense/alf42.lic --volumes-from data maoo/alfresco-share:latest /bin/bash
