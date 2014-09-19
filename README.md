@@ -11,7 +11,7 @@ With this project you can
 * Run on-the-fly [Vagrant boxes](http://www.vagrantup.com) with Alfresco stack fully configured
 * Integrate additional provisioning logic using [Packer provisioners](http://www.packer.io/docs/templates/provisioners.html)
 * Run a clustered environment using [Alfresco-boxes images for Docker](https://hub.docker.com/u/maoo)
-* Build your custom [hierarchy]() of Alfresco images
+* Build your custom [hierarchy](https://github.com/maoo/alfresco-boxes/blob/master/docker/image%20hierarchy.png) of Alfresco images
 
 Features
 ---
