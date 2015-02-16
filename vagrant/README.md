@@ -13,6 +13,7 @@ vagrant plugin install vagrant-omnibus
 vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-hosts
 ```
+Some users have experienced [problems with the vagrant-vbguest plugin](https://github.com/maoo/alfresco-boxes/issues/19)
 
 Run Vagrant
 ---
