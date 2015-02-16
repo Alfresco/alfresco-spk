@@ -1,15 +1,15 @@
 source "https://api.berkshelf.com"
 
-cookbook 'yum-centos',              tag: 'v0.2.2'
-cookbook 'ark',                     tag: 'v0.9.0'
-cookbook 'resolver',                tag: 'v1.2.0'
-cookbook 'mysql',                   tag: 'v5.5.4'
-cookbook 'database',                tag: 'v2.3.0'
-cookbook 'java',                    tag: 'v1.28.0'
-cookbook 'openssl',                 tag: 'v2.0.0'
-cookbook 'maven',                   tag: 'v1.2.0'
-cookbook 'iptables',                tag: 'v0.14.0'
-cookbook 'imagemagick',             tag: 'v0.2.3'
+cookbook 'yum-centos',              '=0.2.2'
+cookbook 'ark',                     '=0.9.0'
+cookbook 'resolver',                '=1.2.0'
+cookbook 'mysql',                   '=5.5.4'
+cookbook 'database',                '=2.3.0'
+cookbook 'java',                    '=1.28.0'
+cookbook 'openssl',                 '=2.0.0'
+cookbook 'maven',                   '=1.2.0'
+cookbook 'iptables',                '=0.14.0'
+cookbook 'imagemagick',             '=0.2.3'
 
 cookbook 'file',                    git: 'git://github.com/jenssegers/chef-file.git', tag: 'v1.0.0'
 
