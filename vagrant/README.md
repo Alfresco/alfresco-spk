@@ -52,3 +52,28 @@ To reset your local environment, run the following command
 ```
 vagrant destroy -f && killall VBoxSVC && rm -Rf .vagrant *.lock
 ```
+
+Maven Repository custom configuration
+---
+When `vagrant up` runs, it fetches artifacts using Apache Maven; you may want to reuse a (host) local Maven repository that already contains some of the artifacts you need (saving significant time during provisioning); add the following to your Vagrantfile
+
+```
+config.vm.synced_folder File.expand_path("~/m2-repository"), "/root/.m2/repository"
+```
+
+By default, alfresco-boxes will purge Maven configuration after the run, to avoid keeping installation files within the box; to avoid this operation, set the following in your JSON attribute file:
+
+```
+{
+  "provisioners": [
+    {
+      "json": {
+        ...
+        "maven" : {
+          "purge_settings" : false
+        }
+      }
+    }
+  ]
+}
+```
