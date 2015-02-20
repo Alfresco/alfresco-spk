@@ -15,7 +15,7 @@ docker pull maoo/alfresco-allinone-community:latest
 docker pull maoo/alfresco-allinone-enterprise:latest
 
 # Built by build-arch-images.sh
-docker pull maoo/apache-lb:latest #Will be replace by haproxy
+# docker pull maoo/apache-lb:latest #Will be replace by haproxy
 docker pull maoo/alfresco-repo:latest
 docker pull maoo/alfresco-share:latest
 docker pull maoo/alfresco-solr:latest
