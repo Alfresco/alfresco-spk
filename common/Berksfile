@@ -8,7 +8,6 @@ cookbook 'mysql-chef_gem',          '=0.0.5'
 cookbook 'database',                '=2.3.0'
 cookbook 'java',                    '=1.28.0'
 cookbook 'openssl',                 '=2.0.0'
-cookbook 'maven',                   '=1.2.0'
 cookbook 'iptables',                '=0.14.0'
 cookbook 'imagemagick',             '=0.2.3'
 
@@ -34,6 +33,7 @@ cookbook 'file',                    git: 'git://github.com/jenssegers/chef-file.
 cookbook 'swftools',                git: 'git://github.com/dhartford/chef-swftools.git'
 cookbook 'openoffice',              git: 'git://github.com/dhartford/chef-openoffice.git'
 
-cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git',      tag: 'chef-alfresco-0.4.2'
-cookbook 'artifact-deployer',       git: 'git://github.com/maoo/artifact-deployer.git',  tag: 'artifact-deployer-0.7.5'
+cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git'
+cookbook 'artifact-deployer',       git: 'git://github.com/maoo/artifact-deployer.git',  tag: 'v0.8.6'
 cookbook 'tomcat',                  git: 'git://github.com/maoo/tomcat.git'
+cookbook 'maven',                   git: 'git://github.com:maoo/maven.git'
