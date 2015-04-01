@@ -36,4 +36,4 @@ cookbook 'openoffice',              git: 'git://github.com/dhartford/chef-openof
 cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git'
 cookbook 'artifact-deployer',       git: 'git://github.com/maoo/artifact-deployer.git',  tag: 'v0.8.6'
 cookbook 'tomcat',                  git: 'git://github.com/maoo/tomcat.git'
-cookbook 'maven',                   git: 'git://github.com:maoo/maven.git'
+cookbook 'maven',                   git: 'git://github.com/maoo/maven.git'
