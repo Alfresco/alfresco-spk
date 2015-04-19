@@ -27,6 +27,9 @@ export DNS_IP=`ifconfig docker0| grep 'inet '| cut -d: -f2| awk '{ print $2}'`
 docker run --name alf1 --dns $DNS_IP -d -p 8080:8080 --volumes-from data maoo/alfresco-allinone-community:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 ```
 
+> For Ubuntu 14.10, please use the following syntax to export DNS_IP
+> ```export DNS_IP=`ifconfig docker0 | grep 'inet '| awk '{print $2}' | awk -F: '{print $2}'` ```
+
 Check the [community.sh script](https://github.com/maoo/alfresco-boxes/blob/master/docker/scripts/run/community.sh) to see how to run it together with other containers.
 
 Source code is hosted by [alfresco-boxes](https://github.com/maoo/alfresco-boxes/tree/master/docker/images/allinone/alfresco-allinone-community), Docker image is hosted by [Docker public Registry](https://registry.hub.docker.com/u/maoo/alfresco-allinone-community)
