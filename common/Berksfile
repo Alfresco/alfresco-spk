@@ -29,7 +29,7 @@ source "https://api.berkshelf.com"
 # cookbook 'artifact-deployer',       '~>0.8.7'
 # cookbook 'swftools',                git: 'git://github.com/dhartford/chef-swftools.git'
 # cookbook 'openoffice',              git: 'git://github.com/dhartford/chef-openoffice.git'
-cookbook 'apt',                     '~>2.6.1'
+cookbook 'apt',                     '~> 2.3.10'
 cookbook 'alfresco',                git: 'git://github.com/maoo/chef-alfresco.git'
 cookbook 'file',                    git: 'git://github.com/jenssegers/chef-file.git', tag: 'v1.0.0'
 cookbook 'tomcat',                  git: 'git://github.com/maoo/tomcat.git'
