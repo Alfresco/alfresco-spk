@@ -86,13 +86,13 @@ You can run one of the following architectures
 #### Alfresco Community Allinone
 
 Runs an alfresco-allinone-community containing Alfresco Repository, Share and Solr applications.
-Script: `/alfboxes/docker/scripts/run-community.sh`
+Script: `/alfboxes/docker/scripts/run/community.sh`
 
 #### Alfresco Enterprise Balanced Cluster
 
 Runs a 2 nodes cluster of alfresco-allinone-enterprise; Share and Repository are load-balanced for fault-tolerance and an `lb` container balances requests
 
-Script: `/alfboxes/docker/scripts/run-balanced-arch.sh`
+Script: `/alfboxes/docker/scripts/run/balanced-arch.sh`
 
 ![Balanced Architecture](https://raw.githubusercontent.com/maoo/alfresco-boxes/master/docker/scripts/run/balanced-arch.png)
 
@@ -100,7 +100,7 @@ Script: `/alfboxes/docker/scripts/run-balanced-arch.sh`
 
 Runs a cluster with one Repo-only (Bulk), one Share+Repo (Frontend) and one Solr+Repo (Search) container
 
-Script: `/alfboxes/docker/scripts/run-distributed-arch.sh`
+Script: `/alfboxes/docker/scripts/run/distributed-arch.sh`
 
 ![Distributed Architecture](https://raw.githubusercontent.com/maoo/alfresco-boxes/master/docker/scripts/run/distributed-arch.png)
 
@@ -108,7 +108,7 @@ All mentioned architectures include the following containers:
 - `skydns`, `skydock` - Used for DNS service discovery
 - `data` (ubuntu:12.04) - Data Container that holds /var/lib/tomcat7/alf_data/contentstore
 - `db` (mysql) - A MySQL Server with an empty database called `alfresco` (user/pwd is alfresco/alfresco)
-Check `scripts/run-*.sh` for more info.
+Check `scripts/run/*.sh` for more info.
 
 ## Known issues
 
