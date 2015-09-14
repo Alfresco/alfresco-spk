@@ -32,7 +32,7 @@ Check [chef-alfresco](https://github.com/maoo/chef-alfresco) docs for a full ove
 Installation
 ---
 * Install [ChefDK](http://downloads.getchef.com/chef-dk)
-* Checkout this project with ```git clone git@github.com:ftaiolivista/alfresco-boxes.git  ./alfresco-boxes```
+* Checkout this project with ```git clone https://github.com/maoo/alfresco-boxes.git ./alfresco-boxes```
 * Install [VirtualBox](https://www.virtualbox.org) - you can optionally use VMWare Player/Fusion
 * Install Vendor Chef Cookbooks with ```cd alfresco-boxes/common && ./create-vendor-cookbooks.sh```
   * This step needs to be executed everytime that ```common/Berksfile``` is edited
