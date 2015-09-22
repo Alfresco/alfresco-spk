@@ -22,7 +22,7 @@ Host naming convention (`<name>.<type>.<domain>`) is enforced by [skydock](https
 
 To run a container:
 ```
-export DNS_IP=`ifconfig docker0| grep 'inet '| cut -d: -f2| awk '{ print $2}'`
+export DNS_IP=`ifconfig docker0 | grep 'inet '| awk '{print $2}' | awk -F: '{print $2}'`
 
 docker run --name alf1 --dns $DNS_IP -d -p 8080:8080 --volumes-from data maoo/alfresco-allinone-community:latest /bin/sh -c "/etc/init.d/tomcat7 start ; sleep 1 ; tail -f /var/log/tomcat7/catalina.out"
 ```
