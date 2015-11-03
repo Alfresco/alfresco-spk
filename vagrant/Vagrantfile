@@ -2,48 +2,120 @@
 #
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-BOX_OS=ENV['BOX_OS'] || "precise64"
-JSONFILE=ENV['JSON'] || "alfresco-allinone-dev.json"
 
-print "Using '"+BOX_OS+"' as source Vagrant box\n"
-print "Using '"+JSONFILE+"' as JSON Chef configuration\n"
+require 'json/merge_patch'
 
-Vagrant.configure("2") do |config|
-  provisioner = JSON.parse(IO.read(JSONFILE))["provisioners"][0]
-  attributes = provisioner["json"]
-  run_list = provisioner["run_list"]
+params = {}
+boxAttributes = ""
 
-  # Box env configuration
-  config.vm.provider :virtualbox do |vb,override|
-    if BOX_OS.eql? "centos64"
-      override.vm.box_url         = "http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-i386-v20130731.box"
-      override.vm.box             = "centos64"
-    elsif BOX_OS.eql? "precise64"
-      override.vm.box_url         = "http://files.vagrantup.com/precise64.box"
-      override.vm.box             = "precise64"
-    end
-    vb.customize ["modifyvm", :id, "--memory", 4096]
-    vb.customize ["modifyvm", :id, "--cpus", 4]
+params['downloadCmd'] = ENV['DOWNLOAD_CMD'] || "curl"
+params['workDir'] = ENV['WORK_DIR'] || "./.vagrant"
+
+params['boxUrl'] = ENV['BOX_URL'] || "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
+params['vagrantBoxName'] = ENV['BOX_NAME'] || "opscode-centos-7.1"
+params['vagrantBoxMemory'] = ENV['BOX_MEMORY'] || "2048"
+params['vagrantBoxCpus'] = ENV['BOX_CPUS'] || "2"
+
+params['initVarsUrl'] = ENV['INITVARS_URL'] || "file://#{ENV['PWD']}/initvars.json"
+params['nodeUrl'] = ENV['NODE_URL'] || "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/allinone-community.json"
+params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.7/chef-alfresco-0.6.7.tar.gz"
+params['dataBagsUrl'] = ENV['DATABAGS_URL'] || ''
+
+def printVars(params)
+  print "Printing out Vagrant environment variables:\n"
+  params.each do |paramName,paramValue|
+    print "#{paramName}: '"+paramValue+"'\n"
+  end
+end
+
+def reloadChefItems(params)
+  # Make sure the work directory exists
+  `mkdir -p #{params['workDir']}`
+
+  # TODO - check if already installed first and/or add it to docs
+  # `vagrant plugin install json-merge_patch`
+
+  # Download and uncompress Chef cookbooks (in a Berkshelf package format)
+  if params['cookbooksUrl'] and params['cookbooksUrl'].length != 0
+    `#{params['downloadCmd']} #{params['cookbooksUrl']} > #{params['workDir']}/cookbooks.tar.gz`
+    `tar xzf #{params['workDir']}/cookbooks.tar.gz -C #{params['workDir']}`
   end
 
-  config.vm.network :private_network, ip:  attributes["ip"]
-  config.vm.hostname = attributes["hostname"]
+  # Download and uncompress Chef databags
+  if params['dataBagsUrl'] and params['dataBagsUrl'].length != 0
+    `#{params['downloadCmd']} #{params['dataBagsUrl']} > #{params['workDir']}/databags.tar.gz`
+    `tar xzf #{params['workDir']}/databags.tar.gz -C #{params['workDir']}`
+  end
 
-  config.omnibus.chef_version = "11.16.2"
+  # Download node URL
+  `#{params['downloadCmd']} #{params['nodeUrl']} > #{params['workDir']}/attributes.json.original`
 
+  # Download initVars URL
+  `#{params['downloadCmd']} #{params['initVarsUrl']} > #{params['workDir']}/initvars.json`
+
+  # Patch node URL with initVars
+  mergedAttributes = JSON.merge(File.open("#{params['workDir']}/attributes.json.original").read, File.open("#{params['workDir']}/initvars.json").read)
+
+  return mergedAttributes
+end
+
+Vagrant.configure("2") do |config|
+
+  # TODO - this stopped working when added json-merge_patch
+  #
+  # config.trigger.before :provision do
+  #   reloadChefItems(params)
+  # end
+  #
+  # config.trigger.before :up do
+  #   reloadChefItems(params)
+  # end
+
+  # TODO - make pretty printing work
+  #
+  # boxAttributesContent = JSON.pretty_generate(reloadChefItems(params))
+  boxAttributesContent = reloadChefItems(params)
+  # boxAttributes = JSON.pretty_generate(JSON.parse(boxAttributesContent))
+  boxAttributes = JSON.parse(boxAttributesContent)
+
+  if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
+    boxAttributes['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
+    boxAttributes['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
+    boxAttributes['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
+  end
+
+  File.open("#{params['workDir']}/attributes.json", 'w').write(boxAttributes)
+  print("boxAttributes\n")
+  print(boxAttributes)
+
+  # boxAttributes = JSON.parse(IO.read("#{params['workDir']}/attributes.json"))
+  boxIp = boxAttributes["ip"] || "127.0.0.1"
+  boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
+  boxRunList = boxAttributes["run_list"]
+
+  # Box env configuration
+  # TODO - this will be needed for clustering
+  # config.vm.network :private_network, ip:  boxIp
+  config.vm.hostname = boxHostname
+  config.vm.provider :virtualbox do |vb,override|
+    override.vm.box_url = params['vagrantBoxUrl']
+    override.vm.box = params['vagrantBoxName']
+    vb.customize ["modifyvm", :id, "--memory", params['vagrantBoxMemory']]
+    vb.customize ["modifyvm", :id, "--cpus", params['vagrantBoxCpus']]
+  end
+
+  # Use the latest Chef version
+  # config.omnibus.chef_version = "12.5.1"
+
+  # Chef run configuration
   config.vm.provision :chef_solo do |chef|
-    # Used as Vagrant cache during build
-    chef.provisioning_path  = "/tmp/vagrant-chef-solo"
-    chef.file_cache_path    = chef.provisioning_path
-    chef.cookbooks_path     = "../common/vendor-cookbooks"
-    chef.data_bags_path     = "../common/data_bags"
+    chef.cookbooks_path = "#{params['workDir']}/cookbooks"
+    chef.data_bags_path = "#{params['workDir']}/data_bags"
 
-    # Add this layer's Run List
-    run_list.each do |recipe|
+    boxRunList.each do |recipe|
       chef.add_recipe "recipe[#{recipe}]"
     end
 
-    # Pass the rest of the attributes
-    chef.json = attributes
+    chef.json = boxAttributes
   end
 end

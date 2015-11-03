@@ -11,7 +11,7 @@ Alternatively, you can install your vagrant plugins manually using
 ```
 vagrant plugin install vagrant-omnibus
 vagrant plugin install vagrant-vbguest
-vagrant plugin install vagrant-hosts
+vagrant plugin install vagrant-triggers
 ```
 Some users have experienced [problems with the vagrant-vbguest plugin](https://github.com/maoo/alfresco-boxes/issues/19)
 
@@ -21,22 +21,41 @@ Run Vagrant
 cd vagrant
 vagrant up
 ```
-This command will run - by default - `alfresco-allinone-dev.json`
 
 You can now
 * Open http://192.168.0.33:8080/share
 * Login as admin/admin
 * Use top-right search box and type 'project'
 
-You can optionally define an alternative JSON file and/or select a different OS (only ```centos64``` and ```precise64``` are supported for now)
+Custom parameters
+---
+You can optionally override the following variables:
 ```
-JSON=alfresco-allinone-ent.json BOX_OS=centos64 vagrant up
+DOWNLOAD_CMD="curl"
+WORK_DIR="./.vagrant"
+
+BOX_URL="http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
+BOX_NAME="opscode-centos-7.1"
+BOX_MEMORY="2048"
+BOX_CPUS="2"
+
+INITVARS_URL="$PWD/initvars.json"
+NODE_URL="https://raw.githubusercontent.com/Alfresco/chef-alfresco/master/nodes/allinone.json"
+COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.7/chef-alfresco-0.6.7.tar.gz"
+DATABAGS_URL=nil
+```
+
+Alfresco Enterprise
+---
+In order to use an enterprise version, you must pass your artifacts.alfresco.com credentials as follows:
+```
+NEXUS_USERNAME=myusername
+NEXUS_PASSWORD=password
 ```
 
 Debugging
 ---
 For debugging purposes, prepend
-* ```PACKER_LOG=1``` to ```packer``` commands
 * ```VAGRANT_LOG=debug``` to ```vagrant``` commsnds
 
 Troubleshooting
@@ -52,31 +71,4 @@ To reset your local environment, run the following command
 
 ```
 vagrant destroy -f && killall VBoxSVC && rm -Rf .vagrant *.lock
-```
-
-Maven Repository custom configuration
----
-When `vagrant up` runs, it fetches artifacts using Apache Maven; you may want to reuse a (host) local Maven repository that already contains some of the artifacts you need (saving significant time during provisioning); add the following to your Vagrantfile
-
-```
-config.vm.synced_folder File.expand_path("~/.m2/repository"), "/root/.m2/repository"
-```
-
-By default, alfresco-boxes will purge Maven configuration after the run, to avoid keeping installation files within the box; to avoid this operation, set the following in your JSON attribute file:
-
-```
-{
-  "provisioners": [
-    {
-      "json": {
-        ...
-        "artifact-deployer": {
-            "maven" : {
-              "purge_settings" : false
-          }
-        }
-      }
-    }
-  ]
-}
 ```
