@@ -1,13 +1,20 @@
 {
-  "allinone" : {
+  "alfresco_allinone" : {
     "url" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/allinone-community.json",
     "memory" : "2048",
     "cpus" : "2",
     "initVars" : {
       "patched" : true,
+      "alfresco" : {
+        "install_fonts" : false
+      },
       "nginx" : {
         "use_nossl_config" : true
       }
+    },
+    "packer" : {
+      "provisioner" : "chef-zero",
+      "builder" : "amazon"
     }
   }
 }

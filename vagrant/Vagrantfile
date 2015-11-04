@@ -55,7 +55,8 @@ def reloadChefItems(nodes,params)
     `#{params['downloadCmd']} #{chefNode['url']} > #{params['workDir']}/attributes-#{chefNodeName}.json.original`
     print "Downloaded #{chefNode['url']} into #{params['workDir']}/attributes-#{chefNodeName}.json.original\n"
 
-    print "initVars: #{chefNode['initVars'].to_json}\n"
+    # For debugging purposes
+    # print "initVars: #{chefNode['initVars'].to_json}\n"
 
     # Patch node URL with initVars
     mergedAttributes = JSON.merge(File.open("#{params['workDir']}/attributes-#{chefNodeName}.json.original").read, chefNode['initVars'].to_json)
@@ -69,76 +70,97 @@ def reloadChefItems(nodes,params)
   end
 end
 
-# Download nodes URL
-`#{params['downloadCmd']} #{params['nodesUrl']} > #{params['workDir']}/nodes.json`
-print "Downloaded #{params['nodesUrl']} into #{params['workDir']}/nodes.json\n"
+print "Running Vagrant #{ARGV[0]}\n"
 
-# Load nodes JSON
-nodes = JSON.parse(File.open("#{params['workDir']}/nodes.json").read)
-reloadChefItems(nodes, params)
+if ['packer'].include? ARGV[0]
+  # TODO
+  # Get packer bin
+  # Fetch packer-common ZIP file
+  # Export provisioners, builders and KSdir variables
+  # Install racker
+  # Run racker
+  # Run Packer
+  print "Vagrant was invoked with Packer command\n"
+  print `which packer`
+  print "\n"
+else
 
-Vagrant.configure("2") do |config|
+  if ['up','provision'].include? ARGV[0]
+    # Download nodes URL
+    `#{params['downloadCmd']} #{params['nodesUrl']} > #{params['workDir']}/nodes.json`
+    print "Downloaded #{params['nodesUrl']} into #{params['workDir']}/nodes.json\n"
+  end
 
-  # TODO - this stopped working when added json-merge_patch
-  #
-  # config.trigger.before :provision do
-  #   reloadChefItems(params)
-  # end
-  #
-  # config.trigger.before :up do
-  #   reloadChefItems(params)
-  # end
+  # Load nodes JSON
+  nodes = JSON.parse(File.open("#{params['workDir']}/nodes.json").read)
 
-  # TODO - make pretty printing work
-  #
-  # boxAttributesContent = JSON.pretty_generate(reloadChefItems(params))
-  nodes.each do |chefNodeName,chefNode|
-    config.vm.define chefNodeName do |machineConfig|
-      boxAttributesContent = File.open("#{params['workDir']}/attributes-#{chefNodeName}.json").read
-      # boxAttributes = JSON.pretty_generate(JSON.parse(boxAttributesContent))
-      boxAttributes = JSON.parse(boxAttributesContent)
-      # For debugging purposes
-      # print("boxAttributes:\n#{boxAttributes}\n")
+  if ['up','provision'].include? ARGV[0]
+    reloadChefItems(nodes, params)
+  end
 
-      if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
-        boxAttributes['artifact-deployer'] = {}
-        boxAttributes['artifact-deployer']['maven'] = {}
-        boxAttributes['artifact-deployer']['maven']['repositories'] = {}
-        boxAttributes['artifact-deployer']['maven']['repositories']['private'] = {}
+  Vagrant.configure("2") do |config|
 
-        boxAttributes['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
-        boxAttributes['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
-        boxAttributes['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
-      end
+    # TODO - this stopped working when added json-merge_patch
+    #
+    # config.trigger.before :provision do
+    #   reloadChefItems(params)
+    # end
+    #
+    # config.trigger.before :up do
+    #   reloadChefItems(params)
+    # end
 
-      boxIp = boxAttributes["ip"] || "127.0.0.1"
-      boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
-      boxRunList = boxAttributes["run_list"]
+    # TODO - make pretty printing work
+    #
+    # boxAttributesContent = JSON.pretty_generate(reloadChefItems(params))
+    nodes.each do |chefNodeName,chefNode|
+      config.vm.define chefNodeName do |machineConfig|
+        boxAttributesContent = File.open("#{params['workDir']}/attributes-#{chefNodeName}.json").read
+        # boxAttributes = JSON.pretty_generate(JSON.parse(boxAttributesContent))
+        boxAttributes = JSON.parse(boxAttributesContent)
+        # For debugging purposes
+        # print("boxAttributes:\n#{boxAttributes}\n")
 
-      # Box env configuration
-      # TODO - this will be needed for clustering
-      # config.vm.network :private_network, ip:  boxIp
-      machineConfig.vm.hostname = boxHostname
-      machineConfig.vm.provider :virtualbox do |vb,override|
-        override.vm.box_url = params['vagrantBoxUrl']
-        override.vm.box = params['boxName']
-        vb.customize ["modifyvm", :id, "--memory", chefNode['memory']]
-        vb.customize ["modifyvm", :id, "--cpus", chefNode['cpus']]
-      end
+        if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
+          boxAttributes['artifact-deployer'] = {}
+          boxAttributes['artifact-deployer']['maven'] = {}
+          boxAttributes['artifact-deployer']['maven']['repositories'] = {}
+          boxAttributes['artifact-deployer']['maven']['repositories']['private'] = {}
 
-      # Use the latest Chef version
-      # config.omnibus.chef_version = "12.5.1"
-
-      # Chef run configuration
-      machineConfig.vm.provision :chef_solo do |chef|
-        chef.cookbooks_path = "#{params['workDir']}/cookbooks"
-        chef.data_bags_path = "#{params['workDir']}/data_bags"
-
-        boxRunList.each do |recipe|
-          chef.add_recipe "recipe[#{recipe}]"
+          boxAttributes['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
+          boxAttributes['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
+          boxAttributes['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
         end
 
-        chef.json = boxAttributes
+        boxIp = boxAttributes["ip"] || "127.0.0.1"
+        boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
+        boxRunList = boxAttributes["run_list"]
+
+        # Box env configuration
+        # TODO - this will be needed for clustering
+        # config.vm.network :private_network, ip:  boxIp
+        machineConfig.vm.hostname = boxHostname
+        machineConfig.vm.provider :virtualbox do |vb,override|
+          override.vm.box_url = params['vagrantBoxUrl']
+          override.vm.box = params['boxName']
+          vb.customize ["modifyvm", :id, "--memory", chefNode['memory']]
+          vb.customize ["modifyvm", :id, "--cpus", chefNode['cpus']]
+        end
+
+        # Use the latest Chef version
+        # config.omnibus.chef_version = "12.5.1"
+
+        # Chef run configuration
+        machineConfig.vm.provision :chef_solo do |chef|
+          chef.cookbooks_path = "#{params['workDir']}/cookbooks"
+          chef.data_bags_path = "#{params['workDir']}/data_bags"
+
+          boxRunList.each do |recipe|
+            chef.add_recipe "recipe[#{recipe}]"
+          end
+
+          chef.json = boxAttributes
+        end
       end
     end
   end
