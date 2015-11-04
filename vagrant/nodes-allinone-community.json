@@ -1,0 +1,13 @@
+{
+  "allinone" : {
+    "url" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/allinone-community.json",
+    "memory" : "2048",
+    "cpus" : "2",
+    "initVars" : {
+      "patched" : true,
+      "nginx" : {
+        "use_nossl_config" : true
+      }
+    }
+  }
+}
