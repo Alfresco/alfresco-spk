@@ -8,27 +8,25 @@ require 'json/merge_patch'
 params = {}
 boxAttributes = ""
 
-params['downloadCmd'] = ENV['DOWNLOAD_CMD'] || "curl"
+params['downloadCmd'] = ENV['DOWNLOAD_CMD'] || "curl --silent"
 params['workDir'] = ENV['WORK_DIR'] || "./.vagrant"
 
 params['boxUrl'] = ENV['BOX_URL'] || "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
-params['vagrantBoxName'] = ENV['BOX_NAME'] || "opscode-centos-7.1"
-params['vagrantBoxMemory'] = ENV['BOX_MEMORY'] || "2048"
-params['vagrantBoxCpus'] = ENV['BOX_CPUS'] || "2"
+params['boxName'] = ENV['BOX_NAME'] || "opscode-centos-7.1"
 
-params['initVarsUrl'] = ENV['INITVARS_URL'] || "file://#{ENV['PWD']}/initvars.json"
-params['nodeUrl'] = ENV['NODE_URL'] || "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/allinone-community.json"
+params['nodesUrl'] = ENV['NODES_URL'] || "file://#{ENV['PWD']}/nodes-allinone-community.json"
 params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.7/chef-alfresco-0.6.7.tar.gz"
 params['dataBagsUrl'] = ENV['DATABAGS_URL'] || ''
 
 def printVars(params)
-  print "Printing out Vagrant environment variables:\n"
+  print "#START - Printing out Vagrant environment variables:\n"
   params.each do |paramName,paramValue|
     print "#{paramName}: '"+paramValue+"'\n"
   end
+  print "#END - Printing out Vagrant environment variables:\n"
 end
 
-def reloadChefItems(params)
+def reloadChefItems(nodes,params)
   # Make sure the work directory exists
   `mkdir -p #{params['workDir']}`
 
@@ -38,26 +36,46 @@ def reloadChefItems(params)
   # Download and uncompress Chef cookbooks (in a Berkshelf package format)
   if params['cookbooksUrl'] and params['cookbooksUrl'].length != 0
     `#{params['downloadCmd']} #{params['cookbooksUrl']} > #{params['workDir']}/cookbooks.tar.gz`
+    print "Downloaded #{params['cookbooksUrl']}\n"
     `tar xzf #{params['workDir']}/cookbooks.tar.gz -C #{params['workDir']}`
+    print "Unpacked #{params['workDir']}/cookbooks.tar.gz into #{params['workDir']}\n"
   end
 
   # Download and uncompress Chef databags
   if params['dataBagsUrl'] and params['dataBagsUrl'].length != 0
     `#{params['downloadCmd']} #{params['dataBagsUrl']} > #{params['workDir']}/databags.tar.gz`
+    print "Downloaded #{params['dataBagsUrl']}\n"
     `tar xzf #{params['workDir']}/databags.tar.gz -C #{params['workDir']}`
+    print "Unpacked #{params['workDir']}/databags.tar.gz into #{params['workDir']}\n"
   end
 
   # Download node URL
-  `#{params['downloadCmd']} #{params['nodeUrl']} > #{params['workDir']}/attributes.json.original`
+  nodes.each do |chefNodeName,chefNode|
+    print "Processing node '#{chefNodeName}'\n"
+    `#{params['downloadCmd']} #{chefNode['url']} > #{params['workDir']}/attributes-#{chefNodeName}.json.original`
+    print "Downloaded #{chefNode['url']} into #{params['workDir']}/attributes-#{chefNodeName}.json.original\n"
 
-  # Download initVars URL
-  `#{params['downloadCmd']} #{params['initVarsUrl']} > #{params['workDir']}/initvars.json`
+    print "initVars: #{chefNode['initVars'].to_json}\n"
 
-  # Patch node URL with initVars
-  mergedAttributes = JSON.merge(File.open("#{params['workDir']}/attributes.json.original").read, File.open("#{params['workDir']}/initvars.json").read)
+    # Patch node URL with initVars
+    mergedAttributes = JSON.merge(File.open("#{params['workDir']}/attributes-#{chefNodeName}.json.original").read, chefNode['initVars'].to_json)
 
-  return mergedAttributes
+    File.open("#{params['workDir']}/attributes-#{chefNodeName}.json", 'w').write(mergedAttributes)
+
+    print "Merged #{params['workDir']}/attributes-#{chefNodeName}.json.original and #{params['workDir']}/initvars.json into #{params['workDir']}/attributes-#{chefNodeName}.json\n"
+
+    # For debugging purposes
+    # print("mergedAttributes:\n#{mergedAttributes}\n")
+  end
 end
+
+# Download nodes URL
+`#{params['downloadCmd']} #{params['nodesUrl']} > #{params['workDir']}/nodes.json`
+print "Downloaded #{params['nodesUrl']} into #{params['workDir']}/nodes.json\n"
+
+# Load nodes JSON
+nodes = JSON.parse(File.open("#{params['workDir']}/nodes.json").read)
+reloadChefItems(nodes, params)
 
 Vagrant.configure("2") do |config|
 
@@ -74,48 +92,54 @@ Vagrant.configure("2") do |config|
   # TODO - make pretty printing work
   #
   # boxAttributesContent = JSON.pretty_generate(reloadChefItems(params))
-  boxAttributesContent = reloadChefItems(params)
-  # boxAttributes = JSON.pretty_generate(JSON.parse(boxAttributesContent))
-  boxAttributes = JSON.parse(boxAttributesContent)
+  nodes.each do |chefNodeName,chefNode|
+    config.vm.define chefNodeName do |machineConfig|
+      boxAttributesContent = File.open("#{params['workDir']}/attributes-#{chefNodeName}.json").read
+      # boxAttributes = JSON.pretty_generate(JSON.parse(boxAttributesContent))
+      boxAttributes = JSON.parse(boxAttributesContent)
+      # For debugging purposes
+      # print("boxAttributes:\n#{boxAttributes}\n")
 
-  if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
-    boxAttributes['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
-    boxAttributes['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
-    boxAttributes['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
-  end
+      if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
+        boxAttributes['artifact-deployer'] = {}
+        boxAttributes['artifact-deployer']['maven'] = {}
+        boxAttributes['artifact-deployer']['maven']['repositories'] = {}
+        boxAttributes['artifact-deployer']['maven']['repositories']['private'] = {}
 
-  File.open("#{params['workDir']}/attributes.json", 'w').write(boxAttributes)
-  print("boxAttributes\n")
-  print(boxAttributes)
+        boxAttributes['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
+        boxAttributes['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
+        boxAttributes['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
+      end
 
-  # boxAttributes = JSON.parse(IO.read("#{params['workDir']}/attributes.json"))
-  boxIp = boxAttributes["ip"] || "127.0.0.1"
-  boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
-  boxRunList = boxAttributes["run_list"]
+      boxIp = boxAttributes["ip"] || "127.0.0.1"
+      boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
+      boxRunList = boxAttributes["run_list"]
 
-  # Box env configuration
-  # TODO - this will be needed for clustering
-  # config.vm.network :private_network, ip:  boxIp
-  config.vm.hostname = boxHostname
-  config.vm.provider :virtualbox do |vb,override|
-    override.vm.box_url = params['vagrantBoxUrl']
-    override.vm.box = params['vagrantBoxName']
-    vb.customize ["modifyvm", :id, "--memory", params['vagrantBoxMemory']]
-    vb.customize ["modifyvm", :id, "--cpus", params['vagrantBoxCpus']]
-  end
+      # Box env configuration
+      # TODO - this will be needed for clustering
+      # config.vm.network :private_network, ip:  boxIp
+      machineConfig.vm.hostname = boxHostname
+      machineConfig.vm.provider :virtualbox do |vb,override|
+        override.vm.box_url = params['vagrantBoxUrl']
+        override.vm.box = params['boxName']
+        vb.customize ["modifyvm", :id, "--memory", chefNode['memory']]
+        vb.customize ["modifyvm", :id, "--cpus", chefNode['cpus']]
+      end
 
-  # Use the latest Chef version
-  # config.omnibus.chef_version = "12.5.1"
+      # Use the latest Chef version
+      # config.omnibus.chef_version = "12.5.1"
 
-  # Chef run configuration
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "#{params['workDir']}/cookbooks"
-    chef.data_bags_path = "#{params['workDir']}/data_bags"
+      # Chef run configuration
+      machineConfig.vm.provision :chef_solo do |chef|
+        chef.cookbooks_path = "#{params['workDir']}/cookbooks"
+        chef.data_bags_path = "#{params['workDir']}/data_bags"
 
-    boxRunList.each do |recipe|
-      chef.add_recipe "recipe[#{recipe}]"
+        boxRunList.each do |recipe|
+          chef.add_recipe "recipe[#{recipe}]"
+        end
+
+        chef.json = boxAttributes
+      end
     end
-
-    chef.json = boxAttributes
   end
 end
