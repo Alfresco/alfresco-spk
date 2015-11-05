@@ -17,7 +17,8 @@
         "chef-solo" : "file://$PWD/chef-solo-provisioner.json"
       },
       "builders" : {
-        "amazon-ebs" : "file://$PWD/amazon-ebs-builder.json"
+        "amazon-ebs" : "file://$PWD/amazon-ebs-builder.json",
+        "docker" : "file://$PWD/docker-builder.json"
       }
     }
   }
