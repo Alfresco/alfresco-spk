@@ -2,11 +2,27 @@
 Alfresco SPK is a toolset that can be used by stack operators (Devops/Architects/Engineers, Support, QA, Sales, Marketing, ...) to define stacks locally (first) and run them anywhere (later); it sits on top of existing technologies (ChefDK, Vagrant, Packer) and implements a modular, testable, consistent development workflow for Alfresco software provisioning.
 
 ## Concepts
-* Instance template - a JSON file that contains provisioning configurations related to a single node of an Alfresco stack; instance templates are resolved via URL, that can point to a local or remote file
-* Stack template - a JSON file that describes a stack in terms of instances; each instance will link to an instance template JSON file; stack templates are resolved via URL, that can point to a local or remote file. The default stack template is defined in `stack-templates/community-allinone.json`; you can use another stack template simply setting the `$STACK_TEMPLATE_URL` environment variable:
 
+### Instance template
+A JSON file that contains provisioning configurations related to a single node of an Alfresco stack; instance templates are resolved via URL, that can point to a local or remote file.
+
+Instance templates are [Chef nodes](https://docs.chef.io/nodes.html) that contain all configurations - also known as Chef attributes - that are involved in the instance provisioning, for example the Alfresco admin password, the db host, the amps to install and much (much) more.
+
+Attributes are defined, along with its defaults, by [chef-alfresco](https://github.com/Alfresco/chef-alfresco) provides the definition of such attributes, along with its defaults, plus a list of the most [common instance templates](https://github.com/Alfresco/chef-alfresco/tree/master/nodes) (which may soon be migrated into this project).
+
+### Stack template
+A JSON file that describes a stack in terms of instances; each instance is composed by
+- An instance template, as described above
+- Vagrant-related configurations, that are used to run the stack locally; for example, `memory` and `cpu` control the resources allocated by Vagrant to run the instance. `localVars` is a JSON snippet that [merges](https://tools.ietf.org/html/rfc7386) the instance template JSON; it allows to overlay instance template configurations that are needed for local runs with Vagrant; this configuration is not involved in any other SPK feature, rather than running locally with Vagrant.
+- Packer-related configurations, that are used to create images based on instance template configurations; the `packer` item defines
+  - builders; they define the nature(s) of the image(s) that you want to build; currently, the only builder implemented and extensively tested is [amazon-ebs](packer/amazon-ebs-builder.json.example) (which produces an AMI), though there have been successes for OVF and Docker images too (WIP); any [Packer builder](https://www.packer.io/docs/templates/builders.html) can be easily integrated
+  - provisioners; by default, the only provisioner is needed is [`chef-solo`](packer/chef-solo-provisioner.json), which basically runs the same provisioning logic that runs locally; however, you can extend this list with more [Packer provisioners](https://www.packer.io/docs/templates/provisioners.html) of your choice
+
+Stack templates are resolved via URL, that can point to a local or remote file. The default stack template is defined in `stack-templates/community-allinone.json`, though the [stack-templates](stack-templates) folder aims to host many more examples.
+
+You can use any stack template you want, either locally or remotely:
 ```
-export STACK_TEMPLATE_URL=file://$PWD/stack-templates/community-allinone.json
+export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
 ```
 
 ## Requirements
@@ -36,12 +52,27 @@ Assuming that you defined `$STACK_TEMPLATE_URL` with the proper JSON stack defin
 
 This will create a [Vagrant Machine](https://docs.vagrantup.com/v2/multi-machine) for each instance that composes the stack.
 
-### Running remotely on AWS (or any other packer-supported builder)
-If your local run works and you're happy with it, you can test it against AWS, or any other cloud provider that is [supported by Packer](https://www.packer.io/docs/templates/builders.html)
-...
+Assuming that you've run your stack locally and you're happy with the instance template definitions, you can proceed with one (or both) of the following options:
 
 ### Packaging images
-...
+Create an immutable image for each of the instances involved in a given stack; instance templates will be used to dictate the provisioning configuration, whereas `localVars` - as mentioned above - will be ignored.
+
+To create the images:
+```
+vagrant packer
+```
+
+As above, you can select the stack template using:
+```
+export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
+```
+
+An image will be created for each instance *and* builder; for example, if you create images for the `enterprise-clustered.json` stack, using `amazon-ebs` and `docker` as builders, you'll get 4 images created.
+
+### Running remotely on AWS (or any other packer-supported builder)
+Test instance templates against AWS, or any other cloud provider that is [supported by Packer](https://www.packer.io/docs/templates/builders.html)
+
+...TODO - chef-bootstrap.sh
 
 ## Custom parameters
 You can optionally override the following variables:
@@ -64,10 +95,16 @@ NEXUS_PASSWORD=password
 This approach works for local, remote run and image creation (read above how to export variables on a remote run)
 
 ## Debugging
-For debugging purposes, prepend
-* ```VAGRANT_LOG=debug``` to ```vagrant``` commsnds
+To enable Vagrant debug mode:
+```
+VAGRANT_LOG=debug
+```
 
-## Troubleshooting
+To enable Packer debug mode:
+```
+export PACKER_OPTS=-debug
+```
+
 If you want to check if VirtualBox is still running from previous attempps run
 
 ```

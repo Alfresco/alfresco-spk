@@ -1,9 +1,9 @@
 {
   "alfresco-allinone" : {
-    "url" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/allinone-community.json",
+    "instance-template" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/allinone-community.json",
     "memory" : "2048",
     "cpus" : "2",
-    "initVars" : {
+    "localVars" : {
       "patched" : true,
       "alfresco" : {
         "install_fonts" : false
@@ -14,11 +14,10 @@
     },
     "packer" : {
       "provisioners" : {
-        "chef-solo" : "file://$PWD/chef-solo-provisioner.json"
+        "chef-solo" : "file://$PWD/packer/chef-solo-provisioner.json"
       },
       "builders" : {
-        "amazon-ebs" : "file://$PWD/amazon-ebs-builder.json",
-        "docker" : "file://$PWD/docker-builder.json"
+        "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
       }
     }
   }

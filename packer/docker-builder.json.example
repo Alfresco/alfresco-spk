@@ -1,3 +1,4 @@
+# Not tested, WIP!
 {
   "type" : "docker",
   "image": "centos",
