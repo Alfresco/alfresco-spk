@@ -1,5 +1,5 @@
 {
-  "alfresco_share" : {
+  "alfresco-share" : {
     "url" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/share.json",
     "memory" : "800",
     "cpus" : "1",
@@ -13,7 +13,7 @@
       }
     }
   },
-  "alfresco_solr" : {
+  "alfresco-solr" : {
     "url" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/solr.json",
     "memory" : "800",
     "cpus" : "1",

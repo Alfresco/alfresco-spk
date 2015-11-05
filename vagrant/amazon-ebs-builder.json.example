@@ -1,0 +1,15 @@
+{
+  "type" : "amazon-ebs",
+  "access_key" : "YOUR AWS ACCESS KEY HERE",
+  "secret_key" : "YOUR AWS SECRET KEY HERE",
+  "region" : "us-east-1",
+  "source_ami" : "ami-96a818fe",
+  "instance_type" : "m3.medium",
+  "ssh_username" : "centos",
+  "security_group_ids"  : ["DEFAULT SG WITH 22 OPEN"],
+  "ami_name" : "Alfresco Allinone Community AMI",
+  "ami_description" : "Alfresco Allinone Community AMI",
+  "ami_virtualization_type"  : "hvm",
+  "ami_users"  : ["AWS ACCOUNT ID TO SHARE AMI WITH"],
+  "enhanced_networking"  : "true"
+}
