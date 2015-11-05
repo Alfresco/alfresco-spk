@@ -3,6 +3,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# export COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/snapshots/content/org/alfresco/devops/chef-alfresco/0.6.8-SNAPSHOT/chef-alfresco-0.6.8-20151104.130154-30.tar.gz"
+# export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
+
 require 'json/merge_patch'
 
 params = {}
@@ -11,6 +14,7 @@ boxAttributes = ""
 params['downloadCmd'] = ENV['DOWNLOAD_CMD'] || "curl --silent"
 params['workDir'] = ENV['WORK_DIR'] || "./.vagrant"
 params['packerBin'] = ENV['PACKER_BIN'] || "/Users/mau/Documents/opt/packer-0.7.5/packer"
+params['packerOpts'] = ENV['PACKER_OPTS'] || ''
 
 params['boxUrl'] = ENV['BOX_URL'] || "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
 params['boxName'] = ENV['BOX_NAME'] || "opscode-centos-7.1"
@@ -29,14 +33,11 @@ def printVars(params)
 end
 
 def reloadChefItems(nodes,params)
-  # TODO - check if already installed first and/or add it to docs
-  # `vagrant plugin install json-merge_patch`
-
   # Download and uncompress Chef cookbooks (in a Berkshelf package format)
   if params['cookbooksUrl'] and params['cookbooksUrl'].length != 0
     `#{params['downloadCmd']} #{params['cookbooksUrl']} > #{params['workDir']}/cookbooks.tar.gz`
     print "Downloaded #{params['cookbooksUrl']}\n"
-    `tar xzf #{params['workDir']}/cookbooks.tar.gz -C #{params['workDir']}`
+    `rm -rf #{params['workDir']}/cookbooks; tar xzf #{params['workDir']}/cookbooks.tar.gz -C #{params['workDir']}`
     print "Unpacked #{params['workDir']}/cookbooks.tar.gz into #{params['workDir']}\n"
   end
 
@@ -44,21 +45,21 @@ def reloadChefItems(nodes,params)
   if params['dataBagsUrl'] and params['dataBagsUrl'].length != 0
     `#{params['downloadCmd']} #{params['dataBagsUrl']} > #{params['workDir']}/databags.tar.gz`
     print "Downloaded #{params['dataBagsUrl']}\n"
-    `tar xzf #{params['workDir']}/databags.tar.gz -C #{params['workDir']}`
+    `rm -rf #{params['workDir']}/databags; tar xzf #{params['workDir']}/databags.tar.gz -C #{params['workDir']}`
     print "Unpacked #{params['workDir']}/databags.tar.gz into #{params['workDir']}\n"
   end
 
   # Download node URL
   nodes.each do |chefNodeName,chefNode|
     print "Processing node '#{chefNodeName}'\n"
-    `#{params['downloadCmd']} #{chefNode['url']} > #{params['workDir']}/attributes-#{chefNodeName}.json.original`
-    print "Downloaded #{chefNode['url']} into #{params['workDir']}/attributes-#{chefNodeName}.json.original\n"
+    `#{params['downloadCmd']} #{chefNode['instance-template']} > #{params['workDir']}/attributes-#{chefNodeName}.json.original`
+    print "Downloaded #{chefNode['instance-template']} into #{params['workDir']}/attributes-#{chefNodeName}.json.original\n"
 
     # For debugging purposes
-    # print "initVars: #{chefNode['initVars'].to_json}\n"
+    # print "localVars: #{chefNode['localVars'].to_json}\n"
 
-    # Patch node URL with initVars
-    mergedAttributes = JSON.parse(JSON.merge(File.read("#{params['workDir']}/attributes-#{chefNodeName}.json.original"), chefNode['initVars'].to_json))
+    # Patch node URL with localVars
+    mergedAttributes = JSON.parse(JSON.merge(File.read("#{params['workDir']}/attributes-#{chefNodeName}.json.original"), chefNode['localVars'].to_json))
 
     if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
       mergedAttributes['artifact-deployer'] = {}
@@ -75,10 +76,7 @@ def reloadChefItems(nodes,params)
     attributeFile.write(mergedAttributes.to_json)
     attributeFile.close()
 
-    print "Merged #{params['workDir']}/attributes-#{chefNodeName}.json.original and #{params['workDir']}/initvars.json into #{params['workDir']}/attributes-#{chefNodeName}.json\n"
-
-    # For debugging purposes
-    # print("mergedAttributes:\n#{mergedAttributes}\n")
+    print "Merged #{params['workDir']}/attributes-#{chefNodeName}.json.original and #{params['workDir']}/localVars.json into #{params['workDir']}/attributes-#{chefNodeName}.json\n"
   end
 end
 
@@ -86,6 +84,7 @@ print "Running Vagrant #{ARGV[0]}\n"
 
 # Make sure the work directory exists
 `mkdir -p #{params['workDir']}/packer`
+`mkdir -p #{params['workDir']}/alf_data`
 
 # Download nodes URL
 `#{params['downloadCmd']} #{params['stackTemplateUrl']} > #{params['workDir']}/nodes.json`
@@ -115,7 +114,7 @@ if ['packer'].include? ARGV[0]
       provisioner = File.read("#{params['workDir']}/packer/#{provisionerName}-provisioner.json")
 
       # Inject Chef attributes JSON into the chef-solo provisioner
-      # Please note that the JSON have been already patched with initvars
+      # Please note that the JSON have been already patched with localVars
       # by reloadChefItems function
       if provisionerName == 'chef-solo'
         provisionerJson = JSON.parse(provisioner)
@@ -163,7 +162,7 @@ if ['packer'].include? ARGV[0]
       packerFile = File.open("#{params['workDir']}/packer/#{packerDefName}-packer.json", 'w')
       packerFile.write(packerDef)
       packerFile.close()
-      `cd #{params['workDir']}/packer; #{params['packerBin']} build #{packerDefName}-packer.json`
+      `cd #{params['workDir']}/packer; #{params['packerBin']} build #{packerDefName}-packer.json #{params['packerOpts']}`
     end
   # end
 else
@@ -183,13 +182,14 @@ else
         # For debugging purposes
         # print("boxAttributes:\n#{boxAttributes}\n")
 
-        boxIp = boxAttributes["ip"] || "127.0.0.1"
+        boxIp = boxAttributes["ip"]
         boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
         boxRunList = boxAttributes["run_list"]
 
         # Box env configuration
-        # TODO - this will be needed for clustering
-        # config.vm.network :private_network, ip:  boxIp
+        if boxIp
+          config.vm.network :private_network, ip:  boxIp
+        end
         machineConfig.vm.hostname = boxHostname
         machineConfig.vm.provider :virtualbox do |vb,override|
           override.vm.box_url = params['vagrantBoxUrl']
