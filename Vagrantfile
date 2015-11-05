@@ -120,7 +120,7 @@ if ['packer'].include? ARGV[0]
       if provisionerName == 'chef-solo'
         provisionerJson = JSON.parse(provisioner)
         nodeUrl = "#{params['workDir']}/attributes-#{chefNodeName}.json"
-        nodeUrlContent = File.read("#{params['workDir']}/attributes-#{chefNodeName}.json")
+        nodeUrlContent = File.read("#{params['workDir']}/attributes-#{chefNodeName}.json.original")
         provisionerJson['json'] = JSON.parse(nodeUrlContent)
         provisionerFile = File.open("#{params['workDir']}/packer/#{provisionerName}-provisioner.json", 'w')
         provisionerFile.write(provisionerJson.to_json)

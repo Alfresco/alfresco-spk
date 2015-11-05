@@ -1,6 +1,7 @@
 {
   "alfresco-share" : {
     "url" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/share.json",
+    "ip" : "192.168.33.10",
     "memory" : "800",
     "cpus" : "1",
     "initVars" : {
@@ -9,17 +10,25 @@
         "use_nossl_config" : true
       },
       "alfresco" : {
-        "install_fonts" : false
+        "install_fonts" : false,
+        "properties" : {
+          "dir.contentstore" : "/vagrant/.vagrant/alf_data"
+        }
       }
     }
   },
   "alfresco-solr" : {
     "url" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/solr.json",
+    "ip" : "192.168.33.11",
     "memory" : "800",
     "cpus" : "1",
     "initVars" : {
       "patched" : true,
       "alfresco" : {
+        "properties" : {
+          "dir.contentstore" : "/vagrant/.vagrant/alf_data",
+          "db.host" : "192.168.33.10"
+        },
         "install_fonts" : false
       }
     }
