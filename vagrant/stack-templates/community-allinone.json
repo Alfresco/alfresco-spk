@@ -1,5 +1,5 @@
 {
-  "alfresco_allinone" : {
+  "alfresco-allinone" : {
     "url" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/allinone-community.json",
     "memory" : "2048",
     "cpus" : "2",
@@ -13,8 +13,12 @@
       }
     },
     "packer" : {
-      "provisioner" : "chef-zero",
-      "builder" : "amazon"
+      "provisioners" : {
+        "chef-client" : "file://$PWD/chef-client-provisioner.json"
+      },
+      "builders" : {
+        "amazon-ebs" : "file://$PWD/amazon-ebs-builder.json"
+      }
     }
   }
 }

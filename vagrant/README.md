@@ -34,15 +34,10 @@ You can optionally override the following variables:
 DOWNLOAD_CMD="curl"
 WORK_DIR="./.vagrant"
 
-BOX_URL="http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
-BOX_NAME="opscode-centos-7.1"
-BOX_MEMORY="2048"
-BOX_CPUS="2"
-
-INITVARS_URL="$PWD/initvars.json"
-NODE_URL="https://raw.githubusercontent.com/Alfresco/chef-alfresco/master/nodes/allinone.json"
 COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.7/chef-alfresco-0.6.7.tar.gz"
 DATABAGS_URL=nil
+
+STACK_TEMPLATE_URL="https://raw.githubusercontent.com/Alfresco/chef-alfresco/master/stack-templates/enterprise-clustered.json"
 ```
 
 Alfresco Enterprise
