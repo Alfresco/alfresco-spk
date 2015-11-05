@@ -14,7 +14,7 @@
     },
     "packer" : {
       "provisioners" : {
-        "chef-client" : "file://$PWD/chef-client-provisioner.json"
+        "chef-solo" : "file://$PWD/chef-solo-provisioner.json"
       },
       "builders" : {
         "amazon-ebs" : "file://$PWD/amazon-ebs-builder.json"
