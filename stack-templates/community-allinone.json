@@ -1,6 +1,6 @@
 {
   "alfresco-allinone" : {
-    "instance-template" : "https://raw.githubusercontent.com/Alfresco/chef-alfresco/clustering/nodes/allinone-community.json",
+    "instance-template" : "file://$PWD/instance-templates/allinone-community.json",
     "memory" : "2048",
     "cpus" : "2",
     "localVars" : {

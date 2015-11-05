@@ -8,7 +8,9 @@ A JSON file that contains provisioning configurations related to a single node o
 
 Instance templates are [Chef nodes](https://docs.chef.io/nodes.html) that contain all configurations - also known as Chef attributes - that are involved in the instance provisioning, for example the Alfresco admin password, the db host, the amps to install and much (much) more.
 
-Attributes are defined, along with its defaults, by [chef-alfresco](https://github.com/Alfresco/chef-alfresco) provides the definition of such attributes, along with its defaults, plus a list of the most [common instance templates](https://github.com/Alfresco/chef-alfresco/tree/master/nodes) (which may soon be migrated into this project).
+Attributes are defined, along with its defaults, by [chef-alfresco](https://github.com/Alfresco/chef-alfresco) provides the definition of such attributes, along with its defaults.
+
+Alfresco SPK provides a [list of pre-defined instance-templates](instance-templates) that are used by the sample stacks.
 
 ### Stack template
 A JSON file that describes a stack in terms of instances; each instance is composed by
