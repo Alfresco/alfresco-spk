@@ -1,50 +1,82 @@
-alfresco-boxes
-================
+## What is Alfresco SPK
+Alfresco SPK is a toolset that can be used by stack operators (Devops/Architects/Engineers, Support, QA, Sales, Marketing, ...) to define stacks locally (first) and run them anywhere (later); it sits on top of existing technologies (ChefDK, Vagrant, Packer) and implements a modular, testable, consistent development workflow for Alfresco software provisioning.
 
-A collection of examples for the creation, provisioning and virtualization of machine images that sits on top of:
-- [Packer](http://www.packer.io), for creation
-- [chef-alfresco](https://github.com/maoo/chef-alfresco), for provisioning
-- [Docker](https://www.docker.io), for (smart) virtualization
+## Concepts
+* Instance template - a JSON file that contains provisioning configurations related to a single node of an Alfresco stack; instance templates are resolved via URL, that can point to a local or remote file
+* Stack template - a JSON file that describes a stack in terms of instances; each instance will link to an instance template JSON file; stack templates are resolved via URL, that can point to a local or remote file. The default stack template is defined in `stack-templates/community-allinone.json`; you can use another stack template simply setting the `$STACK_TEMPLATE_URL` environment variable:
 
-With this project you can
-* Build Alfresco (custom) images of [any nature](http://www.packer.io/docs/templates/builders.html) with Packer, without worrying about the provisioning part
-* Run on-the-fly [Vagrant boxes](http://www.vagrantup.com) with Alfresco stack fully configured
-* Integrate additional provisioning logic using [Packer provisioners](http://www.packer.io/docs/templates/provisioners.html)
-* Run a clustered environment using [Alfresco-boxes images for Docker](https://hub.docker.com/u/maoo)
-* Build your custom [hierarchy](https://github.com/maoo/alfresco-boxes/blob/master/docker/image%20hierarchy.png) of Alfresco images
+```
+export STACK_TEMPLATE_URL=file://$PWD/stack-templates/community-allinone.json
+```
 
-Features
----
-* Supports Community and Enterprise editions
-* Tested with latest 4.2.3 and 5.0.a versions
-* Installs and configures Repository, Share and Solr application
-* Tested on CentOS and Ubuntu
-* Runs on Vagrant, Packer and Docker, sharing the same set of Chef cookbooks
-* Compatible with AWS, DigitalOcean, OpenStack and many other services
-* Handles Tomcat SSL keystore installation
-* Supports AMP installation (via MMT)
-* Supports custom Maven repositories (and credentials encryption)
-* Can be configured for any Alfresco WAR(s) version/distro; artifacts can be resolved by (local FS) path, url or Maven coordinates
-* Auto-generate and/or patch property files (alfresco-global.properties, share-config-custom.xml, log4j.properties, solrcore.properties) without the need to maintain pre-defined templates
+## Requirements
+* [ChefDK](https://downloads.chef.io/chef-dk)
+* [Vagrant](https://www.vagrantup.com/downloads.html)
+* [Packer](https://packer.io/downloads.html)
 
-Check [chef-alfresco](https://github.com/maoo/chef-alfresco) docs for a full overview of provisioning features.
+## Configure Vagrant
+Vagrant needs some additional plugins:
+```
+vagrant plugin install vagrant-omnibus
+vagrant plugin install vagrant-vbguest
+vagrant plugin install json-merge_patch
+```
 
-Installation
----
-* Install [ChefDK](http://downloads.getchef.com/chef-dk)
-* Checkout this project with ```git clone https://github.com/maoo/alfresco-boxes.git ./alfresco-boxes```
-* Install [VirtualBox](https://www.virtualbox.org) - you can optionally use VMWare Player/Fusion
-* Install Vendor Chef Cookbooks with ```cd alfresco-boxes/common && ./create-vendor-cookbooks.sh```
-  * This step needs to be executed everytime that ```common/Berksfile``` is edited
-  * Cookbooks are fetched and locally cached into ```common/vendor-cookbooks``` folder
-  * By default ```common/vendor-cookbooks``` folder is git-ignored (via ```.gitignore```), but it could be pushed in order to be used by other provisioning systems, like [AWS OpsWorks](http://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook-attributes.html)
+## Development Workflow
 
-Creating a box
----
-* If you want to _build_ with Packer, follow [packer/README.md](https://github.com/maoo/alfresco-boxes/tree/master/packer)
-* If you want to _run_ with Vagrant, follow [vagrant/README.md](https://github.com/maoo/alfresco-boxes/tree/master/vagrant)
-* If you want to _virtualise_ with Docker, follow [docker/README.md](https://github.com/maoo/alfresco-boxes/tree/master/docker)
+### Checkout the project
+To start using the Alfresco SPK, first you need to checkout (and cd into) this project:
+```
+git clone https://github.com/Alfresco/alfresco-spk.git
+cd alfresco-spk
+```
 
-Known Issues
----
-If you're using Ubuntu as guest machines and you're running alfresco-boxes behind a firewall, you must ensure that [port 11371 is open/reachable](http://support.gpgtools.org/kb/faq/im-behind-a-firewall-eg-in-a-big-company-and-cant-reach-any-key-server-what-now)
+### Running locally
+Assuming that you defined `$STACK_TEMPLATE_URL` with the proper JSON stack definition, in order to spin up the entire stack locally using Vagrant, just type `vagrant up`
+
+This will create a [Vagrant Machine](https://docs.vagrantup.com/v2/multi-machine) for each instance that composes the stack.
+
+### Running remotely on AWS (or any other packer-supported builder)
+If your local run works and you're happy with it, you can test it against AWS, or any other cloud provider that is [supported by Packer](https://www.packer.io/docs/templates/builders.html)
+...
+
+### Packaging images
+...
+
+## Custom parameters
+You can optionally override the following variables:
+```
+DOWNLOAD_CMD="curl --silent"
+WORK_DIR="./.vagrant"
+
+COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.7/chef-alfresco-0.6.7.tar.gz"
+DATABAGS_URL=nil
+
+STACK_TEMPLATE_URL="https://raw.githubusercontent.com/Alfresco/chef-alfresco/master/stack-templates/enterprise-clustered.json"
+```
+
+## Using Alfresco Enterprise
+In order to use an enterprise version, you must pass your artifacts.alfresco.com credentials as follows:
+```
+NEXUS_USERNAME=myusername
+NEXUS_PASSWORD=password
+```
+This approach works for local, remote run and image creation (read above how to export variables on a remote run)
+
+## Debugging
+For debugging purposes, prepend
+* ```VAGRANT_LOG=debug``` to ```vagrant``` commsnds
+
+## Troubleshooting
+If you want to check if VirtualBox is still running from previous attempps run
+
+```
+ps aux | grep VirtualBoxVM
+ps aux | grep Vbox
+```
+
+To reset your local environment, run the following command
+
+```
+vagrant destroy -f && killall VBoxSVC && rm -Rf .vagrant *.lock
+```
