@@ -1,0 +1,5 @@
+---
+alfresco:
+  install_fonts: false
+nginx:
+  use_nossl_config: true

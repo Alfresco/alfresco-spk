@@ -13,12 +13,7 @@ Attributes are defined, along with its defaults, by [chef-alfresco](https://gith
 Alfresco SPK provides a [list of pre-defined instance-templates](instance-templates) that are used by the sample stacks.
 
 ### Stack template
-A JSON file that describes a stack in terms of instances; each instance is composed by
-- An instance template, as described above
-- Vagrant-related configurations, that are used to run the stack locally; for example, `memory` and `cpu` control the resources allocated by Vagrant to run the instance. `localVars` is a JSON snippet that [merges](https://tools.ietf.org/html/rfc7386) the instance template JSON; it allows to overlay instance template configurations that are needed for local runs with Vagrant; this configuration is not involved in any other SPK feature, rather than running locally with Vagrant.
-- Packer-related configurations, that are used to create images based on instance template configurations; the `packer` item defines
-  - builders; they define the nature(s) of the image(s) that you want to build; currently, the only builder implemented and extensively tested is [amazon-ebs](packer/amazon-ebs-builder.json.example) (which produces an AMI), though there have been successes for OVF and Docker images too (WIP); any [Packer builder](https://www.packer.io/docs/templates/builders.html) can be easily integrated
-  - provisioners; by default, the only provisioner is needed is [`chef-solo`](packer/chef-solo-provisioner.json), which basically runs the same provisioning logic that runs locally; however, you can extend this list with more [Packer provisioners](https://www.packer.io/docs/templates/provisioners.html) of your choice
+A JSON file that describes a stack in terms of instances.
 
 Stack templates are resolved via URL, that can point to a local or remote file. The default stack template is defined in `stack-templates/community-allinone.json`, though the [stack-templates](stack-templates) folder aims to host many more examples.
 
@@ -26,6 +21,61 @@ You can use any stack template you want, either locally or remotely:
 ```
 export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
 ```
+
+Each instance defined in a stack template is composed by the following items.
+
+#### Instance template reference
+A URL link that resolves an instance template (described above):
+```
+{
+  "alfresco-allinone" : {
+    "instance-template" : "file://$PWD/instance-templates/allinone-community.json",
+    ...
+  }
+}
+```
+URL can be resolved locally or remotely.
+
+#### Vagrant-related configurations
+Used to run the stack locally; for example, `memory` and `cpu` control the resources allocated by Vagrant to run the instance.
+
+#### Local Variables
+Used to [overlay](https://tools.ietf.org/html/rfc7386) instance templates with local configurations; this mechanism is used for local runs (using Vagrant) and for orchestration runs, but they are ignored by the (Packer) image creation process.
+
+Local variables can be specified in JSON or YAML formats, following the same syntax dictated by instance templates:
+
+- [JSON](stack-templates/enterprise-clustered.json)
+```
+{
+  "alfresco-share" : {
+    "localJsonVars" : {
+      "alfresco" : {
+        "install_fonts" : false,
+        "properties" : {
+          "dir.contentstore" : "/vagrant/.vagrant/alf_data"
+        }
+      }
+    }
+    ....
+  }
+}
+```
+
+- [YAML](stack-templates/community-allinone.json)
+```
+{
+  "alfresco-allinone" : {
+    "localYamlVarsUrl" : "file://$PWD/packer/local-yaml-vars/allinone.yml",
+    ...
+  }
+}    
+```
+Here's a [YAML file example](local-yaml-vars/allinone.yml).
+
+#### Packer-related configurations
+Used to create images based on instance template configurations; the `packer` item defines
+- builders; they define the nature(s) of the image(s) that you want to build; currently, the only builder implemented and extensively tested is [amazon-ebs](packer/amazon-ebs-builder.json.example) (which produces an AMI), though there have been successes for OVF and Docker images too (WIP); any [Packer builder](https://www.packer.io/docs/templates/builders.html) can be easily integrated
+- provisioners; by default, the only provisioner is needed is [`chef-solo`](packer/chef-solo-provisioner.json), which basically runs the same provisioning logic that runs locally; however, you can extend this list with more [Packer provisioners](https://www.packer.io/docs/templates/provisioners.html) of your choice
 
 ## Requirements
 * [ChefDK](https://downloads.chef.io/chef-dk)
@@ -57,7 +107,7 @@ This will create a [Vagrant Machine](https://docs.vagrantup.com/v2/multi-machine
 Assuming that you've run your stack locally and you're happy with the instance template definitions, you can proceed with one (or both) of the following options:
 
 ### Packaging images
-Create an immutable image for each of the instances involved in a given stack; instance templates will be used to dictate the provisioning configuration, whereas `localVars` - as mentioned above - will be ignored.
+Create an immutable image for each of the instances involved in a given stack; instance templates will be used to dictate the provisioning configuration, whereas Local Variables - as mentioned above - will be ignored.
 
 To create the images:
 ```
@@ -86,6 +136,12 @@ COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/r
 DATABAGS_URL=nil
 
 STACK_TEMPLATE_URL="https://raw.githubusercontent.com/Alfresco/chef-alfresco/master/stack-templates/enterprise-clustered.json"
+```
+
+### Example of custom values
+```
+export COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/snapshots/content/org/alfresco/devops/chef-alfresco/0.6.8-SNAPSHOT/chef-alfresco-0.6.8-20151104.130154-30.tar.gz"
+export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
 ```
 
 ## Using Alfresco Enterprise
