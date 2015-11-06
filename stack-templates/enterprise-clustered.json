@@ -6,6 +6,7 @@
     "cpus" : "1",
     "localJsonVars" : {
       "alfresco" : {
+        "components" : ["haproxy","nginx","tomcat","transform","repo","share","mysql"],
         "install_fonts" : false,
         "properties" : {
           "dir.contentstore" : "/vagrant/.vagrant/alf_data"

@@ -127,7 +127,17 @@ When AMIs are (or not) in place and provisioning logic have been tested locally,
 Alfresco SPK provides a [chef-bootstrap.sh](scripts/chef-bootstrap.sh) that can be used to easily integrate with the orchestration tool of your choice; below we provide an integration example using AWS Cloudformation (and [UserData](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) attribute)
 
 ```
+CHEF_NODE_NAME=allinone
+CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/maoo/alfresco-boxes/newchefalfresco/instance-templates/allinone-community.json
 
+CHEF_LOCAL_YAML_VARS_URL=file://$WORK_DIR/local-vars.yaml
+cat > $CHEF_LOCAL_YAML_VARS_URL << "EOF"
+---
+alfresco:
+  public_hostname: '{"Fn::GetAtt": ["ElasticLoadBalancer","DNSName"]}'
+EOF
+
+ruby chef-bootstrap.rb
 ```
 
 ## Custom parameters

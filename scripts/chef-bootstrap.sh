@@ -4,7 +4,6 @@
 COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.8/chef-alfresco-0.6.8.tar.gz"
 # DATABAGS_URL="..."
 
-WORK_DIR=/tmp/chef-bootstrap
 CHEF_NODE_NAME=allinone
 CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/maoo/alfresco-boxes/newchefalfresco/instance-templates/allinone-community.json
 

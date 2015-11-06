@@ -6,7 +6,7 @@ require_relative 'provisioning-libs'
 
 params = getEnvParams()
 
-workDir = params['workDir']
+workDir = ENV['WORK_DIR'] || "/tmp/chef-bootstrap"]
 downloadCmd = params['downloadCmd']
 cookbooksUrl = params['cookbooksUrl']
 dataBagsUrl = params['dataBagsUrl']
