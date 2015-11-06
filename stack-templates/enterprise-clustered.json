@@ -4,16 +4,15 @@
     "ip" : "192.168.33.10",
     "memory" : "800",
     "cpus" : "1",
-    "localVars" : {
-      "patched" : true,
-      "nginx" : {
-        "use_nossl_config" : true
-      },
+    "localJsonVars" : {
       "alfresco" : {
         "install_fonts" : false,
         "properties" : {
           "dir.contentstore" : "/vagrant/.vagrant/alf_data"
         }
+      },
+      "nginx" : {
+        "use_nossl_config": true
       }
     },
     "packer" : {
@@ -30,23 +29,25 @@
     "ip" : "192.168.33.11",
     "memory" : "800",
     "cpus" : "1",
-    "localVars" : {
-      "patched" : true,
+    "localJsonVars" : {
       "alfresco" : {
+        "install_fonts" : false,
         "properties" : {
           "dir.contentstore" : "/vagrant/.vagrant/alf_data",
           "db.host" : "192.168.33.10"
-        },
-        "install_fonts" : false
+        }
+      },
+      "nginx" : {
+        "use_nossl_config": true
       }
-    }
-  },
-  "packer" : {
-    "provisioners" : {
-      "chef-solo" : "file://$PWD/packer/chef-solo-provisioner.json"
     },
-    "builders" : {
-      "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
+    "packer" : {
+      "provisioners" : {
+        "chef-solo" : "file://$PWD/packer/chef-solo-provisioner.json"
+      },
+      "builders" : {
+        "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
+      }
     }
   }
 }
