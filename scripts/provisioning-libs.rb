@@ -30,6 +30,7 @@ end
 def initWorkDir(workDir)
   `mkdir -p #{workDir}/packer`
   `mkdir -p #{workDir}/alf_data`
+  `chmod 777 #{workDir}/alf_data`
   print "Created #{workDir}/packer #{workDir}/alf_data folders\n"
 end
 
@@ -79,10 +80,6 @@ def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate,
 
   # If localVars are defined, overlay the instance template JSON
   if localJsonVars
-    print "merging\n"
-    print File.read("#{workDir}/attributes-#{chefNodeName}.json.original")+"\n"
-    print "merging\n"
-    print localJsonVars.to_json+"\n"
     mergedAttributes = JSON.parse(JSON.merge(File.read("#{workDir}/attributes-#{chefNodeName}.json.original"), localJsonVars.to_json))
   end
 

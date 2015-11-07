@@ -23,6 +23,8 @@ else
   Vagrant.configure("2") do |config|
     nodes.each do |chefNodeName,chefNode|
       config.vm.define chefNodeName do |machineConfig|
+        machineConfig.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=777", "fmode=666"]
+        
         boxAttributes = getNodeAttributes(params['workDir'], chefNodeName)
 
         boxIp = boxAttributes["ip"]
