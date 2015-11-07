@@ -140,13 +140,15 @@ EOF
 ruby chef-bootstrap.rb
 ```
 
+The expression `{"Fn::GetAtt": ["ElasticLoadBalancer","DNSName"]}` is Cloudformation-specific and reads the `DNSName` value of an `ElasticLoadBalancer` instance defined in the same Cloudformation template.
+
 ## Custom parameters
 You can optionally override the following variables:
 ```
 DOWNLOAD_CMD="curl --silent"
 WORK_DIR="./.vagrant"
 
-COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.7/chef-alfresco-0.6.7.tar.gz"
+COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.10/chef-alfresco-0.6.10.tar.gz"
 DATABAGS_URL=nil
 
 STACK_TEMPLATE_URL="https://raw.githubusercontent.com/Alfresco/chef-alfresco/master/stack-templates/enterprise-clustered.json"
