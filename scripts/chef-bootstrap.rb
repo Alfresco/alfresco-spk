@@ -6,7 +6,7 @@ require_relative 'provisioning-libs'
 
 params = getEnvParams()
 
-workDir = ENV['WORK_DIR'] || "/tmp/chef-bootstrap"]
+workDir = ENV['WORK_DIR'] || "/tmp/chef-bootstrap"
 downloadCmd = params['downloadCmd']
 cookbooksUrl = params['cookbooksUrl']
 dataBagsUrl = params['dataBagsUrl']
@@ -21,4 +21,6 @@ downloadArtifact(workDir, downloadCmd, dataBagsUrl, "databags")
 
 downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate, localYamlVarsUrl, localJsonVars)
 
-runChef("#{workDir}/attributes-#{chefNodeName}.json")
+installChef()
+
+runChef(workDir, "#{workDir}/attributes-#{chefNodeName}.json")

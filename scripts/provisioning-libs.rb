@@ -45,7 +45,7 @@ end
 
 def yamlToJson(yaml)
   data = YAML::load(yaml)
-  return JSON.dump(data).to_json
+  return JSON.dump(data)
 end
 
 def printVars(params)
@@ -80,7 +80,7 @@ def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate,
 
   # If localVars are defined, overlay the instance template JSON
   if localJsonVars
-    mergedAttributes = JSON.parse(JSON.merge(File.read("#{workDir}/attributes-#{chefNodeName}.json.original"), localJsonVars.to_json))
+    mergedAttributes = JSON.parse(JSON.merge(File.read("#{workDir}/attributes-#{chefNodeName}.json.original"), localJsonVars))
   end
 
   if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
@@ -174,9 +174,9 @@ def downloadChefItems(nodes, workDir, downloadCmd, cookbooksUrl, dataBagsUrl)
 end
 
 def installChef()
-  `curl https://www.opscode.com/chef/install.sh | bash`
+  `curl --silent https://www.opscode.com/chef/install.sh | bash`
 end
 
-def runChef(chefAttributePath)
-  `cd /etc/chef ; chef-client -z -j #{chefAttributePath}`
+def runChef(workDir, chefAttributePath)
+    `cd #{workDir} ; chef-client -z -j #{chefAttributePath}`
 end
