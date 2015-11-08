@@ -24,7 +24,7 @@ else
     nodes.each do |chefNodeName,chefNode|
       config.vm.define chefNodeName do |machineConfig|
         machineConfig.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=777", "fmode=666"]
-        
+
         boxAttributes = getNodeAttributes(params['workDir'], chefNodeName)
 
         boxIp = boxAttributes["ip"]
@@ -32,7 +32,7 @@ else
         boxRunList = boxAttributes["run_list"]
 
         if boxIp
-          config.vm.network :private_network, ip:  boxIp
+          machineConfig.vm.network :private_network, ip:  boxIp
         end
         machineConfig.vm.hostname = boxHostname
         machineConfig.vm.provider :virtualbox do |vb,override|

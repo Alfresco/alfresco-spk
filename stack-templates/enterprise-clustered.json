@@ -1,10 +1,10 @@
 {
   "alfresco-share" : {
     "instance-template" : "file://$PWD/instance-templates/share.json",
-    "ip" : "192.168.33.10",
     "memory" : "800",
     "cpus" : "1",
     "localJsonVars" : {
+      "ip" : "192.168.33.10",
       "alfresco" : {
         "components" : ["haproxy","nginx","tomcat","transform","repo","share","mysql"],
         "install_fonts" : false,
@@ -27,10 +27,10 @@
   },
   "alfresco-solr" : {
     "instance-template" : "file://$PWD/instance-templates/solr.json",
-    "ip" : "192.168.33.11",
     "memory" : "800",
     "cpus" : "1",
     "localJsonVars" : {
+      "ip" : "192.168.33.11",
       "alfresco" : {
         "install_fonts" : false,
         "properties" : {
