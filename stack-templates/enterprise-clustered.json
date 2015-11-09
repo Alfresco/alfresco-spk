@@ -9,7 +9,9 @@
         "components" : ["haproxy","nginx","tomcat","transform","repo","share","mysql"],
         "install_fonts" : false,
         "properties" : {
-          "dir.contentstore" : "/vagrant/.vagrant/alf_data"
+          "dir.contentstore" : "/vagrant/.vagrant/alf_data",
+          "solr.host" : "192.168.33.11",
+          "solr.port" : "8090"
         }
       },
       "nginx" : {

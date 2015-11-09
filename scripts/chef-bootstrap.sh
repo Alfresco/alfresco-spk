@@ -4,7 +4,7 @@ export WORK_DIR=/tmp/chef-bootstrap
 mkdir -p $WORK_DIR
 
 # Use the Chef Alfresco version of your choice, also SNAPSHOT versions
-export COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.9/chef-alfresco-0.6.9.tar.gz"
+# export COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.9/chef-alfresco-0.6.9.tar.gz"
 # DATABAGS_URL="..."
 
 export CHEF_NODE_NAME=allinone
