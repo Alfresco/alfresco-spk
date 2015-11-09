@@ -1,16 +1,10 @@
 {
     "name": "share-enterprise",
     "alfresco" : {
-        "public_protocol" : "http",
-        "public_portssl" : "80",
-        "skip_certificate_creation" : true,
         "version" : "5.0.2",
         "edition" : "enterprise",
         "components" : ["haproxy","nginx","tomcat","transform","repo","share","aos"],
         "restart_services" : ["tomcat-alfresco","tomcat-share"]
-    },
-    "nginx" : {
-      "use_nossl_config" : true
     },
     "run_list": ["alfresco::default"]
 }

@@ -7,6 +7,10 @@
       "ip" : "192.168.33.10",
       "alfresco" : {
         "components" : ["haproxy","nginx","tomcat","transform","repo","share","mysql"],
+        "ssl_enabled" : false,
+        "skip_certificate_creation" : true,
+        "public_protocol" : "http",
+        "public_portssl" : "80",
         "install_fonts" : false,
         "properties" : {
           "dir.contentstore" : "/vagrant/.vagrant/alf_data",
@@ -16,6 +20,9 @@
       },
       "nginx" : {
         "use_nossl_config": true
+      },
+      "haproxy" : {
+        "enable_ssl_header" : false
       }
     },
     "packer" : {
@@ -34,14 +41,13 @@
     "localJsonVars" : {
       "ip" : "192.168.33.11",
       "alfresco" : {
+        "ssl_enabled" : false,
+        "skip_certificate_creation" : true,
         "install_fonts" : false,
         "properties" : {
           "dir.contentstore" : "/vagrant/.vagrant/alf_data",
           "db.host" : "192.168.33.10"
         }
-      },
-      "nginx" : {
-        "use_nossl_config": true
       }
     },
     "packer" : {
