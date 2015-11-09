@@ -12,7 +12,7 @@ def getEnvParams()
   params['boxUrl'] = ENV['BOX_URL'] || "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
   params['boxName'] = ENV['BOX_NAME'] || "opscode-centos-7.1"
 
-  params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.8/chef-alfresco-0.6.8.tar.gz"
+  params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/content/repositories/snapshots/org/alfresco/devops/chef-alfresco/0.6.11-SNAPSHOT/chef-alfresco-0.6.11-20151109.082709-2.tar.gz"
   params['dataBagsUrl'] = ENV['DATABAGS_URL'] || ''
 
   params['stackTemplateUrl'] = ENV['STACK_TEMPLATE_URL'] || "file://#{ENV['PWD']}/stack-templates/community-allinone.json"
@@ -80,7 +80,11 @@ def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate,
 
   # If localVars are defined, overlay the instance template JSON
   if localJsonVars
-    mergedAttributes = JSON.parse(JSON.merge(File.read("#{workDir}/attributes-#{chefNodeName}.json.original"), localJsonVars))
+    # Debugging purposes
+    # print "Printing out local JSON Variables:\n"
+    # print localJsonVars.to_json + "\n"
+
+    mergedAttributes = JSON.parse(JSON.merge(File.read("#{workDir}/attributes-#{chefNodeName}.json.original"), localJsonVars.to_json))
   end
 
   if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
