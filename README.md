@@ -8,9 +8,7 @@ A JSON file that contains provisioning configurations related to a single node o
 
 Instance templates are [Chef nodes](https://docs.chef.io/nodes.html) that contain all configurations - also known as Chef attributes - that are involved in the instance provisioning, for example the Alfresco admin password, the db host, the amps to install and much (much) more.
 
-Attributes are defined, along with its defaults, by [chef-alfresco](https://github.com/Alfresco/chef-alfresco) provides the definition of such attributes, along with its defaults.
-
-Alfresco SPK provides a [list of pre-defined instance-templates](instance-templates) that are used by the sample stacks.
+Alfresco SPK provides a [list of pre-defined instance-templates](instance-templates) that are used by the sample stacks; attributes are defined, along with its defaults, by [chef-alfresco](https://github.com/Alfresco/chef-alfresco).
 
 ### Stack template
 A JSON file that describes a stack in terms of instances.
@@ -31,13 +29,38 @@ A URL link that resolves an instance template (described above):
   "alfresco-allinone" : {
     "instance-template" : {
       "url" : "file://$PWD/instance-templates/allinone-community.json",
-      ...
+      "overlay" : {
+        "alfresco" : {
+          "properties" : {
+            "dir.contentstore" : "/vagrant/.vagrant/alf_data",
+            "db.host" : "192.168.33.10"
+          }
+        }
+      }
     },
     ...
   }
 }
 ```
 URL can be resolved locally or remotely.
+
+The `overlay` element contain local configurations that are [merged](https://tools.ietf.org/html/rfc7386) into the instance template; as such, the syntax is the same used by instance templates.
+
+Configuration overlays can be specified in JSON or YAML formats; the latter is easier to define within inline scripts, avoiding the need to escape `"` chars:
+
+```
+{
+  "alfresco-allinone" : {
+    "instance-template" : {
+      "url" : "file://$PWD/instance-templates/allinone-community.json",
+      "overlayYamlUrl" : "file://$PWD/yaml-overlays/allinone.yml"
+    },
+    ...
+  }
+}
+```
+
+The snippet is taken from [community-allinone.json stack template](stack-templates/community-allinone.json) and uses [allinone.yml](yaml-overlays/allinone.yml) as YAML overlay.
 
 #### Vagrant-related configurations
 Used to run the stack locally; for example, `memory` and `cpu` control the resources allocated by Vagrant to run the instance.
@@ -53,47 +76,6 @@ Used to run the stack locally; for example, `memory` and `cpu` control the resou
   }
 }
 ```
-
-#### Configuration overlays
-Used to [overlay](https://tools.ietf.org/html/rfc7386) instance templates with local configurations; this mechanism is used for local runs (using Vagrant) and for orchestration runs, but they are ignored by the (Packer) image creation process.
-
-The syntax used in the overlays is the same used by instance templates.
-
-Configuration overlays can be specified in JSON or YAML formats, following the same syntax dictated by instance templates:
-
-- [JSON](stack-templates/enterprise-clustered.json)
-```
-{
-  "alfresco-solr" : {
-    "instance-template" : {
-      "url" : "file://$PWD/instance-templates/solr.json",
-      "overlay" : {
-        "alfresco" : {
-          "properties" : {
-            "dir.contentstore" : "/vagrant/.vagrant/alf_data",
-            "db.host" : "192.168.33.10"
-          }
-        }
-      }
-    },
-    ....
-  }
-}
-```
-
-- [YAML](stack-templates/community-allinone.json)
-```
-{
-  "alfresco-allinone" : {
-    "instance-template" : {
-      "url" : "file://$PWD/instance-templates/allinone-community.json",
-      "overlayYamlUrl" : "file://$PWD/yaml-overlays/allinone.yml"
-    },
-    ...
-  }
-}
-```
-Here's a [YAML file example](local-yaml-vars/allinone.yml).
 
 #### Image configurations
 Used to create images based on instance template configurations; the `images` item defines
@@ -159,7 +141,7 @@ Create one or more immutable images for each of the instances involved in a give
 
 To create the images:
 ```
-vagrant packer
+vagrant up images
 ```
 
 As above, you can select the stack template using:
