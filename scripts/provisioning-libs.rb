@@ -23,6 +23,9 @@ def getEnvParams()
   params['chefLocalYamlVarsUrl'] = ENV['CHEF_LOCAL_YAML_VARS_URL']
   params['chefLocalJsonVars'] = ENV['CHEF_LOCAL_JSON_VARS']
 
+  params['chefLogLevel'] = ENV['CHEF_LOG_LEVEL'] || "info"
+  params['chefLogFile'] = ENV['CHEF_LOG_FILE'] || "/var/log/chef-client.log"
+
   print "Returning #{params.length} Environment params\n"
   return params
 end
@@ -185,5 +188,5 @@ def installChef()
 end
 
 def runChef(workDir, chefAttributePath)
-    `cd #{workDir} ; chef-client -z -j #{chefAttributePath}`
+    `cd #{workDir} ; chef-client --log_level #{chefLogLevel} --logfile #{chefLogFile} -z -j #{chefAttributePath}`
 end
