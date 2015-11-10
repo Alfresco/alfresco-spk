@@ -9,9 +9,12 @@ initWorkDir(params['workDir'])
 nodes = getStackTemplateNodes(params['downloadCmd'], params['workDir'], params['stackTemplateUrl'])
 
 vagrantCommand = ARGV[0]
-print "Running Vagrant #{vagrantCommand}\n"
+vagrantImagesParam = ARGV[1]
 
-if ['packer'].include? vagrantCommand
+print "Vagrant command: '#{vagrantCommand}'\n"
+print "Vagrant image command: '#{vagrantImagesParam}'\n"
+
+if vagrantImagesParam == 'images'
   downloadChefItems(nodes, params['workDir'], params['downloadCmd'], params['cookbooksUrl'], params['dataBagsUrl'])
   packerDefs = getPackerDefinitions(nodes)
   runPackerDefinitions(nodes, params['workDir'], params['packerBin'], params['packerOpts'])
