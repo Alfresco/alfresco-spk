@@ -6,13 +6,13 @@ def getEnvParams()
   params = {}
   params['downloadCmd'] = ENV['DOWNLOAD_CMD'] || "curl --silent"
   params['workDir'] = ENV['WORK_DIR'] || "./.vagrant"
-  params['packerBin'] = ENV['PACKER_BIN'] || "/Users/mau/Documents/opt/packer-0.7.5/packer"
+  params['packerBin'] = ENV['PACKER_BIN'] || 'packer'
   params['packerOpts'] = ENV['PACKER_OPTS'] || ''
 
   params['boxUrl'] = ENV['BOX_URL'] || "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
   params['boxName'] = ENV['BOX_NAME'] || "opscode-centos-7.1"
 
-  params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/content/repositories/snapshots/org/alfresco/devops/chef-alfresco/0.6.11-SNAPSHOT/chef-alfresco-0.6.11-20151109.082709-2.tar.gz"
+  params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/content/repositories/snapshots/org/alfresco/devops/chef-alfresco/0.6.11/chef-alfresco-0.6.11.tar.gz"
   params['dataBagsUrl'] = ENV['DATABAGS_URL'] || ''
 
   params['stackTemplateUrl'] = ENV['STACK_TEMPLATE_URL'] || "file://#{ENV['PWD']}/stack-templates/community-allinone.json"
@@ -76,15 +76,17 @@ def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate,
     `#{downloadCmd} #{localYamlVarsUrl} > #{workDir}/local-yaml-vars-#{chefNodeName}.yml`
     localJsonVars = yamlToJson(File.read("#{workDir}/local-yaml-vars-#{chefNodeName}.yml"))
     print "Downloaded #{localYamlVarsUrl} into #{workDir}/local-yaml-vars-#{chefNodeName}.yml\n"
+  else
+    localJsonVars = localJsonVars.to_json
   end
 
   # If localVars are defined, overlay the instance template JSON
   if localJsonVars
     # Debugging purposes
     # print "Printing out local JSON Variables:\n"
-    # print localJsonVars.to_json + "\n"
+    # print localJsonVars + "\n"
 
-    mergedAttributes = JSON.parse(JSON.merge(File.read("#{workDir}/attributes-#{chefNodeName}.json.original"), localJsonVars.to_json))
+    mergedAttributes = JSON.parse(JSON.merge(File.read("#{workDir}/attributes-#{chefNodeName}.json.original"), localJsonVars))
   end
 
   if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
@@ -119,7 +121,7 @@ end
 # packerElement can be 'provisioners' or 'builders'; it's used to parse JSON input structure
 # packerElementType can be 'provisioner' or 'builder'; it's used to name files
 def parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, packerElementType, packerElement)
-  provisionerUrls = chefNode['packer'][packerElement]
+  provisionerUrls = chefNode['images'][packerElement]
   ret = "["
   urls.each do |elementName,url|
     `#{downloadCmd} #{url} > #{workDir}/packer/#{elementName}-#{packerElementType}.json`
@@ -173,7 +175,7 @@ def downloadChefItems(nodes, workDir, downloadCmd, cookbooksUrl, dataBagsUrl)
 
   # Download node URL
   nodes.each do |chefNodeName,chefNode|
-    downloadNodeDefinition(workDir, downloadCmd, chefNodeName, chefNode['instance-template'], chefNode['localYamlVarsUrl'], chefNode['localJsonVars'])
+    downloadNodeDefinition(workDir, downloadCmd, chefNodeName, chefNode['instance-template']['url'], chefNode['instance-template']['overlayYamlUrl'], chefNode['instance-template']['overlay'])
   end
 end
 

@@ -1,0 +1,20 @@
+# Not tested, WIP!
+{
+  "type": "virtualbox-ovf",
+  "source_path" : "{{user `source_path`}}",
+  "output_directory" : "{{user `output_directory`}}",
+  "vm_name" : "{{user `vm_name`}}",
+  "ssh_username": "vagrant",
+  "ssh_password": "vagrant",
+  "boot_command": [
+    "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks-ovf.cfg<enter><wait>"
+  ],
+  "guest_additions_mode" : "disable",
+  "headless": "false",
+  "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -p",
+  "vboxmanage": {
+    'memory'  : [ 'modifyvm', '{{.Name}}', '--memory',    '1024' ],
+    'cpus'    : [ 'modifyvm', '{{.Name}}', '--cpus',      '1' ],
+    'ioapic'  : [ 'modifyvm', '{{.Name}}', '--ioapic',    'on' ]
+  }
+}
