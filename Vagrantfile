@@ -27,7 +27,7 @@ else
 
         boxAttributes = getNodeAttributes(params['workDir'], chefNodeName)
 
-        boxIp = boxAttributes["ip"]
+        boxIp = chefNode['local-run']['ip']
         boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
         boxRunList = boxAttributes["run_list"]
 
@@ -38,8 +38,8 @@ else
         machineConfig.vm.provider :virtualbox do |vb,override|
           override.vm.box_url = params['vagrantBoxUrl']
           override.vm.box = params['boxName']
-          vb.customize ["modifyvm", :id, "--memory", chefNode['memory']]
-          vb.customize ["modifyvm", :id, "--cpus", chefNode['cpus']]
+          vb.customize ["modifyvm", :id, "--memory", chefNode['local-run']['memory']]
+          vb.customize ["modifyvm", :id, "--cpus", chefNode['local-run']['cpus']]
         end
 
         # Chef run configuration

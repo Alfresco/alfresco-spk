@@ -29,7 +29,10 @@ A URL link that resolves an instance template (described above):
 ```
 {
   "alfresco-allinone" : {
-    "instance-template" : "file://$PWD/instance-templates/allinone-community.json",
+    "instance-template" : {
+      "url" : "file://$PWD/instance-templates/allinone-community.json",
+      ...
+    },
     ...
   }
 }
@@ -38,24 +41,41 @@ URL can be resolved locally or remotely.
 
 #### Vagrant-related configurations
 Used to run the stack locally; for example, `memory` and `cpu` control the resources allocated by Vagrant to run the instance.
+```
+{
+  "alfresco-allinone" : {
+    "local-run" : {
+      "memory" : "2048",
+      "cpus" : "2"
+      "ip" : "192.168.33.33"
+    },
+    ...
+  }
+}
+```
 
-#### Local Variables
+#### Configuration overlays
 Used to [overlay](https://tools.ietf.org/html/rfc7386) instance templates with local configurations; this mechanism is used for local runs (using Vagrant) and for orchestration runs, but they are ignored by the (Packer) image creation process.
 
-Local variables can be specified in JSON or YAML formats, following the same syntax dictated by instance templates:
+The syntax used in the overlays is the same used by instance templates.
+
+Configuration overlays can be specified in JSON or YAML formats, following the same syntax dictated by instance templates:
 
 - [JSON](stack-templates/enterprise-clustered.json)
 ```
 {
-  "alfresco-share" : {
-    "localJsonVars" : {
-      "alfresco" : {
-        "install_fonts" : false,
-        "properties" : {
-          "dir.contentstore" : "/vagrant/.vagrant/alf_data"
+  "alfresco-solr" : {
+    "instance-template" : {
+      "url" : "file://$PWD/instance-templates/solr.json",
+      "overlay" : {
+        "alfresco" : {
+          "properties" : {
+            "dir.contentstore" : "/vagrant/.vagrant/alf_data",
+            "db.host" : "192.168.33.10"
+          }
         }
       }
-    }
+    },
     ....
   }
 }
@@ -65,17 +85,45 @@ Local variables can be specified in JSON or YAML formats, following the same syn
 ```
 {
   "alfresco-allinone" : {
-    "localYamlVarsUrl" : "file://$PWD/packer/local-yaml-vars/allinone.yml",
+    "instance-template" : {
+      "url" : "file://$PWD/instance-templates/allinone-community.json",
+      "overlayYamlUrl" : "file://$PWD/yaml-overlays/allinone.yml"
+    },
     ...
   }
-}    
+}
 ```
 Here's a [YAML file example](local-yaml-vars/allinone.yml).
 
-#### Packer-related configurations
-Used to create images based on instance template configurations; the `packer` item defines
-- builders; they define the nature(s) of the image(s) that you want to build; currently, the only builder implemented and extensively tested is [amazon-ebs](packer/amazon-ebs-builder.json.example) (which produces an AMI), though there have been successes for OVF and Docker images too (WIP); any [Packer builder](https://www.packer.io/docs/templates/builders.html) can be easily integrated
-- provisioners; by default, the only provisioner is needed is [`chef-solo`](packer/chef-solo-provisioner.json), which basically runs the same provisioning logic that runs locally; however, you can extend this list with more [Packer provisioners](https://www.packer.io/docs/templates/provisioners.html) of your choice
+#### Image configurations
+Used to create images based on instance template configurations; the `images` item defines
+- builders; they define the nature(s) of the image(s) that you want to build; currently, the only builder implemented and extensively tested is [amazon-ebs](images/amazon-ebs-builder.json.example) (which produces an AMI), though there have been successes for OVF and Docker images too (WIP); any [Packer builder](https://www.packer.io/docs/templates/builders.html) can be easily integrated
+- provisioners; by default, the only provisioner needed is [`chef-solo`](images/chef-solo-provisioner.json), which basically runs the same provisioning logic that runs locally; however, you can extend this list with more [Packer provisioners](https://www.packer.io/docs/templates/provisioners.html) of your choice
+- variables; for each entry, a [Packer variable](https://www.packer.io/docs/templates/user-variables.html) is defined; variables can be used by provisioners and builders using the following syntax:
+```
+{{user `this is my property`}}
+```
+
+Below a configuration example that builds an allinone image:
+```
+{
+  "alfresco-allinone" : {
+    "images" : {
+      "provisioners" : {
+        "chef-solo" : "file://$PWD/packer/chef-solo-provisioner.json"
+      },
+      "builders" : {
+        "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
+      },
+      "variables" : {
+        "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
+        "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
+      }
+    },
+    ...
+  }
+}
+```
 
 ## Requirements
 * [ChefDK](https://downloads.chef.io/chef-dk)

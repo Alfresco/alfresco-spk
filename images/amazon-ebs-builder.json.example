@@ -8,8 +8,8 @@
   "instance_type" : "m3.medium",
   "ssh_username" : "centos",
   "security_group_ids"  : ["DEFAULT SG WITH 22 OPEN"],
-  "ami_name" : "Alfresco Allinone Community AMI - {{timestamp}}",
-  "ami_description" : "Alfresco Allinone Community AMI - {{timestamp}}",
+  "ami_name" : "{{user `ami_name`}}",
+  "ami_description" : "{{user `ami_description`}}",
   "ami_virtualization_type"  : "hvm",
   "ami_users"  : ["AWS ACCOUNT ID TO SHARE AMI WITH"],
   "enhanced_networking"  : "true"
