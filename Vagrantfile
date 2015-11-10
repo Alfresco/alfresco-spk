@@ -18,7 +18,7 @@ nodes = getStackTemplateNodes(params['downloadCmd'], params['workDir'], params['
 if vagrantImagesParam == 'images'
   downloadChefItems(nodes, params['workDir'], params['downloadCmd'], params['cookbooksUrl'], params['dataBagsUrl'])
   packerDefs = getPackerDefinitions(params['downloadCmd'], params['workDir'], nodes)
-  runPackerDefinitions(packerDefs, params['workDir'], params['packerBin'], params['packerOpts'])
+  runPackerDefinitions(packerDefs, params['workDir'], params['packerBin'], params['packerOpts'], "packer.log")
   abort("Vagrant up images completed!")
 else
   if vagrantUpOrProvision

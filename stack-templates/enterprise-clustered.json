@@ -31,10 +31,10 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-solo" : "file://$PWD/packer/chef-solo-provisioner.json"
+        "chef-solo" : "file://$PWD/images/chef-solo-provisioner.json"
       },
       "builders" : {
-        "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
+        "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"
       },
       "variables" : {
         "ami_description" : "Alfresco One 5.0.2 - Share Server - {{timestamp}}",
@@ -64,10 +64,10 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-solo" : "file://$PWD/packer/chef-solo-provisioner.json"
+        "chef-solo" : "file://$PWD/images/chef-solo-provisioner.json"
       },
       "builders" : {
-        "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
+        "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"
       },
       "variables" : {
         "ami_description" : "Alfresco One 5.0.2 - Index Server - {{timestamp}}",
