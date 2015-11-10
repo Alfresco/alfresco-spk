@@ -2,6 +2,15 @@ require 'json/merge_patch'
 require 'json'
 require 'yaml'
 
+def downloadFile(downloadCmd, url, destination)
+  `#{downloadCmd} #{url} > #{destination}`
+  if File.zero?(destination)
+    abort("Error downloading #{url} into #{destination}! File has 0 bytes; aborting")
+  else
+    print "Downloaded #{url} into #{destination}\n"
+  end
+end
+
 def getEnvParams()
   params = {}
   params['downloadCmd'] = ENV['DOWNLOAD_CMD'] || "curl --silent"
@@ -39,8 +48,7 @@ end
 
 def getStackTemplateNodes(downloadCmd, workDir, stackTemplateUrl)
   # Download nodes URL
-  `#{downloadCmd} #{stackTemplateUrl} > #{workDir}/nodes.json`
-  print "Downloaded #{stackTemplateUrl} into #{workDir}/nodes.json\n"
+  downloadFile(downloadCmd, stackTemplateUrl, "#{workDir}/nodes.json")
 
   print "Returning Stack template nodes parsed from #{stackTemplateUrl} into #{workDir}/nodes.json\n"
   return JSON.parse(File.read("#{workDir}/nodes.json"))
@@ -62,8 +70,7 @@ end
 def downloadArtifact(workDir, downloadCmd, url, artifactName)
   # Download and uncompress Chef cookbooks (in a Berkshelf package format)
   if url and url.length != 0
-    `#{downloadCmd} #{url} > #{workDir}/cookbooks.tar.gz`
-    print "Downloaded #{url}\n"
+    downloadFile(downloadCmd, url, "#{workDir}/cookbooks.tar.gz")
     `rm -rf #{workDir}/#{artifactName}; tar xzf #{workDir}/#{artifactName}.tar.gz -C #{workDir}`
     print "Unpacked #{workDir}/#{artifactName}.tar.gz into #{workDir}\n"
   end
@@ -71,14 +78,12 @@ end
 
 def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate, localYamlVarsUrl, localJsonVars)
   print "Processing node '#{chefNodeName}'\n"
-  `#{downloadCmd} #{instanceTemplate} > #{workDir}/attributes-#{chefNodeName}.json.original`
-  print "Downloaded #{instanceTemplate} into #{workDir}/attributes-#{chefNodeName}.json.original\n"
+  downloadFile(downloadCmd, instanceTemplate, "#{workDir}/attributes-#{chefNodeName}.json.original")
 
   # If a Yaml file Url is specified, override Json definition
   if localYamlVarsUrl
-    `#{downloadCmd} #{localYamlVarsUrl} > #{workDir}/local-yaml-vars-#{chefNodeName}.yml`
+    downloadFile(downloadCmd, localYamlVarsUrl, "#{workDir}/local-yaml-vars-#{chefNodeName}.yml")
     localJsonVars = yamlToJson(File.read("#{workDir}/local-yaml-vars-#{chefNodeName}.yml"))
-    print "Downloaded #{localYamlVarsUrl} into #{workDir}/local-yaml-vars-#{chefNodeName}.yml\n"
   else
     localJsonVars = localJsonVars.to_json
   end
@@ -111,9 +116,15 @@ def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate,
 end
 
 def mergePackerElementWithNodeAttributes(workDir, chefNodeName, provisionerName, provisioner)
+  print "provisioner: #{provisioner}\n"
+
   provisionerJson = JSON.parse(provisioner)
   nodeUrl = "#{workDir}/attributes-#{chefNodeName}.json"
   nodeUrlContent = File.read("#{workDir}/attributes-#{chefNodeName}.json.original")
+
+  print "nodeUrl: #{nodeUrl}\n"
+  print "nodeUrlContent: #{nodeUrlContent}\n"
+
   provisionerJson['json'] = JSON.parse(nodeUrlContent)
   provisionerFile = File.open("#{workDir}/packer/#{provisionerName}-provisioner.json", 'w')
   provisionerFile.write(provisionerJson.to_json)
@@ -128,8 +139,7 @@ def parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, packerElem
   ret = "["
   urls.each do |elementName,url|
     packerFileName = "#{workDir}/packer/#{elementName}-#{packerElementType}.json"
-    `#{downloadCmd} #{url} > #{packerFileName}`
-    print "Downloaded #{url} into #{packerFileName}\n"
+    downloadFile(downloadCmd, url, packerFileName)
     element = File.read(packerFileName)
 
     # Inject Chef attributes JSON into the chef-solo provisioner
@@ -149,6 +159,10 @@ def getPackerDefinitions(downloadCmd, workDir, nodes)
     # Compose Packer JSON
     provisioners = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'provisioner', 'provisioners')
     builders = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'builder', 'builders')
+
+    print "Packer Builders: #{builders}\n"
+    print "Packer Provisioners: #{provisioners}\n"
+
     variables = chefNode['images']['variables'].to_json
     packerDefinitions[chefNodeName] = "{\"variables\":#{variables},\"builders\":#{builders},\"provisioners\":#{provisioners}}"
   end
@@ -160,7 +174,7 @@ def getNodeAttributes(workDir, chefNodeName)
   return JSON.parse(boxAttributesContent)
 end
 
-def runPackerDefinitions(packerDefs, workDir, packerBin, packerOpts)
+def runPackerDefinitions(packerDefs, workDir, packerBin, packerOpts, packerLogFile)
   # Summarise Packer suites and ask for confirmation before running it
   print "Running the following Packer templates:\n"
   packerDefs.each do |packerDefName,packerDef|
@@ -173,7 +187,7 @@ def runPackerDefinitions(packerDefs, workDir, packerBin, packerOpts)
 
     print "RUN: cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts}\n"
 
-    `cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts}`
+    `cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts} > #{packerLogFile}`
   end
 end
 
