@@ -124,12 +124,13 @@ end
 # packerElement can be 'provisioners' or 'builders'; it's used to parse JSON input structure
 # packerElementType can be 'provisioner' or 'builder'; it's used to name files
 def parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, packerElementType, packerElement)
-  provisionerUrls = chefNode['images'][packerElement]
+  urls = chefNode['images'][packerElement]
   ret = "["
   urls.each do |elementName,url|
-    `#{downloadCmd} #{url} > #{workDir}/packer/#{elementName}-#{packerElementType}.json`
-    print "Downloaded #{provisionerUrl} into #{workDir}/packer/#{provisionerName}-#{packerElementType}.json\n"
-    element = File.read("#{workDir}/packer/#{provisionerName}-#{packerElementType}.json")
+    packerFileName = "#{workDir}/packer/#{elementName}-#{packerElementType}.json"
+    `#{downloadCmd} #{url} > #{packerFileName}`
+    print "Downloaded #{url} into #{packerFileName}\n"
+    element = File.read(packerFileName)
 
     # Inject Chef attributes JSON into the chef-solo provisioner
     if elementName == 'chef-solo'
@@ -142,14 +143,14 @@ def parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, packerElem
   return ret
 end
 
-def getPackerDefinitions(nodes)
+def getPackerDefinitions(downloadCmd, workDir, nodes)
   packerDefinitions = {}
   nodes.each do |chefNodeName,chefNode|
     # Compose Packer JSON
-    provisioners = parsePackerElements(workDir, chefNode, chefNodeName, 'provisioner', 'provisioners')
-    builders = parsePackerElements(workDir, chefNode, chefNodeName, 'builder', 'builders')
+    provisioners = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'provisioner', 'provisioners')
+    builders = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'builder', 'builders')
     variables = chefNode['images']['variables'].to_json
-    packerDefs[chefNodeName] = "{\"variables\":#{variables},\"builders\":#{builders},\"provisioners\":#{provisioners}}"
+    packerDefinitions[chefNodeName] = "{\"variables\":#{variables},\"builders\":#{builders},\"provisioners\":#{provisioners}}"
   end
   return packerDefinitions
 end
@@ -159,7 +160,7 @@ def getNodeAttributes(workDir, chefNodeName)
   return JSON.parse(boxAttributesContent)
 end
 
-def runPackerDefinitions(nodes, workDir, packerBin, packerOpts)
+def runPackerDefinitions(packerDefs, workDir, packerBin, packerOpts)
   # Summarise Packer suites and ask for confirmation before running it
   print "Running the following Packer templates:\n"
   packerDefs.each do |packerDefName,packerDef|
@@ -169,6 +170,9 @@ def runPackerDefinitions(nodes, workDir, packerBin, packerOpts)
     packerFile = File.open("#{workDir}/packer/#{packerDefName}-packer.json", 'w')
     packerFile.write(packerDef)
     packerFile.close()
+
+    print "RUN: cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts}\n"
+
     `cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts}`
   end
 end

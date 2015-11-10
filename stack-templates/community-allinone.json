@@ -10,16 +10,14 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-solo" : {
-          "url" : "file://$PWD/images/chef-solo-provisioner.json"
-        },
-        "builders" : {
-          "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"
-        },
-        "variables" : {
-          "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
-          "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
-        }
+        "chef-solo" : "file://$PWD/images/chef-solo-provisioner.json"
+      },
+      "builders" : {
+        "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"
+      },
+      "variables" : {
+        "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
+        "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
       }
     }
   }
