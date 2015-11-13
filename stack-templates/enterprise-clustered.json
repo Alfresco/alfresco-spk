@@ -1,10 +1,10 @@
 {
-  "alfresco-share" : {
+  "alfresco-share1" : {
     "instance-template" : {
       "url" : "file://$PWD/instance-templates/share.json",
       "overlay" : {
         "alfresco" : {
-          "components" : ["haproxy","nginx","tomcat","transform","repo","share","mysql"],
+          "components" : ["haproxy","nginx","tomcat","transform","repo","share","aos","mysql"],
           "ssl_enabled" : false,
           "skip_certificate_creation" : true,
           "public_protocol" : "http",
@@ -12,7 +12,7 @@
           "install_fonts" : false,
           "properties" : {
             "dir.contentstore" : "/vagrant/.vagrant/alf_data",
-            "solr.host" : "192.168.33.11",
+            "solr.host" : "192.168.33.21",
             "solr.port" : "8090"
           }
         },
@@ -21,39 +21,6 @@
         },
         "haproxy" : {
           "enable_ssl_header" : false
-        }
-      }
-    },
-    "local-run" : {
-      "memory" : "800",
-      "cpus" : "1",
-      "ip" : "192.168.33.10"
-    },
-    "images" : {
-      "provisioners" : {
-        "chef-alfresco" : "file://$PWD/images/chef-alfresco-provisioner.json"
-      },
-      "builders" : {
-        "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"
-      },
-      "variables" : {
-        "ami_description" : "Alfresco One 5.0.2 - Share Server - {{timestamp}}",
-        "ami_name" : "Alfresco One 5.0.2 - Share Server - {{timestamp}}"
-      }
-    }
-  },
-  "alfresco-solr" : {
-    "instance-template" : {
-      "url" : "file://$PWD/instance-templates/solr.json",
-      "overlay" : {
-        "alfresco" : {
-          "ssl_enabled" : false,
-          "skip_certificate_creation" : true,
-          "install_fonts" : false,
-          "properties" : {
-            "dir.contentstore" : "/vagrant/.vagrant/alf_data",
-            "db.host" : "192.168.33.10"
-          }
         }
       }
     },
@@ -70,9 +37,95 @@
         "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"
       },
       "variables" : {
+        "ami_description" : "Alfresco One 5.0.2 - Share Server - {{timestamp}}",
+        "ami_name" : "Alfresco One 5.0.2 - Share Server - {{timestamp}}"
+      }
+    }
+  },
+  "alfresco-share2" : {
+    "instance-template" : {
+      "url" : "file://$PWD/instance-templates/share.json",
+      "overlay" : {
+        "alfresco" : {
+          "components" : ["haproxy","nginx","tomcat","transform","repo","share","aos"],
+          "ssl_enabled" : false,
+          "skip_certificate_creation" : true,
+          "public_protocol" : "http",
+          "public_portssl" : "80",
+          "install_fonts" : false,
+          "properties" : {
+            "dir.contentstore" : "/vagrant/.vagrant/alf_data",
+            "db.host" : "192.168.33.11",
+            "solr.host" : "192.168.33.22",
+            "solr.port" : "8090"
+          }
+        },
+        "nginx" : {
+          "use_nossl_config": true
+        },
+        "haproxy" : {
+          "enable_ssl_header" : false
+        }
+      }
+    },
+    "local-run" : {
+      "memory" : "800",
+      "cpus" : "1",
+      "ip" : "192.168.33.11"
+    }
+  },
+  "alfresco-solr1" : {
+    "instance-template" : {
+      "url" : "file://$PWD/instance-templates/solr.json",
+      "overlay" : {
+        "alfresco" : {
+          "ssl_enabled" : false,
+          "skip_certificate_creation" : true,
+          "install_fonts" : false,
+          "properties" : {
+            "dir.contentstore" : "/vagrant/.vagrant/alf_data",
+            "db.host" : "192.168.33.11"
+          }
+        }
+      }
+    },
+    "local-run" : {
+      "memory" : "800",
+      "cpus" : "1",
+      "ip" : "192.168.33.21"
+    },
+    "images" : {
+      "provisioners" : {
+        "chef-alfresco" : "file://$PWD/images/chef-alfresco-provisioner.json"
+      },
+      "builders" : {
+        "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"
+      },
+      "variables" : {
         "ami_description" : "Alfresco One 5.0.2 - Index Server - {{timestamp}}",
         "ami_name" : "Alfresco One 5.0.2 - Index Server - {{timestamp}}"
       }
+    }
+  },
+  "alfresco-solr2" : {
+    "instance-template" : {
+      "url" : "file://$PWD/instance-templates/solr.json",
+      "overlay" : {
+        "alfresco" : {
+          "ssl_enabled" : false,
+          "skip_certificate_creation" : true,
+          "install_fonts" : false,
+          "properties" : {
+            "dir.contentstore" : "/vagrant/.vagrant/alf_data",
+            "db.host" : "192.168.33.11"
+          }
+        }
+      }
+    },
+    "local-run" : {
+      "memory" : "800",
+      "cpus" : "1",
+      "ip" : "192.168.33.22"
     }
   }
 }
