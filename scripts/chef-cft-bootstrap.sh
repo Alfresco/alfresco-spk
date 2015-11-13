@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 export WORK_DIR=/tmp/chef-bootstrap
 mkdir -p $WORK_DIR
 
@@ -10,11 +9,6 @@ mkdir -p $WORK_DIR
 
 export CHEF_NODE_NAME=allinone
 export CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/maoo/alfresco-boxes/newchefalfresco/instance-templates/allinone-community.json
-
-# Setup /etc/hosts
-export LOCALIP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
-export LOCALNAME=$(curl http://169.254.169.254/latest/meta-data/local-hostname)
-export LOCALSHORTNAME=$(curl http://169.254.169.254/latest/meta-data/hostname|awk -F. '{print $1}')
 
 # Manage Alfresco License retrieval
 mkdir /opt/alflicense
@@ -29,6 +23,7 @@ semanage permissive -a haproxy_t
 CHEF_LOCAL_YAML_VARS_URL=$WORK_DIR/local-vars.yaml
 cat > $CHEF_LOCAL_YAML_VARS_URL << "EOF"
 ---
+run_list: ["alfresco::redeploy"]
 artifact-deployer:
   maven:
     repositories:
