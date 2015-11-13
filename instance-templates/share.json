@@ -1,6 +1,11 @@
 {
     "name": "share-enterprise",
+    "nginx" : {
+      "use_nossl_config" : true,
+      "disable_nginx_init" : true
+    },
     "alfresco" : {
+        "skip_certificate_creation" : true,
         "version" : "5.0.2",
         "edition" : "enterprise",
         "components" : ["haproxy","nginx","tomcat","transform","repo","share","aos"],
