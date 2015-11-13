@@ -31,7 +31,7 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-solo" : "file://$PWD/images/chef-solo-provisioner.json"
+        "chef-alfresco" : "file://$PWD/images/chef-alfresco-provisioner.json"
       },
       "builders" : {
         "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"
@@ -64,7 +64,7 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-solo" : "file://$PWD/images/chef-solo-provisioner.json"
+        "chef-alfresco" : "file://$PWD/images/chef-alfresco-provisioner.json"
       },
       "builders" : {
         "amazon-ebs" : "file://$PWD/images/amazon-ebs-builder.json"

@@ -1,7 +1,8 @@
 {
     "name": "allinone-community",
     "nginx" : {
-      "use_nossl_config" : true
+      "use_nossl_config" : true,
+      "disable_nginx_init" : true
     },
     "alfresco" : {
         "skip_certificate_creation" : true,

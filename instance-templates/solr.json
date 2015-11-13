@@ -1,6 +1,7 @@
 {
     "name": "solr-enterprise",
     "alfresco" : {
+        "skip_certificate_creation" : true,
         "version" : "5.0.2",
         "edition" : "enterprise",
         "components" : ["tomcat","repo","solr"],

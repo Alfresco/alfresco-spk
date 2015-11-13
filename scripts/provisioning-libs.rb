@@ -76,6 +76,20 @@ def downloadArtifact(workDir, downloadCmd, url, artifactName)
   end
 end
 
+def addNexusCredentials(attributesJson)
+  ret = attributesJson
+  if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
+    ret['artifact-deployer'] = {}
+    ret['artifact-deployer']['maven'] = {}
+    ret['artifact-deployer']['maven']['repositories'] = {}
+    ret['artifact-deployer']['maven']['repositories']['private'] = {}
+    ret['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
+    ret['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
+    ret['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
+  end
+  return ret
+end
+
 def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate, localYamlVarsUrl, localJsonVars)
   print "Processing node '#{chefNodeName}'\n"
   downloadFile(downloadCmd, instanceTemplate, "#{workDir}/attributes-#{chefNodeName}.json.original")
@@ -97,16 +111,7 @@ def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate,
     mergedAttributes = JSON.parse(JSON.merge(File.read("#{workDir}/attributes-#{chefNodeName}.json.original"), localJsonVars))
   end
 
-  if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
-    mergedAttributes['artifact-deployer'] = {}
-    mergedAttributes['artifact-deployer']['maven'] = {}
-    mergedAttributes['artifact-deployer']['maven']['repositories'] = {}
-    mergedAttributes['artifact-deployer']['maven']['repositories']['private'] = {}
-
-    mergedAttributes['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
-    mergedAttributes['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
-    mergedAttributes['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
-  end
+  mergedAttributes = addNexusCredentials(mergedAttributes)
 
   attributeFile = File.open("#{workDir}/attributes-#{chefNodeName}.json", 'w')
   attributeFile.write(mergedAttributes.to_json)
@@ -116,20 +121,12 @@ def downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate,
 end
 
 def mergePackerElementWithNodeAttributes(workDir, chefNodeName, provisionerName, provisioner)
-  print "provisioner: #{provisioner}\n"
-
   provisionerJson = JSON.parse(provisioner)
   nodeUrl = "#{workDir}/attributes-#{chefNodeName}.json"
   nodeUrlContent = File.read("#{workDir}/attributes-#{chefNodeName}.json.original")
-
-  print "nodeUrl: #{nodeUrl}\n"
-  print "nodeUrlContent: #{nodeUrlContent}\n"
-
   provisionerJson['json'] = JSON.parse(nodeUrlContent)
-  provisionerFile = File.open("#{workDir}/packer/#{provisionerName}-provisioner.json", 'w')
-  provisionerFile.write(provisionerJson.to_json)
-  provisionerFile.close()
-  provisioner = File.read("#{workDir}/packer/#{provisionerName}-provisioner.json")
+  provisionerJson['json'] = addNexusCredentials(provisionerJson['json'])
+  return provisionerJson.to_json
 end
 
 # packerElement can be 'provisioners' or 'builders'; it's used to parse JSON input structure
@@ -143,8 +140,8 @@ def parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, packerElem
     element = File.read(packerFileName)
 
     # Inject Chef attributes JSON into the chef-solo provisioner
-    if elementName == 'chef-solo'
-      mergePackerElementWithNodeAttributes(workDir, chefNodeName, elementName, element)
+    if elementName == 'chef-alfresco'
+      element = mergePackerElementWithNodeAttributes(workDir, chefNodeName, elementName, element)
     end
     ret += element + ","
   end
