@@ -23,4 +23,4 @@ downloadNodeDefinition(workDir, downloadCmd, chefNodeName, instanceTemplate, loc
 
 installChef()
 
-runChef(workDir, "#{workDir}/attributes-#{chefNodeName}.json")
+runChef(workDir, params['chefLogLevel'], params['chefLogFile'], "#{workDir}/attributes-#{chefNodeName}.json")

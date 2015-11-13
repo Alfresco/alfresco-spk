@@ -202,6 +202,6 @@ def installChef()
   `curl --silent https://www.opscode.com/chef/install.sh | bash`
 end
 
-def runChef(workDir, chefAttributePath)
+def runChef(workDir, chefLogLevel, chefLogFile, chefAttributePath)
     `cd #{workDir} ; chef-client --log_level #{chefLogLevel} --logfile #{chefLogFile} -z -j #{chefAttributePath}`
 end
