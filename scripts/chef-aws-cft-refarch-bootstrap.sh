@@ -8,7 +8,7 @@ mkdir -p $WORK_DIR
 # DATABAGS_URL="..."
 
 export CHEF_NODE_NAME=allinone
-export CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/maoo/alfresco-boxes/newchefalfresco/instance-templates/allinone-community.json
+export CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/alfresco/alfresco-spk/master/instance-templates/allinone-community.json
 
 # Manage Alfresco License retrieval
 mkdir /opt/alflicense
@@ -51,8 +51,8 @@ EOF
 export CHEF_LOCAL_YAML_VARS_URL=file://$CHEF_LOCAL_YAML_VARS_URL
 
 # Fetch files to install alfresco
-curl -L https://raw.githubusercontent.com/maoo/alfresco-boxes/newchefalfresco/scripts/provisioning-libs.rb > provisioning-libs.rb
-curl -L https://raw.githubusercontent.com/maoo/alfresco-boxes/newchefalfresco/scripts/chef-bootstrap.rb > chef-bootstrap.rb
+curl -L https://raw.githubusercontent.com/alfresco/alfresco-spk/master/scripts/provisioning-libs.rb > provisioning-libs.rb
+curl -L https://raw.githubusercontent.com/alfresco/alfresco-spk/master/scripts/chef-bootstrap.rb > chef-bootstrap.rb
 
 # Run Alfresco installation
 yum install -y ruby
