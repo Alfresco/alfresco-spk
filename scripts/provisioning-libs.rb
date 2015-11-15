@@ -21,7 +21,7 @@ def getEnvParams()
   params['boxUrl'] = ENV['BOX_URL'] || "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
   params['boxName'] = ENV['BOX_NAME'] || "opscode-centos-7.1"
 
-  params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/content/groups/public/org/alfresco/devops/chef-alfresco/0.6.11/chef-alfresco-0.6.11.tar.gz"
+  params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.12/chef-alfresco-0.6.12.tar.gz"
   params['dataBagsUrl'] = ENV['DATABAGS_URL'] || ''
 
   params['stackTemplateUrl'] = ENV['STACK_TEMPLATE_URL'] || "file://#{ENV['PWD']}/stack-templates/community-allinone.json"
@@ -35,7 +35,8 @@ def getEnvParams()
   params['chefLogLevel'] = ENV['CHEF_LOG_LEVEL'] || "info"
   params['chefLogFile'] = ENV['CHEF_LOG_FILE'] || "/var/log/chef-client.log"
 
-  print "Returning #{params.length} Environment params\n"
+  # For debugging purposes
+  # print "Returning #{params.length} Environment params\n"
   return params
 end
 
@@ -49,8 +50,6 @@ end
 def getStackTemplateNodes(downloadCmd, workDir, stackTemplateUrl)
   # Download nodes URL
   downloadFile(downloadCmd, stackTemplateUrl, "#{workDir}/nodes.json")
-
-  print "Returning Stack template nodes parsed from #{stackTemplateUrl} into #{workDir}/nodes.json\n"
   return JSON.parse(File.read("#{workDir}/nodes.json"))
 end
 
@@ -59,6 +58,7 @@ def yamlToJson(yaml)
   return JSON.dump(data)
 end
 
+# Used for debugging purposes
 def printVars(params)
   print "#START - Printing out Vagrant environment variables:\n"
   params.each do |paramName,paramValue|
@@ -68,9 +68,9 @@ def printVars(params)
 end
 
 def downloadArtifact(workDir, downloadCmd, url, artifactName)
-  # Download and uncompress Chef cookbooks (in a Berkshelf package format)
+  # Download and uncompress Chef artifacts (in a Berkshelf package format)
   if url and url.length != 0
-    downloadFile(downloadCmd, url, "#{workDir}/cookbooks.tar.gz")
+    downloadFile(downloadCmd, url, "#{workDir}/#{artifactName}.tar.gz")
     `rm -rf #{workDir}/#{artifactName}; tar xzf #{workDir}/#{artifactName}.tar.gz -C #{workDir}`
     print "Unpacked #{workDir}/#{artifactName}.tar.gz into #{workDir}\n"
   end
@@ -157,8 +157,9 @@ def getPackerDefinitions(downloadCmd, workDir, nodes)
     provisioners = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'provisioner', 'provisioners')
     builders = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'builder', 'builders')
 
-    print "Packer Builders: #{builders}\n"
-    print "Packer Provisioners: #{provisioners}\n"
+    # For debugging purposes
+    # print "Packer Builders: #{builders}\n"
+    # print "Packer Provisioners: #{provisioners}\n"
 
     variables = chefNode['images']['variables'].to_json
     packerDefinitions[chefNodeName] = "{\"variables\":#{variables},\"builders\":#{builders},\"provisioners\":#{provisioners}}"
@@ -177,14 +178,15 @@ def runPackerDefinitions(packerDefs, workDir, packerBin, packerOpts, packerLogFi
   packerDefs.each do |packerDefName,packerDef|
     print "- #{packerDefName}-packer.json\n"
   end
+  print "Check #{packerLogFile} for logs.\n"
+
   packerDefs.each do |packerDefName,packerDef|
     packerFile = File.open("#{workDir}/packer/#{packerDefName}-packer.json", 'w')
     packerFile.write(packerDef)
     packerFile.close()
 
-    print "RUN: cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts}\n"
-
-    `cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts} > #{packerLogFile}`
+    print "Executing Packer template '#{packerDefName}-packer.json' (~ 25 minutes run)\n"
+    `cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts} >> #{packerLogFile}`
   end
 end
 

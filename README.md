@@ -136,12 +136,12 @@ This will create a [Vagrant Machine](https://docs.vagrantup.com/v2/multi-machine
 
 Assuming that you've run your stack locally and you're happy with the instance template definitions, you can proceed with one (or both) of the following options:
 
-### Packaging images
+### Building Immutable images
 Create one or more immutable images for each of the instances involved in a given stack; instance templates will be used to dictate the provisioning configuration, whereas Local Variables - as mentioned above - will be ignored.
 
 To create the images:
 ```
-vagrant up images
+vagrant build-images
 ```
 
 As above, you can select the stack template using:
@@ -151,7 +151,7 @@ export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
 
 An image will be created for each instance *and* builder; for example, if you create images for the `enterprise-clustered.json` stack, using `amazon-ebs` and `docker` as builders, you'll get 4 images created.
 
-### Running remotely on AWS (or any other packer-supported builder)
+### Integrating with AWS (or any other packer-supported builder)
 When AMIs are (or not) in place and provisioning logic have been tested locally, it is possible to configure other orchestration tools and/or Cloud providers in order to spin up the same stack remotely.
 
 Alfresco SPK provides a [chef-bootstrap.sh](scripts/chef-bootstrap.sh) that can be used to easily integrate with the orchestration tool of your choice; below we provide an integration example using AWS Cloudformation (and [UserData](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) attribute)
