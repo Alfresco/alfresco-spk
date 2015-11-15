@@ -2,14 +2,7 @@
   "alfresco-allinone" : {
     "instance-template" : {
       "url" : "file://$PWD/instance-templates/allinone-community.json",
-      "overlay" : {
-        "alfresco" : {
-          "install_fonts" : false
-        },
-        "nginx" : {
-          "use_nossl_config" : true
-        }
-      }
+      "overlayYamlUrl" : "file://$PWD/yaml-overlays/allinone.yml"
     },
     "local-run" : {
       "memory" : "2048",

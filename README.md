@@ -79,8 +79,8 @@ Used to run the stack locally; for example, `memory` and `cpu` control the resou
 
 #### Image configurations
 Used to create images based on instance template configurations; the `images` item defines
-- builders; they define the nature(s) of the image(s) that you want to build; currently, the only builder implemented and extensively tested is [amazon-ebs](images/amazon-ebs-builder.json.example) (which produces an AMI), though there have been successes for OVF and Docker images too (WIP); any [Packer builder](https://www.packer.io/docs/templates/builders.html) can be easily integrated
-- provisioners; by default, the only provisioner needed is [`chef-solo`](images/chef-solo-provisioner.json), which basically runs the same provisioning logic that runs locally; however, you can extend this list with more [Packer provisioners](https://www.packer.io/docs/templates/provisioners.html) of your choice
+- builders; they define the nature(s) of the image(s) that you want to build; currently, the only builder implemented and extensively tested is [amazon-ebs](packer/amazon-ebs-builder.json.example) (which produces an AMI), though there have been successes for OVF and Docker images too (WIP); any [Packer builder](https://www.packer.io/docs/templates/builders.html) can be easily integrated
+- provisioners; by default, the only provisioner needed is [`chef-solo`](packer/chef-solo-provisioner.json), which basically runs the same provisioning logic that runs locally; however, you can extend this list with more [Packer provisioners](https://www.packer.io/docs/templates/provisioners.html) of your choice
 - variables; for each entry, a [Packer variable](https://www.packer.io/docs/templates/user-variables.html) is defined; variables can be used by provisioners and builders using the following syntax:
 ```
 {{user `this is my property`}}
