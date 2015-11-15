@@ -1,0 +1,25 @@
+{
+  "provisioners": [
+    {
+      "json": {
+        "hostname": "alfresco-allinone",
+        "ip": "192.168.0.32",
+        "alfresco": {
+          "components" : ["mysql","tomcat","transform","repo","share","solr"],
+          "start_service": true,
+          "version":"4.2.3",
+          "properties": {
+            "hostname.private":"192.168.0.32"
+          }
+        },
+        "tomcat": {
+          "base_version": 7
+        }
+      },
+      "run_list": [
+        "apt::default",
+        "alfresco::default"
+      ]
+    }
+  ]
+}

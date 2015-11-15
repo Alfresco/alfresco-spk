@@ -1,0 +1,34 @@
+{
+    "builders": [
+      {
+        "type": "docker",
+        "image": "maoo/alfresco-repo-base:latest",
+        "export_path": "alfresco-allinone-community.tar"
+      }
+    ],
+    "provisioners": [
+      {
+        "json": {
+          "alfresco": {
+            "components" : ["repo","share","solr"],
+            "properties": {
+              "db.host":"db.mysql.demo.acme.com"
+            }
+          },
+          "tomcat" : {
+            "base_version": 7
+          }
+        },
+        "cookbook_paths": [
+          "../../../../common/vendor-cookbooks"
+        ],
+        "data_bags_path": "../../../../common/data_bags",
+        "run_list": [
+          "alfresco::default"
+        ],
+        "prevent_sudo": false,
+        "skip_install": false,
+        "type": "chef-solo"
+      }
+    ]
+}

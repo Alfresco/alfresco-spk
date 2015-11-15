@@ -1,0 +1,33 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "maoo/alfresco-base:latest",
+            "export_path": "alfresco-web-base.tar"
+        }
+    ],
+    "provisioners": [
+        {
+            "json": {
+                "alfresco": {
+                  "components": ["tomcat"]
+                },
+                "tomcat" : {
+                    "base_version": 7,
+                    "jvm_memory" : "-Xmx2500M -XX:MaxPermSize=512M"
+                }
+            },
+            "cookbook_paths": [
+                "../../../../common/vendor-cookbooks"
+            ],
+            "data_bags_path": "../../../../common/data_bags",
+            "run_list": [
+                "apt::default",
+                "alfresco::default"
+            ],
+            "prevent_sudo": false,
+            "skip_install": false,
+            "type": "chef-solo"
+        }
+    ]
+}

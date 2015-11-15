@@ -1,6 +1,0 @@
-# Not tested, WIP!
-{
-  "type" : "docker",
-  "image": "centos",
-  "export_path": "image.tar"
-}
