@@ -27,6 +27,7 @@ else
 
   Vagrant.configure("2") do |config|
     nodes.each do |chefNodeName,chefNode|
+      print "Spinning up '#{chefNodeName}' Vagrant instance (~ 30 minutes run)\n"
       config.vm.define chefNodeName do |machineConfig|
 
         if vagrantUpOrProvision
