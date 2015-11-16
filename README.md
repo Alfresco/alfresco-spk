@@ -190,6 +190,12 @@ export COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/reposit
 export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
 ```
 
+### Access the boxes
+```
+vagrant ssh alfresco-share1
+```
+Check stack templates for private IP used to run it locally; Share services run on port 80.
+
 ## Using Alfresco Enterprise
 In order to use an enterprise version, you must pass your artifacts.alfresco.com credentials as follows:
 ```
