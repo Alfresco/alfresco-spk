@@ -27,17 +27,16 @@ else
 
   Vagrant.configure("2") do |config|
     nodes.each do |chefNodeName,chefNode|
-      print "Spinning up '#{chefNodeName}' Vagrant instance (~ 30 minutes run)\n"
+      boxAttributes = getNodeAttributes(params['workDir'], chefNodeName)
+      boxIp = chefNode['local-run']['ip']
+      boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
+      boxRunList = boxAttributes["run_list"]
+
+      print "Spinning up '#{chefNodeName}' Vagrant instance on IP `#{boxIp}`(~ 30 minutes run)\n"
       config.vm.define chefNodeName do |machineConfig|
 
         if vagrantUpOrProvision
           machineConfig.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=777", "fmode=666"]
-
-          boxAttributes = getNodeAttributes(params['workDir'], chefNodeName)
-
-          boxIp = chefNode['local-run']['ip']
-          boxHostname = boxAttributes["hostname"] || boxAttributes["name"]
-          boxRunList = boxAttributes["run_list"]
 
           if boxIp
             machineConfig.vm.network :private_network, ip:  boxIp
