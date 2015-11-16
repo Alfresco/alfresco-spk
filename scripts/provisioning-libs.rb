@@ -21,7 +21,7 @@ def getEnvParams()
   params['boxUrl'] = ENV['BOX_URL'] || "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.1_chef-provisionerless.box"
   params['boxName'] = ENV['BOX_NAME'] || "opscode-centos-7.1"
 
-  params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.12/chef-alfresco-0.6.12.tar.gz"
+  params['cookbooksUrl'] = ENV['COOKBOOKS_URL'] || "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.13/chef-alfresco-0.6.13.tar.gz"
   params['dataBagsUrl'] = ENV['DATABAGS_URL'] || ''
 
   params['stackTemplateUrl'] = ENV['STACK_TEMPLATE_URL'] || "file://#{ENV['PWD']}/stack-templates/community-allinone.json"
