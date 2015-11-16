@@ -37,6 +37,8 @@ else
 
         if vagrantUpOrProvision
           machineConfig.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=777", "fmode=666"]
+          # TODO - test it
+          # machineConfig.vm.synced_folder "~/.m2/repository", "/root/.m2/repository", mount_options: ["dmode=777", "fmode=666"]
 
           if boxIp
             machineConfig.vm.network :private_network, ip:  boxIp
