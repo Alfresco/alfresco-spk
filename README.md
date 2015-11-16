@@ -60,7 +60,7 @@ Configuration overlays can be specified in JSON or YAML formats; the latter is e
 }
 ```
 
-The snippet is taken from [community-allinone.json stack template](stack-templates/community-allinone.json) and uses [allinone.yml](yaml-overlays/allinone.yml) as YAML overlay.
+This snippet was taken from [community-allinone.json stack template](stack-templates/community-allinone.json) and uses [allinone.yml](yaml-overlays/allinone.yml) as YAML overlay.
 
 #### Vagrant-related configurations
 Used to run the stack locally; for example, `memory` and `cpu` control the resources allocated by Vagrant to run the instance.
