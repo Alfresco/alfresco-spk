@@ -1,6 +1,8 @@
 ## What is Alfresco SPK
 Alfresco SPK is a toolset that can be used by stack operators (Devops/Architects/Engineers, Support, QA, Sales, Marketing, ...) to define stacks locally (first) and run them anywhere (later); it sits on top of existing technologies (ChefDK, Vagrant, Packer) and implements a modular, testable, consistent development workflow for Alfresco software provisioning.
 
+Check [Alfresco Day presentation](http://www.slideshare.net/m.pillitu/alfresco-spkalfrescoday) to know more about Alfresco SPK
+
 ## Concepts
 
 ### Instance template
