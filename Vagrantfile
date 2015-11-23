@@ -47,7 +47,7 @@ else
         end
 
         machineConfig.vm.provider :virtualbox do |vb,override|
-          override.vm.box_url = params['vagrantBoxUrl']
+          override.vm.box_url = params['boxUrl']
           override.vm.box = params['boxName']
           vb.customize ["modifyvm", :id, "--memory", chefNode['local-run']['memory']]
           vb.customize ["modifyvm", :id, "--cpus", chefNode['local-run']['cpus']]
