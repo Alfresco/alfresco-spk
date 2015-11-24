@@ -143,7 +143,7 @@ Create one or more immutable images for each of the instances involved in a give
 
 To create the images:
 ```
-vagrant build-images
+vagrant up build-images
 ```
 
 As above, you can select the stack template using:
