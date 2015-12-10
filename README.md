@@ -153,6 +153,12 @@ export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
 
 An image will be created for each instance *and* builder; for example, if you create images for the `enterprise-clustered.json` stack, using `amazon-ebs` and `docker` as builders, you'll get 4 images created.
 
+#### WIP - Build Docker images
+```
+cd docker
+vagrant up
+```
+
 ### Integrating with AWS (or any other packer-supported builder)
 When AMIs are (or not) in place and provisioning logic have been tested locally, it is possible to configure other orchestration tools and/or Cloud providers in order to spin up the same stack remotely.
 

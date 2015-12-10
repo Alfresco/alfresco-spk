@@ -145,6 +145,7 @@ Vagrant.configure("2") do |config|
       # SPK - added custom scripts
       config.vm.provision "shell", path: "install-packer.sh"
       config.vm.provision "shell", path: "pull-docker-images.sh"
+      config.vm.provision "shell", path: "build-docker-images.sh"
     end
   end
 end
