@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 echo "Run alfresco-spk withing CentOS..."
 cd /spk
 export PACKER_BIN=/opt/packer/packer
