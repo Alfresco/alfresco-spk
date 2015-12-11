@@ -17,5 +17,6 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", path: "pull-docker-images.sh"
     config.vm.provision "shell", path: "check-docker-daemon.sh"
     config.vm.provision "shell", path: "build-docker-images.sh"
+    config.vm.provision "shell", path: "run-docker-stack.sh"
   end
 end
