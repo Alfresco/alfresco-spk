@@ -1,0 +1,14 @@
+{
+    "name": "repo-community-container",
+    "nginx" : {
+      "use_nossl_config" : true,
+      "disable_nginx_init" : true
+    },
+    "alfresco" : {
+        "components" : ["tomcat","transform","repo","aos","googledocs"],
+        "skip_certificate_creation" : true,
+        "public_protocol" : "http",
+        "public_portssl" : "80"
+    },
+    "run_list": ["alfresco::default"]
+}

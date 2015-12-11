@@ -1,7 +1,7 @@
 {
   "alfresco-allinone" : {
     "instance-template" : {
-      "url" : "file:///spk/instance-templates/repo-community-container.json",
+      "url" : "file:///spk/instance-templates/allinone-community.json",
       "overlay" : {
         "alfresco" : {
           "install_fonts" : false
@@ -17,6 +17,7 @@
     },
     "images" : {
       "provisioners" : {
+        "selinux-permissive" : "file:///spk/packer/selinux-permissive-provisioner.json",
         "chef-alfresco" : "file:///spk/packer/chef-alfresco-provisioner.json"
       },
       "builders" : {
