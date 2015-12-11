@@ -7,7 +7,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "bento/centos-7.1"
   config.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.1"
-  config.vm.synced_folder "../", "/spk/", :nfs => true, :mount_options => ['nolock,timeo=6000']
+  #config.vm.synced_folder "../", "/spk/", :nfs => true, :mount_options => ['nolock,timeo=6000']
+  config.vm.synced_folder "../", "/spk/"
   config.vm.network :private_network, ip: "172.17.8.23"
 
   config.vm.define "image-builder" do

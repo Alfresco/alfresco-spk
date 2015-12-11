@@ -1,17 +1,9 @@
 #!/bin/bash
 
-# tee /etc/yum.repos.d/docker.repo <<-'EOF'
-# [dockerrepo]
-# name=Docker Repository
-# baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
-# enabled=1
-# gpgcheck=1
-# gpgkey=https://yum.dockerproject.org/gpg
-# EOF
-#
-# #Installing Docker
-# yum -y install docker-engine
+#Installing Docker
+if [ ! -f /usr/bin/docker ]; then
+  echo "Installing and starting Docker..."
+  curl -sSL https://get.docker.com/ | sh
+  service docker start
+fi
 
-curl -sSL https://get.docker.com/ | sh
-
-service docker start

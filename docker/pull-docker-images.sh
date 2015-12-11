@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #Download pre-defined Docker Images
+echo "Pulling Docker images..."
 docker pull centos
 docker pull orchardup/mysql:latest
 
