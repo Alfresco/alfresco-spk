@@ -1,0 +1,21 @@
+{
+  "type": "virtualbox-iso",
+  "source_path" : "{{user `source_path`}}",
+  "output_directory" : "{{user `output_directory`}}",
+  "vm_name" : "{{user `vm_name`}}",
+  "iso_url": "{{user `iso_url`}}",
+  "iso_checksum": "{{user `iso_checksum`}}",
+  "iso_checksum_type": "{{user `iso_checksum_type`}}",
+  "http_directory": "{{user `http_directory`}}",
+  "ssh_username": "{{user `ssh_username`}}",
+  "ssh_password": "{{user `ssh_password`}}",
+  "guest_os_type": "{{user `guest_os_type`}}",
+  "remote_host": "192.168.0.2",
+  "remote_datastore": "vmdatastore",
+  "boot_command": [
+    "<tab> text ks=http://192.168.0.1:8000/ks-ovf.cfg<enter><wait>"
+  ],
+  "guest_additions_mode" : "disable",
+  "headless": "true",
+  "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S /sbin/halt -p"
+}

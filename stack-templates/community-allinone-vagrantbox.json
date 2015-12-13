@@ -1,7 +1,7 @@
 {
   "alfresco-allinone" : {
     "instance-template" : {
-      "url" : "file:///spk/instance-templates/allinone-community.json",
+      "url" : "file://$PWD/instance-templates/allinone-community.json",
       "overlay" : {
         "alfresco" : {
           "install_fonts" : false
@@ -17,13 +17,27 @@
     },
     "images" : {
       "provisioners" : {
-        "selinux-permissive" : "file:///spk/packer/selinux-permissive-provisioner.json",
-        "chef-alfresco" : "file:///spk/packer/chef-alfresco-provisioner.json"
+        "selinux-permissive" : "file://$PWD/packer/selinux-permissive-provisioner.json",
+        "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json"
       },
       "builders" : {
-        "docker" : "file:///spk/packer/docker-builder.json"
+        "virtualbox-ovf" : "file://$PWD/packer/virtualbox-ovf-builder.json"
+      },
+      "postprocessors" : {
+        "vagrantbox" : "file://$PWD/packer/vagrantbox-postprocessor.json"
       },
       "variables" : {
+        "vagrant_output_file" : "alfresco-community-5.1.c-ea-{{timestamp}}",
+        "iso_url" : "http://mirror.amsiohosting.net/centos.org/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
+        "iso_checksum" : "7cf1ac8da13f54d6be41e3ccf228dc5bb35792f515642755ff4780d5714d4278",
+        "iso_checksum_type" : "sha256",
+        "ssh_username" : "root",
+        "ssh_password" : "vagrant",
+        "ks_path" : "ks-centos.cfg",
+        "http_directory" : "../../ks",
+        "guest_os_type" : "RedHat_64",
+        "output_directory": "vbox-output",
+        "vm_name": "alfresco-community-5.1.c-ea-{{timestamp}}",
         "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
         "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
       }

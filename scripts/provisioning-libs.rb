@@ -156,13 +156,14 @@ def getPackerDefinitions(downloadCmd, workDir, nodes)
     # Compose Packer JSON
     provisioners = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'provisioner', 'provisioners')
     builders = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'builder', 'builders')
+    postprocessors = parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, 'postprocessor', 'postprocessors')
 
     # For debugging purposes
     # print "Packer Builders: #{builders}\n"
     # print "Packer Provisioners: #{provisioners}\n"
 
     variables = chefNode['images']['variables'].to_json
-    packerDefinitions[chefNodeName] = "{\"variables\":#{variables},\"builders\":#{builders},\"provisioners\":#{provisioners}}"
+    packerDefinitions[chefNodeName] = "{\"variables\":#{variables},\"builders\":#{builders},\"provisioners\":#{provisioners},\"post-processors\":#{postprocessors}}"
   end
   return packerDefinitions
 end

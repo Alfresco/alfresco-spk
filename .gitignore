@@ -14,4 +14,4 @@ bootstrap-data
 license
 
 # Ignore Packer builders
-*-builder.json
+amazon-ebs-builder.json
