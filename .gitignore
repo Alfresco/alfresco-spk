@@ -12,6 +12,7 @@ output-virtualbox-iso
 *.tar
 bootstrap-data
 license
+test
 
 # Ignore Packer builders
 amazon-ebs-builder.json
