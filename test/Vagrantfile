@@ -1,0 +1,24 @@
+# Testing Alfresco Community Vagrant .box file
+#
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+
+# TODO - WIP
+# image_url_prefix = "https://s3.amazonaws.com/alfresco-images/vagrantboxes"
+
+image_name="alfresco-community"
+image_timestamp="1449995035"
+image_version="5.1.c-ea"
+image_version = "#{image_version}/#{image_timestamp}" if image_timestamp
+image_name_and_version = "#{image_name}-#{image_version}"
+
+instance_ip = "192.168.0.42"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = image_name_and_version
+  # TODO - WIP
+  # config.vm.url = "#{image_url_prefix}/#{image_name_and_version}.box"
+  config.vm.hostname = image_name
+  config.vm.network :private_network, ip: instance_ip
+end

@@ -1,4 +1,4 @@
 {
   "type": "shell",
-  "inline": ["sudo -E setenforce 0"]
+  "inline": ["setenforce 0"]
 }

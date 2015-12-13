@@ -17,7 +17,7 @@
     },
     "images" : {
       "provisioners" : {
-        "selinux-permissive" : "file://$PWD/packer/selinux-permissive-provisioner.json",
+        "bento-vagrant" : "file://$PWD/packer/bento-vagrant-provisioner.json",
         "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json"
       },
       "builders" : {
@@ -27,7 +27,7 @@
         "vagrantbox" : "file://$PWD/packer/vagrantbox-postprocessor.json"
       },
       "variables" : {
-        "vagrant_output_file" : "alfresco-community-5.1.c-ea-{{timestamp}}",
+        "vagrant_output_file" : "alfresco-community-5.1.c-ea-{{timestamp}}.box",
         "iso_url" : "http://mirror.amsiohosting.net/centos.org/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
         "iso_checksum" : "7cf1ac8da13f54d6be41e3ccf228dc5bb35792f515642755ff4780d5714d4278",
         "iso_checksum_type" : "sha256",
