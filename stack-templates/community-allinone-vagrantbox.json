@@ -17,8 +17,8 @@
     },
     "images" : {
       "provisioners" : {
-        "bento-vagrant" : "file://$PWD/packer/bento-vagrant-provisioner.json",
-        "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json",
+        "bento-vagrant" : "file://$PWD/packer/bento-vagrant-provisioner.json"
       },
       "builders" : {
         "virtualbox-ovf" : "file://$PWD/packer/virtualbox-ovf-builder.json"
@@ -35,6 +35,7 @@
         "ssh_password" : "vagrant",
         "ks_path" : "ks-centos.cfg",
         "http_directory" : "../../ks",
+        "headless" : "false",
         "guest_os_type" : "RedHat_64",
         "output_directory": "vbox-output",
         "vm_name": "alfresco-community-5.1.c-ea-{{timestamp}}",
