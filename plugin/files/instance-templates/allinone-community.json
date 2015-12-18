@@ -1,0 +1,13 @@
+{
+    "name": "allinone-community",
+    "nginx" : {
+      "use_nossl_config" : true,
+      "disable_nginx_init" : true
+    },
+    "alfresco" : {
+        "skip_certificate_creation" : true,
+        "public_protocol" : "http",
+        "public_portssl" : "80"
+    },
+    "run_list": ["alfresco::default"]
+}

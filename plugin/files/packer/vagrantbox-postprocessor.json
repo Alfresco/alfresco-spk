@@ -1,0 +1,6 @@
+{
+ "type" : "vagrant",
+ "output" : "{{user `vagrant_output_file`}}",
+ "compression_level" : 7,
+ "keep_input_artifact" : true
+}

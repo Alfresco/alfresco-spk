@@ -1,0 +1,4 @@
+{
+  "type": "shell",
+  "inline": ["setenforce 0"]
+}
