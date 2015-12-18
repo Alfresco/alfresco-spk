@@ -1,11 +1,11 @@
 {
   "type": "shell",
   "inline": [
-    "curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/common/metadata.sh | bash -s",
-    "curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/common/sshd.sh | bash -s",
-    "curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/centos/networking.sh | bash -s",
-    "curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/common/vagrant.sh | bash -s",
-    "curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/centos/cleanup.sh | bash -s",
-    "curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/common/minimize.s | bash -s"
+    "echo 'invoking metadata.sh' && curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/common/metadata.sh | bash -s",
+    "echo 'invoking sshd.sh' && curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/common/sshd.sh | bash -s",
+    "echo 'invoking networking.sh' && curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/centos/networking.sh | bash -s",
+    "echo 'invoking vagrant.sh' && curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/common/vagrant.sh | bash -s",
+    "echo 'invoking cleanup.sh' && curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/centos/cleanup.sh | bash -s",
+    "echo 'invoking minimize.sh' && curl -L https://raw.githubusercontent.com/chef/bento/2.2.2/scripts/common/minimize.sh | bash -s"
   ]
 }

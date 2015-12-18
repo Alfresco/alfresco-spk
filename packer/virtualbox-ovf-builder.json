@@ -13,6 +13,6 @@
     "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}}<enter><wait>"
   ],
   "guest_additions_mode" : "disable",
-  "headless": "true",
+  "headless": "{{user `headless`}}",
   "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S /sbin/halt -p"
 }

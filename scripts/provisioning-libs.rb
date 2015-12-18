@@ -187,7 +187,11 @@ def runPackerDefinitions(packerDefs, workDir, packerBin, packerOpts, packerLogFi
     packerFile.close()
 
     print "Executing Packer template '#{packerDefName}-packer.json' (~ 60 minutes run)\n"
-    `cd #{workDir}/packer; #{packerBin} build #{packerDefName}-packer.json #{packerOpts} >> #{packerLogFile}`
+    if '-debug' == packerOpts
+      `cd #{workDir}/packer; #{packerBin} build #{packerOpts} #{packerDefName}-packer.json`
+    else
+      `cd #{workDir}/packer; #{packerBin} build #{packerOpts} #{packerDefName}-packer.json >> #{packerLogFile}`
+    end
   end
 end
 

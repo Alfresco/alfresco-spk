@@ -4,13 +4,15 @@
 # vi: set ft=ruby :
 #
 
+# For now:
+# vagrant box add ../.vagrant/packer/alfresco-community-5.1.c-ea-1450080171.box --name alfresco-community-5.1.c-ea-1450080171
 # TODO - WIP
 # image_url_prefix = "https://s3.amazonaws.com/alfresco-images/vagrantboxes"
 
 image_name="alfresco-community"
-image_timestamp="1449995035"
+image_timestamp="1450080171"
 image_version="5.1.c-ea"
-image_version = "#{image_version}/#{image_timestamp}" if image_timestamp
+image_version = "#{image_version}-#{image_timestamp}" if image_timestamp
 image_name_and_version = "#{image_name}-#{image_version}"
 
 instance_ip = "192.168.0.42"
