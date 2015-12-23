@@ -1,4 +1,4 @@
-module Vagrant
+module VagrantPlugins
     module Spk
       module Run
         class Plugin < Vagrant.plugin('2')
@@ -7,6 +7,11 @@ module Vagrant
           description <<-DESC
           This plugin start alfresco 
           DESC
+
+          config 'spk-run' do
+            require_relative 'config'
+            Config
+          end
 
           command 'spk-run' do
             require_relative 'command'

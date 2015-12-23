@@ -1,6 +1,6 @@
 module VagrantPlugins
 	module Spk
-		module Commons
+		module BuildImages
 			class Config < Vagrant.plugin(2, :config)
 				attr_accessor :command, :work_dir, :packer_bin, :packer_opts, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :ks_template
 

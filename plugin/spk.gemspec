@@ -2,7 +2,7 @@ require File.expand_path('../lib/spk/version', __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name          = "spk"
-  spec.version       = Vagrant::Spk::VERSION
+  spec.version       = VagrantPlugins::Spk::VERSION
   spec.authors       = ["Enzo Rivello"]
   spec.email         = ["enzo.rivello@alfresco.com"]
 

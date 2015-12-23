@@ -3,7 +3,7 @@ require 'json'
 require 'yaml'
 require 'pry'
 
-module Vagrant
+module VagrantPlugins
 	module Spk
 		module Commons
 			class Engine
@@ -73,6 +73,7 @@ module Vagrant
 				end
 
 				def get_node_attrs(work_dir, chef_node_name)
+					binding.pry
 				  box_attrs = File.read("#{work_dir}/attributes-#{chef_node_name}.json")
 				  return JSON.parse(box_attrs)
 				end
