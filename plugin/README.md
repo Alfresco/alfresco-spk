@@ -9,13 +9,19 @@ It consists of 2 main actions:
 # How to test
 1. cd in this folder
 2. bundle install
-3. bundle exec vagrant spk-build if you want to build a box
-4. bundle exec vagrant spk-run if you want to run a live Alfresco installation
+3. bundle exec vagrant spk build if you want to build a box
+4. bundle exec vagrant spk run  if you want to run a live Alfresco installation
+
+# How to install
+1. cd in this folder
+2. bundle install
+3. bundle exec rake build
+4. vagrant plugin install pkg/{name_of_the_package}.gem
+5. the plugin will now be available outside of this folder.
 
 
 # TODOS
 Needs test coverage
-Needs more structure
-Needs more generalization (lots of hardcoded stuff)
 Needs to display more info up in the console
 Needs to run with some other custom template and inside a Vagrant file as plugin
+needs error checking!
