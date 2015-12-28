@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
   <% nodes.each do |node_name,node| %>
-    <% box_attrs = @engine.get_node_attrs(@params['work_dir'], node_name) %>
+    <% box_attrs = @engine.get_node_attrs(@params.work_dir, node_name) %>
     box_ip = "<%= node['local-run']['ip'] == nil ? "" : node['local-run']['ip']%>"
     host_name = "<%= box_attrs["hostname"] || box_attrs["name"] %>"
 
@@ -14,15 +14,15 @@ Vagrant.configure("2") do |config|
 	    machineConf.vm.hostname = host_name
 
 	    machineConf.vm.provider :virtualbox do |vb,override|
-	      override.vm.box_url = "<%= @params['box_url'] %>"
-	      override.vm.box = "<%= "#{@params['box_name']}" %>"
+	      override.vm.box_url = "<%= @params.box_url %>"
+	      override.vm.box = "<%= "#{@params.box_name }" %>"
 	      vb.customize ["modifyvm", :id, "--memory", <%= node['local-run']['memory'] %>]
 	      vb.customize ["modifyvm", :id, "--cpus", <%= node['local-run']['cpus'] %>]
 	    end
 
 	    machineConf.vm.provision :chef_solo do |chef|
-	      chef.cookbooks_path = "<%= "#{@params['work_dir']}/cookbooks" %>"
-	      chef.data_bags_path = "<%= "#{@params['work_dir']}/data_bags" %>"
+	      chef.cookbooks_path = "<%= "#{ @params.work_dir }/cookbooks" %>"
+	      chef.data_bags_path = "<%= "#{ @params.work_dir }/data_bags" %>"
 
 	      <% box_attrs['run_list'].each do |recipe| %>
 	        chef.add_recipe "<%= "recipe[#{recipe}]" %>"

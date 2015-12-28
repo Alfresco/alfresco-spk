@@ -1,9 +1,8 @@
 require 'json/merge_patch'
 require 'json'
 require 'yaml'
-require 'pry'
 
-module Vagrant
+module VagrantPlugins
 	module Spk
 		module Commons
 			class Engine
