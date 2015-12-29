@@ -17,12 +17,14 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-alfresco" : "file:///spk/packer/chef-alfresco-provisioner.json"
+        "chef-alfresco" : "file:///spk/packer/chef-provisioner.json"
       },
       "builders" : {
         "docker" : "file:///spk/packer/docker-builder.json"
       },
       "variables" : {
+        "chef_version" : "12.6.0",
+        "run_list_item" : "alfresco::default",
         "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
         "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
       }

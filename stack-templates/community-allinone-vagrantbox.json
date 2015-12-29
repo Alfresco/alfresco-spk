@@ -18,7 +18,7 @@
     "images" : {
       "provisioners" : {
         "selinux-permissive" : "file://$PWD/packer/selinux-permissive-provisioner.json",
-        "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json"
       },
       "builders" : {
         "virtualbox-ovf" : "file://$PWD/packer/virtualbox-ovf-builder.json"
@@ -27,6 +27,8 @@
         "vagrantbox" : "file://$PWD/packer/vagrantbox-postprocessor.json"
       },
       "variables" : {
+        "chef_version" : "12.6.0",
+        "run_list_item" : "alfresco::default",
         "vagrant_output_file" : "alfresco-community-5.1.c-ea-{{timestamp}}",
         "iso_url" : "http://centos.mirror.transip.nl/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso",
         "iso_checksum" : "f90e4d28fa377669b2db16cbcb451fcb9a89d2460e3645993e30e137ac37d284",

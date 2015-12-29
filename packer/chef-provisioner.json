@@ -1,9 +1,9 @@
 {
   "type": "chef-solo",
   "execute_command" : "cd /tmp/packer-chef-solo && ln -s cookbooks-0 cookbooks && {{if .Sudo}}sudo {{end}}chef-client --no-color -z -j {{.JsonPath}}",
-  "install_command": "bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v 12.5.1'",
+  "install_command": "bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v {{user `chef_version`}}'",
   "prevent_sudo": true,
   "skip_install": false,
   "cookbook_paths": ["../cookbooks"],
-  "run_list": ["alfresco::default"]
+  "run_list": ["{{user `run_list_item`}}"]
 }
