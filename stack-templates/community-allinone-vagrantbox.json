@@ -18,7 +18,8 @@
     "images" : {
       "provisioners" : {
         "selinux-permissive" : "file://$PWD/packer/selinux-permissive-provisioner.json",
-        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json",
+        "vagrant-key" : "file://$PWD/packer/vagrant-key-provisioner.json",
       },
       "builders" : {
         "virtualbox-ovf" : "file://$PWD/packer/virtualbox-ovf-builder.json"
