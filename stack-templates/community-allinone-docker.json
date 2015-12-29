@@ -25,6 +25,7 @@
       "variables" : {
         "data_bags_path" : ".",
         "chef_version" : "12.6.0",
+        "chef_prevent_sudo" : "true",
         "run_list_item" : "alfresco::default"
       }
     }

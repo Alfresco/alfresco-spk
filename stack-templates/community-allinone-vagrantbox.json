@@ -30,6 +30,7 @@
       "variables" : {
         "data_bags_path" : ".",
         "chef_version" : "12.6.0",
+        "chef_prevent_sudo" : "true",
         "run_list_item" : "alfresco::default",
         "vagrant_output_file" : "alfresco-community-5.1.c-ea-{{timestamp}}",
         "iso_url" : "http://centos.mirror.transip.nl/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso",
