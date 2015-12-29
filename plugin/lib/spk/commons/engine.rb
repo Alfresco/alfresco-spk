@@ -132,10 +132,9 @@ module VagrantPlugins
 				def parse_packer_elements(command, work_dir, chef_node, chef_node_name, packer_element_type, packer_element)
 				  urls = chef_node['images'][packer_element]
 				  ret = "["
-				  prefix = "#{File.expand_path File.dirname(__FILE__)}/../../../files"
 				  urls.each do |element_name,url|
 				    packer_filename = "#{work_dir}/packer/#{element_name}-#{packer_element_type}.json"
-				    download_file(command, "#{prefix}/#{url}", packer_filename)
+				    download_file(command, "#{url}", packer_filename)
 				    element = File.read(packer_filename)
 
 				    # Inject Chef attributes JSON into the chef-solo provisioner

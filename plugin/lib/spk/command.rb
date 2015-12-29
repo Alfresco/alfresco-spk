@@ -19,7 +19,7 @@ module VagrantPlugins
       end
 
  			def execute
-        
+
         OptionParser.new do |opts|
             opts.banner = "Usage: vagrant spk [build-images|run] "\
                           "[-b|--box-url] "\
@@ -59,14 +59,14 @@ module VagrantPlugins
         # this code will be run only if the command wasn't asking for help
 
         @engine = VagrantPlugins::Spk::Commons::Engine.new
-        
+
         # this needs refactoring. every case needs it's own class
         case @params.mode
         when "build-images"
           @engine.create_work_dir(@params.work_dir)
           nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
           chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.command, @params.cookbooks_url, @params.databags_url)
-          packer_defs = @engine.get_packer_defs("cat", @params.work_dir, chef_items)
+          packer_defs = @engine.get_packer_defs("curl --silent", @params.work_dir, chef_items)
           @engine.run_packer_defs(packer_defs, @params.work_dir, @params.packer_bin, @params.packer_opts , "packer.log")
           abort("Vagrant up build-images completed!")
         when "run"
@@ -85,7 +85,7 @@ module VagrantPlugins
         # code that runs spk build
 
  			end
-  	end	
+  	end
 
   end
 end
