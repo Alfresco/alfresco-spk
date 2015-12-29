@@ -26,10 +26,9 @@ module VagrantPlugins
 				def get_chef_items(nodes, work_dir, command, cookbooks_url, databags_url)
 				  get_artifact(work_dir, command, cookbooks_url, "cookbooks")
 				  get_artifact(work_dir, command, databags_url, "databags")
-				  prefix = "file://#{File.expand_path File.dirname(__FILE__)}/../../../files"
 				  # Download node URL
 				  nodes.each do |name,node|
-				    get_node_definition(work_dir, command, name, "#{prefix}/#{node['instance-template']['url']}", node['instance-template']['overlayYamlUrl'], node['instance-template']['overlay'] )
+						get_node_definition(work_dir, command, name, "#{node['instance-template']['url']}", node['instance-template']['overlayYamlUrl'], node['instance-template']['overlay'] )
 				  end
 				end
 
@@ -87,7 +86,7 @@ module VagrantPlugins
 				  end
 				end
 
-	
+
 	      def get_node_definition(work_dir, command, node_name, instance_template, local_yaml_url, local_json_vars)
 					  print "Processing node '#{node_name}'\n"
 					  download_file(command, instance_template, "#{work_dir}/attributes-#{node_name}.json.original")
