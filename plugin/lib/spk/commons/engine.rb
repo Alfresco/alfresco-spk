@@ -17,10 +17,13 @@ module VagrantPlugins
 
 
 				def get_stack_template_nodes(command, work_dir, stack_template, ks_template)
-				  # Download nodes URL
-				  download_file(command, stack_template, "#{work_dir}/nodes.json")
 				  download_file(command, ks_template ,"#{work_dir}/ks-centos.cfg")
-				  return JSON.parse(File.read("#{work_dir}/nodes.json"))
+				  return get_json(command,work_dir, "nodes.json", stack_template)
+				end
+
+				def get_json(command, work_dir, file_name, url)
+				  download_file(command, url, "#{work_dir}/#{file_name}")
+				  return JSON.parse(File.read("#{work_dir}/#{file_name}"))
 				end
 
 				def get_chef_items(nodes, work_dir, command, cookbooks_url, databags_url)

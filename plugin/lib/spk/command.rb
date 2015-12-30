@@ -53,6 +53,15 @@ module VagrantPlugins
             opts.on("-s", "--stack-template [PATH]", String, "Path of the SPK stack template") do |stack_template|
               @params.stack_template = stack_template
             end
+
+            opts.on("-pre", "--pre-commands [PATH]", String, "Path of the pre commands JSON") do |pre_commands|
+              @params.pre_commands = pre_commands
+            end
+
+            opts.on("-post", "--post-commands [PATH]", String, "Path of the post commands JSON") do |post_commands|
+              @params.post_commands = post_commands
+            end
+
         end.parse!
         @params.finalize!
 
@@ -65,6 +74,23 @@ module VagrantPlugins
         when "build-images"
           @engine.create_work_dir(@params.work_dir)
           nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
+
+          if @params.pre_commands
+            file_list = @params.pre_commands.split(',')
+            pre_commands_final = []
+            file_list.each do |file|
+              pre_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
+            end
+          end
+
+          if @params.post_commands
+            file_list = @params.post_commands.split(',')
+            post_commands_final = []
+            file_list.each do |file|
+              post_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
+            end
+          end
+
           chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.command, @params.cookbooks_url, @params.databags_url)
           packer_defs = @engine.get_packer_defs("curl --no-sessionid --silent", @params.work_dir, chef_items)
           @engine.run_packer_defs(packer_defs, @params.work_dir, @params.packer_bin, @params.packer_opts , "packer.log")

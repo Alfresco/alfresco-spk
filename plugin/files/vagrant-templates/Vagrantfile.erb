@@ -1,4 +1,25 @@
 Vagrant.configure("2") do |config|
+
+  if Vagrant.has_plugin?("vagrant-triggers")
+    <% if nodes['pre_commands'] -%>
+      <% nodes['pre_commands'].each do |pre_command| -%>
+        config.trigger.before :spk do
+          info pre_command[0]
+          run pre_command[1]
+        end
+      <% end -%>
+    <% end -%>
+
+    <% if nodes['pre_commands'] -%>
+      <% post_commands.each do |post_command| -%>
+        config.trigger.after :spk do
+          info post_command[0]
+          run post_command[1]
+        end
+      <% end -%>
+    <% end -%>
+  end
+  
   <% nodes.each do |node_name,node| %>
     <% box_attrs = @engine.get_node_attrs(@params.work_dir, node_name) %>
     box_ip = "<%= node['local-run']['ip'] == nil ? "" : node['local-run']['ip']%>"
@@ -31,5 +52,5 @@ Vagrant.configure("2") do |config|
 	      chef.json = <%= box_attrs %>
 	    end
 	  end
-  <% end %> 
+  <% end %>
 end
