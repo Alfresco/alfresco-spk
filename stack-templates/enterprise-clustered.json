@@ -31,12 +31,16 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json"
       },
       "builders" : {
         "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
       },
       "variables" : {
+        "data_bags_path" : ".",
+        "chef_version" : "12.6.0",
+        "chef_prevent_sudo" : "false",
+        "run_list_item" : "alfresco::default",
         "ami_description" : "Alfresco One 5.0.2 - Share Server - {{timestamp}}",
         "ami_name" : "Alfresco One 5.0.2 - Share Server - {{timestamp}}"
       }
@@ -96,12 +100,16 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json"
       },
       "builders" : {
         "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
       },
       "variables" : {
+        "data_bags_path" : ".",
+        "chef_version" : "12.6.0",
+        "chef_prevent_sudo" : "false",
+        "run_list_item" : "alfresco::default",
         "ami_description" : "Alfresco One 5.0.2 - Index Server - {{timestamp}}",
         "ami_name" : "Alfresco One 5.0.2 - Index Server - {{timestamp}}"
       }
