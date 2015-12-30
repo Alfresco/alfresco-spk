@@ -132,18 +132,20 @@ module VagrantPlugins
 				def parse_packer_elements(command, work_dir, chef_node, chef_node_name, packer_element_type, packer_element)
 				  urls = chef_node['images'][packer_element]
 				  ret = "["
-				  urls.each do |element_name,url|
-				    packer_filename = "#{work_dir}/packer/#{element_name}-#{packer_element_type}.json"
-				    download_file(command, "#{url}", packer_filename)
-				    element = File.read(packer_filename)
+					if urls
+					  urls.each do |element_name,url|
+					    packer_filename = "#{work_dir}/packer/#{element_name}-#{packer_element_type}.json"
+					    download_file(command, "#{url}", packer_filename)
+					    element = File.read(packer_filename)
 
-				    # Inject Chef attributes JSON into the chef-solo provisioner
-				    if element_name == 'chef-alfresco'
-				      element = merge_elements(work_dir, chef_node_name, element_name, element)
-				    end
-				    ret += element + ","
-				  end
-				  ret = ret[0..-2]
+					    # Inject Chef attributes JSON into the chef-solo provisioner
+					    if element_name == 'chef-alfresco'
+					      element = merge_elements(work_dir, chef_node_name, element_name, element)
+					    end
+					    ret += element + ","
+					  end
+					  ret = ret[0..-2]
+					end
 				  ret += "]"
 				  return ret
 				end

@@ -18,7 +18,7 @@ module VagrantPlugins
 			end
 
 			def finalize!
-				@command = "curl --silent" if @command == UNSET_VALUE
+				@command = "curl --no-sessionid --silent" if @command == UNSET_VALUE
 				@work_dir = "#{Dir.home}/.alfresco-spk/vagrant" if @work_dir == UNSET_VALUE
 				@packer_bin = 'packer' if @packer_bin == UNSET_VALUE
 				@packer_opts = '' if @packer_opts == UNSET_VALUE
