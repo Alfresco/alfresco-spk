@@ -1,0 +1,6 @@
+{
+  "type": "shell",
+  "inline": [
+    "yum -y erase cloud-init"
+  ]
+}
