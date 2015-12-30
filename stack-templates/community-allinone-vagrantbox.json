@@ -17,9 +17,14 @@
     },
     "images" : {
       "provisioners" : {
+<<<<<<< HEAD
         "selinux-permissive" : "file://$PWD/packer/selinux-permissive-provisioner.json",
         "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json",
         "vagrant-key" : "file://$PWD/packer/vagrant-key-provisioner.json",
+=======
+        "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json",
+        "bento-vagrant" : "file://$PWD/packer/bento-vagrant-provisioner.json"
+>>>>>>> d01101e650e3f8412364c8bc70aaeafffd777c70
       },
       "builders" : {
         "virtualbox-ovf" : "file://$PWD/packer/virtualbox-ovf-builder.json"
@@ -28,6 +33,7 @@
         "vagrantbox" : "file://$PWD/packer/vagrantbox-postprocessor.json"
       },
       "variables" : {
+<<<<<<< HEAD
         "data_bags_path" : ".",
         "chef_version" : "12.6.0",
         "chef_prevent_sudo" : "true",
@@ -35,11 +41,20 @@
         "vagrant_output_file" : "alfresco-community-5.1.c-ea-{{timestamp}}",
         "iso_url" : "http://centos.mirror.transip.nl/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso",
         "iso_checksum" : "f90e4d28fa377669b2db16cbcb451fcb9a89d2460e3645993e30e137ac37d284",
+=======
+        "vagrant_output_file" : "alfresco-community-5.1.c-ea-{{timestamp}}.box",
+        "iso_url" : "http://mirror.amsiohosting.net/centos.org/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
+        "iso_checksum" : "7cf1ac8da13f54d6be41e3ccf228dc5bb35792f515642755ff4780d5714d4278",
+>>>>>>> d01101e650e3f8412364c8bc70aaeafffd777c70
         "iso_checksum_type" : "sha256",
         "ssh_username" : "root",
         "ssh_password" : "vagrant",
         "ks_path" : "ks-centos.cfg",
+<<<<<<< HEAD
         "http_directory" : "../",
+=======
+        "http_directory" : "../../ks",
+>>>>>>> d01101e650e3f8412364c8bc70aaeafffd777c70
         "headless" : "false",
         "guest_os_type" : "RedHat_64",
         "output_directory": "vbox-output",
