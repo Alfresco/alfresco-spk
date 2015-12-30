@@ -75,7 +75,15 @@ module VagrantPlugins
           @engine.create_work_dir(@params.work_dir)
           nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
 
-          puts "[spk] #{ENV['PWD']}"
+          # puts "[spk] ENVS"
+          # ENV.each do |envName,envValue|
+          #   puts "#{envName}=#{envValue}"
+          # end
+
+          require 'berkshelf'
+          # TODO - make it parametric
+          Berkshelf::Cli.start(["package","berks-cookbooks.tar.gz"])
+
           if @params.pre_commands
             file_list = @params.pre_commands.split(',')
             pre_commands_final = []

@@ -7,6 +7,3 @@ end
 group :plugins do
   gem "spk", path: "."
 end
-
-gem "addressable"
-gem "berkshelf"
