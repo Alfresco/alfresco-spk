@@ -31,7 +31,8 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json",
+        "image-cleanup" : "file://$PWD/packer/image-cleanup-provisioner.json"
       },
       "builders" : {
         "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
@@ -100,7 +101,8 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json",
+        "image-cleanup" : "file://$PWD/packer/image-cleanup-provisioner.json"
       },
       "builders" : {
         "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"

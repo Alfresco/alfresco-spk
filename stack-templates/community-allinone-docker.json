@@ -17,7 +17,8 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-alfresco" : "file:///spk/packer/chef-provisioner.json"
+        "chef-alfresco" : "file:///spk/packer/chef-provisioner.json",
+        "image-cleanup" : "file://$PWD/packer/image-cleanup-provisioner.json"
       },
       "builders" : {
         "docker" : "file:///spk/packer/docker-builder.json"
