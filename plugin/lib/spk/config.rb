@@ -30,8 +30,8 @@ module VagrantPlugins
 				@cookbooks_url = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.15/chef-alfresco-0.6.15.tar.gz" if @cookbooks_url == UNSET_VALUE
 				@databags_url = '' if @databags_url == UNSET_VALUE
 				@stack_template = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/stack-templates/community-allinone.json" if @stack_template == UNSET_VALUE
-				@pre_commands = ["file://#{File.expand_path File.dirname(__FILE__)}/../../files/pre-commands.json"] if @pre_commands == UNSET_VALUE
-				@post_commands = ["file://#{File.expand_path File.dirname(__FILE__)}/../../files/post-commands.json"] if @post_commands == UNSET_VALUE
+				@pre_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/pre-commands.json" if @pre_commands == UNSET_VALUE
+				@post_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/post-commands.json" if @post_commands == UNSET_VALUE
 
 				@ks_template = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/ks/ks-centos.cfg" if @ks_template == UNSET_VALUE
 			end

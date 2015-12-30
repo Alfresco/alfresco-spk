@@ -54,11 +54,11 @@ module VagrantPlugins
               @params.stack_template = stack_template
             end
 
-            opts.on("-pre", "--pre-commands [PATH]", String, "Path of the pre commands JSON") do |pre_commands|
+            opts.on("-e", "--pre-commands [PATH]", String, "Path of the pre commands JSON") do |pre_commands|
               @params.pre_commands = pre_commands
             end
 
-            opts.on("-post", "--post-commands [PATH]", String, "Path of the post commands JSON") do |post_commands|
+            opts.on("-o", "--post-commands [PATH]", String, "Path of the post commands JSON") do |post_commands|
               @params.post_commands = post_commands
             end
 
@@ -75,11 +75,19 @@ module VagrantPlugins
           @engine.create_work_dir(@params.work_dir)
           nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
 
+          puts "[spk] #{ENV['PWD']}"
           if @params.pre_commands
             file_list = @params.pre_commands.split(',')
             pre_commands_final = []
             file_list.each do |file|
               pre_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
+            end
+            pre_commands_final.each do |pre_commands|
+              pre_commands.each do |pre_command|
+                puts "[spk-pre] #{pre_command[0]}"
+                puts "[spk-pre] DEBUG: #{pre_command[1]}"
+                `#{pre_command[1]}`
+              end
             end
           end
 
@@ -88,6 +96,13 @@ module VagrantPlugins
             post_commands_final = []
             file_list.each do |file|
               post_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
+            end
+            post_commands_final.each do |post_commands|
+              post_commands.each do |post_command|
+                puts "[spk-post] #{post_command[0]}"
+                puts "[spk-post] DEBUG: #{post_command[1]}"
+                `#{post_command[1]}`
+              end
             end
           end
 
