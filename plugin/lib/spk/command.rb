@@ -68,60 +68,42 @@ module VagrantPlugins
         # this code will be run only if the command wasn't asking for help
 
         @engine = VagrantPlugins::Spk::Commons::Engine.new
+        @engine.create_work_dir(@params.work_dir)
+
+        nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
+        chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.command, @params.cookbooks_url, @params.databags_url)
+
+        require 'berkshelf'
+        # TODO - make it parametric
+        Berkshelf::Cli.start(["package","berks-cookbooks.tar.gz"])
+
+        if @params.pre_commands
+          file_list = @params.pre_commands.split(',')
+          pre_commands_final = []
+          file_list.each do |file|
+            pre_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
+          end
+          pre_commands_final.each do |pre_commands|
+            pre_commands.each do |pre_command|
+              puts "[spk-pre] #{pre_command[0]}"
+              puts "[spk-pre] DEBUG: #{pre_command[1]}"
+              `#{pre_command[1]}`
+            end
+          end
+        end
 
         # this needs refactoring. every case needs it's own class
         case @params.mode
         when "build-images"
-          @engine.create_work_dir(@params.work_dir)
-          nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
-
           # puts "[spk] ENVS"
           # ENV.each do |envName,envValue|
           #   puts "#{envName}=#{envValue}"
           # end
 
-          require 'berkshelf'
-          # TODO - make it parametric
-          Berkshelf::Cli.start(["package","berks-cookbooks.tar.gz"])
-
-          if @params.pre_commands
-            file_list = @params.pre_commands.split(',')
-            pre_commands_final = []
-            file_list.each do |file|
-              pre_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
-            end
-            pre_commands_final.each do |pre_commands|
-              pre_commands.each do |pre_command|
-                puts "[spk-pre] #{pre_command[0]}"
-                puts "[spk-pre] DEBUG: #{pre_command[1]}"
-                `#{pre_command[1]}`
-              end
-            end
-          end
-
-          if @params.post_commands
-            file_list = @params.post_commands.split(',')
-            post_commands_final = []
-            file_list.each do |file|
-              post_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
-            end
-            post_commands_final.each do |post_commands|
-              post_commands.each do |post_command|
-                puts "[spk-post] #{post_command[0]}"
-                puts "[spk-post] DEBUG: #{post_command[1]}"
-                `#{post_command[1]}`
-              end
-            end
-          end
-
-          chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.command, @params.cookbooks_url, @params.databags_url)
           packer_defs = @engine.get_packer_defs("curl --no-sessionid --silent", @params.work_dir, chef_items)
           @engine.run_packer_defs(packer_defs, @params.work_dir, @params.packer_bin, @params.packer_opts , "packer.log")
           abort("Vagrant up build-images completed!")
         when "run"
-          @engine.create_work_dir(@params.work_dir)
-          nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
-          chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.command, @params.cookbooks_url, @params.databags_url)
           @template = File.read("#{File.expand_path File.dirname(__FILE__)}/../../files/vagrant-templates/Vagrantfile.erb")
           # To be templated and run
           File.open("#{@params.work_dir}/Vagrantfile", "w") { |file| file.write(ERB.new(@template).result(binding)) }
@@ -132,6 +114,21 @@ module VagrantPlugins
           abort("You need to specify if you want to build or run")
         end
         # code that runs spk build
+
+        if @params.post_commands
+          file_list = @params.post_commands.split(',')
+          post_commands_final = []
+          file_list.each do |file|
+            post_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
+          end
+          post_commands_final.each do |post_commands|
+            post_commands.each do |post_command|
+              puts "[spk-post] #{post_command[0]}"
+              puts "[spk-post] DEBUG: #{post_command[1]}"
+              `#{post_command[1]}`
+            end
+          end
+        end
 
  			end
   	end
