@@ -1,8 +1,8 @@
 {
   "type": "shell",
   "inline": [
-    "yum -y clean all",
-    "find /var/log -type f -delete",
-    "find /tmp -type f -delete"
+    "sudo yum -y clean all",
+    "sudo find /var/log -type f -delete",
+    "sudo find /tmp -type f -delete"
   ]
 }
