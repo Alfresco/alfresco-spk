@@ -1,0 +1,4 @@
+[
+  ["Setting git remote","git remote set-url origin $GIT_PREFIX:$GIT_ACCOUNT_NAME/$GIT_PROJECT_NAME.git"],
+  ["Create local Git tag","if git tag -d v$CURRENT_VERSION ; then echo \"Removed existing tag v$CURRENT_VERSION\" ; fi ; git tag -a \"v$CURRENT_VERSION\" -m releasing \"v$CURRENT_VERSION\""]
+]
