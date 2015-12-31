@@ -71,11 +71,12 @@ module VagrantPlugins
         @engine.create_work_dir(@params.work_dir)
 
         nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
-        chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.command, @params.cookbooks_url, @params.databags_url)
 
         require 'berkshelf'
         # TODO - make it parametric
-        Berkshelf::Cli.start(["package","berks-cookbooks.tar.gz"])
+        Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
+
+        chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.command, @params.cookbooks_url, @params.databags_url)
 
         if @params.pre_commands
           file_list = @params.pre_commands.split(',')
