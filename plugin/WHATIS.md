@@ -14,8 +14,23 @@ Both actions use a common set of features:
 - `instance-templates` - Configure Chef instance provisioning logic using [Chef JSON attribute]() file syntax; check [Alfresco instance templates](https://github.com/Alfresco/alfresco-spk/tree/master/instance-templates)
 - pre and post commands - Comma-separated list of JSON files defining Shell Script items to be executed before and after the spk execution; check [Alfresco commands](https://github.com/Alfresco/alfresco-spk/tree/master/packer/commands) (mostly used for CI integration)
 
-## Run
+## Install
+- Install [Vagrant](https://www.vagrantup.com/downloads.html)
+- Install [Packer (0.8.6+)](https://www.packer.io/downloads.html)
+- Download Vagrant SPK plugin
+```
+curl -L --nosession-id https://github.com/Alfresco/alfresco-spk/raw/vagrant-plugin/plugin/pkg/spk-0.1.0.gem > pkg/spk-0.1.0.gem
+```
+- (Or) Build Vagrant SPK plugin
+```
+rm Gemfile.lock ; bundle ; rake build
+```
+- Install Vagrant SPK plugin
+```
+vagrant plugin install pkg/spk-0.1.0.gem
+```
 
+## Run
 The plugin comes with a comprehensive help menu:
 ```
 ╰─[:)] % vagrant spk -h
