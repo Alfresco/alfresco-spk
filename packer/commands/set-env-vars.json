@@ -1,6 +1,0 @@
-[
-  ["Set Environment Variables","set -e ; export LC_ALL=en_US.UTF-8 ; export LANG=en_US.UTF-8 ; export GIT_PREFIX=git@github.com ; export GIT_ACCOUNT_NAME=`echo ${GIT_REPO%????} | cut -d \"/\" -f 4` ; export CURRENT_VERSION=`cat metadata.rb| grep version|awk '{print $2}' | tr -d \\\"` ; export INCREMENTED_VERSION=`echo $CURRENT_VERSION | awk -F'[.]' '{print $1 \".\" $2 \".\" $3+1}'` ; export MVN_INTERNAL_REPO_URL=$MVN_REPO_URL/content/repositories/$MVN_REPO_ID"],
-  ["Extract Cookbook ArtifactId","if [ -z \"$ARTIFACT_ID\" ] ; then export ARTIFACT_ID=`echo ${GIT_REPO%????} | cut -d \"/\" -f 5` ; fi"],
-  ["Extract Cookbook Version","if [[ \"$RELEASE\" -ne \"true\" ]] ; then export CURRENT_VERSION=${CURRENT_VERSION}-SNAPSHOT ; fi"],
-  ["Extract Cookbook (Git) project name","if [ -z \"$GIT_PROJECT_NAME\" ] ; then export GIT_PROJECT_NAME=$ARTIFACT_ID ; fi"]
-]

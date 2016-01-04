@@ -1,4 +1,4 @@
 [
   ["Set Pre Run Environment Variables","export DATABAGS_FOLDER_PATH=~/.alfresco-spk/data_bags"],
-  ["Fetching Chef Databags artifact","mvn dependency:get -DremoteRepositories=$MVN_REPO_CREDS_ID::::$MVN_INTERNAL_REPO_URL -DartifactId=$DATABAGS_ARTIFACTID -DgroupId=$DATABAGS_GROUPID -Dversion=$DATABAGS_VERSION -Dpackaging=tar.gz -Ddest=$DATABAGS_PATH ; tar xzf $DATABAGS_PATH -C ~/.alfresco-spk"]
+  ["Fetching Chef Databags artifact","mvn dependency:get -DremoteRepositories=$MVN_REPO_CREDS_ID::::$MVN_REPO_URL -DartifactId=$DATABAGS_ARTIFACTID -DgroupId=$DATABAGS_GROUPID -Dversion=$DATABAGS_VERSION -Dpackaging=tar.gz -Ddest=$DATABAGS_PATH ; tar xzf $DATABAGS_PATH -C ~/.alfresco-spk"]
 ]
