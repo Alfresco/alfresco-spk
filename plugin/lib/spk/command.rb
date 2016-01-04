@@ -17,11 +17,10 @@ module VagrantPlugins
       end
 
       def self.synopsis
-        'run or build an Alfresco SPK stack'
+        'Run a stack locally or build its immutable images'
       end
 
  			def execute
-
         OptionParser.new do |opts|
             opts.banner = "Usage: vagrant spk [build-images|run] "\
                           "[-b|--box-url] "\
@@ -32,7 +31,7 @@ module VagrantPlugins
                           "[-s|--stack-template] "\
                           "[-e|--pre-commands] "\
                           "[-o|--post-commands] "\
-                          "[-v|--env-vars] "
+                          "[--env-vars] "
 
             opts.separator ""
 
@@ -44,31 +43,31 @@ module VagrantPlugins
               @params.box_name = box_name
             end
 
-            opts.on("-c", "--cookbooks-url [URL]", String, "Url of the chef recipes to be run on the machine") do |cookbooks_url|
+            opts.on("-c", "--cookbooks-url [URL]", String, "URL resolving Berkshelf (Cookbook repo) tar.gz archive") do |cookbooks_url|
               @params.cookbooks_url = cookbooks_url
             end
 
-            opts.on("-d", "--databags-url [URL]", String, "Url of the databags to be applied to the chef run of the machine") do |databags_url|
+            opts.on("-d", "--databags-url [URL]", String, "URL resolving Chef databags tar.gz archive") do |databags_url|
               @params.databags_url = databags_url
             end
 
-            opts.on("-k", "--ks-template [PATH]", String, "Path of the ks template for the machine") do |ks_template|
+            opts.on("-k", "--ks-template [PATH]", String, "URL resolving the ks template for the machine (only used by Vagrant Box Image building)") do |ks_template|
               @params.ks_template = ks_template
             end
 
-            opts.on("-s", "--stack-template [PATH]", String, "Path of the SPK stack template") do |stack_template|
+            opts.on("-s", "--stack-template [PATH]", String, "URL resolving the SPK stack template") do |stack_template|
               @params.stack_template = stack_template
             end
 
-            opts.on("-e", "--pre-commands [PATHS]", String, "Comma-separated list of PATHs to pre commands JSON") do |pre_commands|
+            opts.on("-e", "--pre-commands [PATHS]", String, "Comma-separated list of URLs resolving pre-commands JSON files") do |pre_commands|
               @params.pre_commands = pre_commands
             end
 
-            opts.on("-o", "--post-commands [PATHS]", String, "Comma-separated list of PATHs to post commands JSON") do |post_commands|
+            opts.on("-o", "--post-commands [PATHS]", String, "Comma-separated list of URLs resolving post-commands JSON files") do |post_commands|
               @params.post_commands = post_commands
             end
 
-            opts.on("-v", "--env-vars [PATH]", String, "Path of env vars JSON") do |env_vars|
+            opts.on("-v", "--env-vars [PATH]", String, "Comma-separated list of URLs resolving environment variables JSON files") do |env_vars|
               @params.env_vars = env_vars
             end
         end.parse!
@@ -88,10 +87,16 @@ module VagrantPlugins
 
         env_vars_string = ""
         if @params.env_vars
-          env_vars_final = @engine.get_json(@params.command,@params.work_dir, @params.env_vars.split('/')[-1], @params.env_vars)
-          env_vars_final.each do |var|
-            puts "VAR: #{var}"
-            env_vars_string += var[0] + "=" + var[1] + "\n"
+          file_list = @params.env_vars.split(',')
+          env_vars_final = []
+          file_list.each do |file|
+            env_vars_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
+          end
+          env_vars_final.each do |vars|
+            vars.each do |var|
+              puts "VAR: #{var}"
+              env_vars_string += var[0] + "=" + var[1] + "\n"
+            end
           end
         end
         if @params.pre_commands
