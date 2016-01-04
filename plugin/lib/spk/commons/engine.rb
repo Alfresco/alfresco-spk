@@ -10,9 +10,10 @@ module VagrantPlugins
 				# Populate alfresco home folder.
 				def create_work_dir(work_dir)
 				  `mkdir -p #{work_dir}/packer`
-				  `mkdir -p #{work_dir}/alf_data`
-				  `chmod 777 #{work_dir}/alf_data`
-				  print "Created #{work_dir}/packer #{work_dir}/alf_data folders\n"
+					print "Created #{work_dir}/packer folder\n"
+				  # `mkdir -p #{work_dir}/alf_data`
+				  # `chmod 777 #{work_dir}/alf_data`
+					# print "Created #{work_dir}/packer #{work_dir}/alf_data folders\n"
 				end
 
 
@@ -111,7 +112,7 @@ module VagrantPlugins
 					    merged_attrs = JSON.parse(JSON.merge(File.read("#{work_dir}/attributes-#{node_name}.json.original"), local_json_vars))
 					  end
 
-					  merged_attrs = get_nexus_creds(merged_attrs)
+					  # merged_attrs = get_nexus_creds(merged_attrs)
 
 					  attr_file = File.open("#{work_dir}/attributes-#{node_name}.json", 'w')
 					  attr_file.write(merged_attrs.to_json)
@@ -126,7 +127,7 @@ module VagrantPlugins
 				  node_url = "#{work_dir}/attributes-#{chef_node_name}.json"
 				  node_url_content = File.read("#{work_dir}/attributes-#{chef_node_name}.json.original")
 				  json_provisioner['json'] = JSON.parse(node_url_content)
-				  json_provisioner['json'] = get_nexus_creds(json_provisioner['json'])
+				  # json_provisioner['json'] = get_nexus_creds(json_provisioner['json'])
 				  return json_provisioner.to_json
 				end
 
@@ -153,20 +154,20 @@ module VagrantPlugins
 				  return ret
 				end
 
-
-				def get_nexus_creds(json_attrs)
-				  ret = json_attrs
-				  if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
-				    ret['artifact-deployer'] = {}
-				    ret['artifact-deployer']['maven'] = {}
-				    ret['artifact-deployer']['maven']['repositories'] = {}
-				    ret['artifact-deployer']['maven']['repositories']['private'] = {}
-				    ret['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
-				    ret['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
-				    ret['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
-				  end
-				  return ret
-				end
+				#TODO - this should go into instance templates
+				# def get_nexus_creds(json_attrs)
+				#   ret = json_attrs
+				#   if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
+				#     ret['artifact-deployer'] = {}
+				#     ret['artifact-deployer']['maven'] = {}
+				#     ret['artifact-deployer']['maven']['repositories'] = {}
+				#     ret['artifact-deployer']['maven']['repositories']['private'] = {}
+				#     ret['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
+				#     ret['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
+				#     ret['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
+				#   end
+				#   return ret
+				# end
 
 				def get_artifact(work_dir, command, url, artifact_name)
 				  # Download and uncompress Chef artifacts (in a Berkshelf package format)
