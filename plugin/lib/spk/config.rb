@@ -1,7 +1,7 @@
 module VagrantPlugins
 	module Spk
 		class Config < Vagrant.plugin(2, :config)
-			attr_accessor :command, :work_dir, :packer_bin, :packer_opts, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :pre_commands, :post_commands, :ks_template, :mode
+			attr_accessor :command, :work_dir, :packer_bin, :packer_opts, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :pre_commands, :post_commands, :env_vars, :ks_template, :mode
 
 			def initialize
 				@command = UNSET_VALUE
@@ -17,6 +17,7 @@ module VagrantPlugins
 				@pre_commands = UNSET_VALUE
 				@post_commands = UNSET_VALUE
 				@ks_template = UNSET_VALUE
+				@env_vars = UNSET_VALUE
 			end
 
 			def finalize!
