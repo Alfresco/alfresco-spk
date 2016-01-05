@@ -1,3 +1,3 @@
 [
- ["Deploy Berkshelf artifact to Nexus","mvn deploy:deploy-file -Dfile=$(echo *.tar.gz) -DrepositoryId=$MVN_REPO_CREDS_ID -Durl=$MVN_INTERNAL_REPO_URL -DgroupId=$GROUP_ID  -DartifactId=$ARTIFACT_ID -Dversion=$CURRENT_VERSION$CURRENT_VERSION_SUFFIX -Dpackaging=tar.gz"]
+ ["Deploy Berkshelf artifact to Nexus","mvn deploy:deploy-file -Dfile=$(echo *.tar.gz) -DrepositoryId=$MVN_REPO_CREDS_ID -Durl=$MVN_INTERNAL_REPO_URL -DgroupId=$GROUP_ID  -DartifactId=$ARTIFACT_ID -Dversion=$CURRENT_VERSION -Dpackaging=tar.gz"]
 ]
