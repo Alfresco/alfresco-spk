@@ -10,26 +10,29 @@ module VagrantPlugins
 				# Populate alfresco home folder.
 				def create_work_dir(work_dir)
 				  `mkdir -p #{work_dir}/packer`
-				  `mkdir -p #{work_dir}/alf_data`
-				  `chmod 777 #{work_dir}/alf_data`
-				  print "Created #{work_dir}/packer #{work_dir}/alf_data folders\n"
+					print "Created #{work_dir}/packer folder\n"
+				  # `mkdir -p #{work_dir}/alf_data`
+				  # `chmod 777 #{work_dir}/alf_data`
+					# print "Created #{work_dir}/packer #{work_dir}/alf_data folders\n"
 				end
 
 
 				def get_stack_template_nodes(command, work_dir, stack_template, ks_template)
-				  # Download nodes URL
-				  download_file(command, stack_template, "#{work_dir}/nodes.json")
 				  download_file(command, ks_template ,"#{work_dir}/ks-centos.cfg")
-				  return JSON.parse(File.read("#{work_dir}/nodes.json"))
+				  return get_json(command,work_dir, "nodes.json", stack_template)
+				end
+
+				def get_json(command, work_dir, file_name, url)
+				  download_file(command, url, "#{work_dir}/#{file_name}")
+				  return JSON.parse(File.read("#{work_dir}/#{file_name}"))
 				end
 
 				def get_chef_items(nodes, work_dir, command, cookbooks_url, databags_url)
 				  get_artifact(work_dir, command, cookbooks_url, "cookbooks")
 				  get_artifact(work_dir, command, databags_url, "databags")
-				  prefix = "file://#{File.expand_path File.dirname(__FILE__)}/../../../files"
 				  # Download node URL
 				  nodes.each do |name,node|
-				    get_node_definition(work_dir, command, name, "#{prefix}/#{node['instance-template']['url']}", node['instance-template']['overlayYamlUrl'], node['instance-template']['overlay'] )
+						get_node_definition(work_dir, command, name, "#{node['instance-template']['url']}", node['instance-template']['overlayYamlUrl'], node['instance-template']['overlay'] )
 				  end
 				end
 
@@ -79,6 +82,7 @@ module VagrantPlugins
 				private
 
 				def download_file(command, url, destination)
+					print "Running: #{command} #{url} > #{destination}"
 				  `#{command} #{url} > #{destination}`
 				  if File.zero?(destination)
 				    abort("Error downloading #{url} into #{destination}! File has 0 bytes; aborting")
@@ -87,7 +91,7 @@ module VagrantPlugins
 				  end
 				end
 
-	
+
 	      def get_node_definition(work_dir, command, node_name, instance_template, local_yaml_url, local_json_vars)
 					  print "Processing node '#{node_name}'\n"
 					  download_file(command, instance_template, "#{work_dir}/attributes-#{node_name}.json.original")
@@ -133,34 +137,41 @@ module VagrantPlugins
 				def parse_packer_elements(command, work_dir, chef_node, chef_node_name, packer_element_type, packer_element)
 				  urls = chef_node['images'][packer_element]
 				  ret = "["
-				  prefix = "#{File.expand_path File.dirname(__FILE__)}/../../../files"
-				  urls.each do |element_name,url|
-				    packer_filename = "#{work_dir}/packer/#{element_name}-#{packer_element_type}.json"
-				    download_file(command, "#{prefix}/#{url}", packer_filename)
-				    element = File.read(packer_filename)
+					if urls
+					  urls.each do |element_name,url|
+					    packer_filename = "#{work_dir}/packer/#{element_name}-#{packer_element_type}.json"
+					    download_file(command, "#{url}", packer_filename)
+					    element = File.read(packer_filename)
 
-				    # Inject Chef attributes JSON into the chef-solo provisioner
-				    if element_name == 'chef-alfresco'
-				      element = merge_elements(work_dir, chef_node_name, element_name, element)
-				    end
-				    ret += element + ","
-				  end
-				  ret = ret[0..-2]
+					    # Inject Chef attributes JSON into the chef-solo provisioner
+					    if element_name == 'chef-alfresco'
+					      element = merge_elements(work_dir, chef_node_name, element_name, element)
+					    end
+					    ret += element + ","
+					  end
+					  ret = ret[0..-2]
+					end
 				  ret += "]"
 				  return ret
 				end
 
-
+				#TODO - this should not be here, but cannot handled within
+				# SPK provisioner, since no Packer variables are supported
+				# there
 				def get_nexus_creds(json_attrs)
-				  ret = json_attrs
-				  if ENV['NEXUS_USERNAME'] and ENV['NEXUS_PASSWORD']
+					name = ENV['MVN_CHEF_REPO_NAME']
+					url = ENV['MVN_CHEF_REPO_URL']
+					username = ENV['MVN_CHEF_REPO_USERNAME']
+					password = ENV['MVN_CHEF_REPO_PASSWORD']
+					ret = json_attrs
+				  if name and url and username and password
 				    ret['artifact-deployer'] = {}
 				    ret['artifact-deployer']['maven'] = {}
 				    ret['artifact-deployer']['maven']['repositories'] = {}
-				    ret['artifact-deployer']['maven']['repositories']['private'] = {}
-				    ret['artifact-deployer']['maven']['repositories']['private']['url'] = "https://artifacts.alfresco.com/nexus/content/groups/private"
-				    ret['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
-				    ret['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
+				    ret['artifact-deployer']['maven']['repositories'][name] = {}
+				    ret['artifact-deployer']['maven']['repositories'][name]['url'] = url
+				    ret['artifact-deployer']['maven']['repositories'][name]['username'] = username
+				    ret['artifact-deployer']['maven']['repositories'][name]['password'] = password
 				  end
 				  return ret
 				end

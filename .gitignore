@@ -15,3 +15,6 @@ license
 
 # Ignore Packer builders
 *-builder.json
+
+# Ignore gem builds
+# pkg
