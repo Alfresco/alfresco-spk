@@ -1,5 +1,6 @@
 {
   "type" : "amazon-ebs",
+  "ssh_pty" : "true",
   "access_key" : "{{user `access_key`}}",
   "secret_key" : "{{user `secret_key`}}",
   "region" : "{{user `region`}}",
