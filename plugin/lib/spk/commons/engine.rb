@@ -82,6 +82,7 @@ module VagrantPlugins
 				private
 
 				def download_file(command, url, destination)
+					print "Running: #{command} #{url} > #{destination}"
 				  `#{command} #{url} > #{destination}`
 				  if File.zero?(destination)
 				    abort("Error downloading #{url} into #{destination}! File has 0 bytes; aborting")
