@@ -131,7 +131,7 @@ module VagrantPlugins
           # To be templated and run
           File.open("#{@params.work_dir}/Vagrantfile", "w") { |file| file.write(ERB.new(@template).result(binding)) }
 
-          `cd #{@params.work_dir} && vagrant up >> vagrant.log`
+          `cd #{@params.work_dir} && vagrant up 2>&1`
           abort("Machine is up and running")
         else
           abort("You need to specify if you want to build or run")

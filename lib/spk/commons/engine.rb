@@ -1,6 +1,7 @@
 require 'json/merge_patch'
 require 'json'
 require 'yaml'
+require 'open3'
 
 module VagrantPlugins
 	module Spk
@@ -70,7 +71,11 @@ module VagrantPlugins
 				    packerFile.close()
 
 				    print "Executing Packer template '#{packer_definition}-packer.json' (~ 60 minutes run)\n"
-				    `cd #{work_dir}/packer; #{packer_bin} build #{packer_definition}-packer.json #{packer_opts} >> #{packer_log}`
+				    Open3.popen3("cd #{work_dir}/packer; #{packer_bin} build #{packer_definition}-packer.json #{packer_opts}") do |stdout,stderr, status, thread|
+				    	while line=thread.gets do 
+				    		puts line
+				    	end
+				   	end
 				  end
 				end
 
