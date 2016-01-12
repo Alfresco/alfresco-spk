@@ -12,7 +12,7 @@ class SpkCommands
 
 
 	def execute!
-			binding.pry
+		  validate
       commands_final = []
       @file_list.each { |file| post_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file) }
 
@@ -35,7 +35,10 @@ class SpkCommands
 	private
 
 	def validate
-		errors = []
+		raise ArgumentError.new("Params should be an instance of VagrantPlugins::Spk::Config") if !@params.is_a?(VagrantPlugins::Spk::Config)
+		raise ArgumentError.new("Engine should be an instance of VagrantPlugins::Spk::Commons::Engine") if !@engine.is_a?(VagrantPlugins::Spk::Commons::Engine)
+		raise ArgumentError.new("File list needs to be an Array, and cannot be empty") if !@file_list.is_a?(Array) or @file_list.empty?
+		raise ArgumentError.new("Mode should be either pre or post") if !["pre","post"].include?(@mode)
 	end
 
 
