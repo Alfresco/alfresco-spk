@@ -1,3 +1,4 @@
+
 module VagrantPlugins
 	module Spk
 		class Config < Vagrant.plugin(2, :config)
@@ -13,11 +14,24 @@ module VagrantPlugins
 				@mode = UNSET_VALUE
 				@cookbooks_url = UNSET_VALUE
 				@databags_url = UNSET_VALUE
-				@stack_template = UNSET_VALUE
 				@pre_commands = UNSET_VALUE
 				@post_commands = UNSET_VALUE
 				@ks_template = UNSET_VALUE
 				@env_vars = UNSET_VALUE
+			end
+
+			def validate
+				errors = _detected_errors
+
+				if @mode.nil? or @mode.empty? or !["run","build-images"].include?(@mode)
+					errors << "You need to specify if you want to build-images or run"
+				end
+
+				if @stack_template.nil? or @stack_template.empty? 
+					errors << "You must provide a stack template"
+				end
+
+				errors
 			end
 
 			def finalize!
@@ -30,7 +44,7 @@ module VagrantPlugins
 				@box_name = "opscode_centos-7.2" if @box_name == UNSET_VALUE
 				@cookbooks_url = "file://$PWD/berks-cookbooks.tar.gz" if @cookbooks_url == UNSET_VALUE
 				@databags_url = '' if @databags_url == UNSET_VALUE
-				@stack_template = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/stack-templates/community-allinone.json" if @stack_template == UNSET_VALUE
+				#@stack_template = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/stack-templates/community-allinone.json" if @stack_template == UNSET_VALUE
 				@pre_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/pre-commands.json" if @pre_commands == UNSET_VALUE
 				@post_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/post-commands.json" if @post_commands == UNSET_VALUE
 
