@@ -1,11 +1,14 @@
 require 'spk/commons/engine'
-require 'erb'
+require 'spk/support/spk_build_images'
+require 'spk/support/spk_run'
+require 'spk/support/spk_commands'
 require 'optparse'
 require_relative 'config'
-require 'pry'
 require 'open3'
 require 'berkshelf'
 require 'fileutils'
+require 'pry'
+
 
 module VagrantPlugins
   module Spk
@@ -71,6 +74,10 @@ module VagrantPlugins
               @params.env_vars = env_vars
             end
         end.parse!
+
+        errors = @params.validate
+        abort(errors.join("\n")) if errors.size > 0
+
         @params.finalize!
 
         # this code will be run only if the command wasn't asking for help
@@ -99,64 +106,30 @@ module VagrantPlugins
             end
           end
         end
+
+        #Pre commands
         if @params.pre_commands
           file_list = @params.pre_commands.split(',')
-          pre_commands_final = []
-          file_list.each do |file|
-            pre_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
-          end
-          command_sh = env_vars_string
-          pre_commands_final.each do |pre_commands|
-            pre_commands.each do |pre_command|
-              puts "[spk-pre] #{pre_command[0]}"
-              puts "[spk-pre] DEBUG: #{pre_command[1]}"
-              command_sh += pre_command[1] + "\n"
-            end
-          end
-          command_file = '/tmp/pre-commands.sh'
-          File.open(command_file, 'w') { |file| file.write(command_sh) }
-          FileUtils.chmod(0755, command_file);
-          stdout, stderr, status = Open3.capture3(command_file)
-          puts "[spk-pre] RET: #{status}, ERR: #{stderr}, OUT: #{stdout}"
+          action = SpkCommands.new(@params, @engine, file_list, "pre")
+          action.execute!
         end
 
         # this needs refactoring. every case needs it's own class
         case @params.mode
         when "build-images"
-          packer_defs = @engine.get_packer_defs("curl --no-sessionid --silent", @params.work_dir, chef_items)
-          @engine.run_packer_defs(packer_defs, @params.work_dir, @params.packer_bin, @params.packer_opts , "packer.log")
-          abort("Vagrant up build-images completed!")
+          action = SpkBuildImages.new(@params,@engine)
+          action.execute!
         when "run"
-          @template = File.read("#{File.expand_path File.dirname(__FILE__)}/../../files/vagrant-templates/Vagrantfile.erb")
-          # To be templated and run
-          File.open("#{@params.work_dir}/Vagrantfile", "w") { |file| file.write(ERB.new(@template).result(binding)) }
-
-          `cd #{@params.work_dir} && vagrant up 2>&1`
-          abort("Machine is up and running")
-        else
-          abort("You need to specify if you want to build or run")
+          action = SpkRun.new(@params)
+          action.execute!
         end
-        # code that runs spk build
 
+        
+        # Post Commands
         if @params.post_commands
           file_list = @params.post_commands.split(',')
-          post_commands_final = []
-          file_list.each do |file|
-            post_commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
-          end
-          command_sh = env_vars_string
-          post_commands_final.each do |post_commands|
-            post_commands.each do |post_command|
-              puts "[spk-post] #{post_command[0]}"
-              puts "[spk-post] DEBUG: #{post_command[1]}"
-              command_sh += post_command[1] + "\n"
-            end
-          end
-          command_file = '/tmp/post-commands.sh'
-          File.open(command_file, 'w') { |file| file.write(command_sh) }
-          FileUtils.chmod(0755, command_file);
-          stdout, stderr, status = Open3.capture3(command_file)
-          puts "[spk-post] RET: #{status}, ERR: #{stderr}, OUT: #{stdout}"
+          action = SpkCommands.new(@params, @engine, file_list, "post")
+          action.execute!
         end
 
  			end
