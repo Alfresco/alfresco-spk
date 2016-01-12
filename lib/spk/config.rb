@@ -2,7 +2,7 @@
 module VagrantPlugins
 	module Spk
 		class Config < Vagrant.plugin(2, :config)
-			attr_accessor :command, :work_dir, :packer_bin, :packer_opts, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :pre_commands, :post_commands, :env_vars, :ks_template, :mode
+			attr_accessor :command, :work_dir, :packer_bin, :packer_opts, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :pre_commands, :post_commands, :env_vars, :ks_template, :mode, :why_run
 
 			def initialize
 				@command = UNSET_VALUE
@@ -18,6 +18,7 @@ module VagrantPlugins
 				@post_commands = UNSET_VALUE
 				@ks_template = UNSET_VALUE
 				@env_vars = UNSET_VALUE
+				@why_run = UNSET_VALUE
 			end
 
 			def validate
@@ -47,7 +48,7 @@ module VagrantPlugins
 				#@stack_template = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/stack-templates/community-allinone.json" if @stack_template == UNSET_VALUE
 				@pre_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/pre-commands.json" if @pre_commands == UNSET_VALUE
 				@post_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/post-commands.json" if @post_commands == UNSET_VALUE
-
+				@why_run = false if @why_run == UNSET_VALUE
 				@ks_template = "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/ks/ks-centos.cfg" if @ks_template == UNSET_VALUE
 			end
 		end

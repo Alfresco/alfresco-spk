@@ -73,6 +73,11 @@ module VagrantPlugins
             opts.on("-v", "--env-vars [PATH]", String, "Comma-separated list of URLs resolving environment variables JSON files") do |env_vars|
               @params.env_vars = env_vars
             end
+
+            opts.on("-w", "--why-run [true|false]", String, "Why run mode will just test configuration but will not run or build anything") do |why_run|
+              @params.why_run = why_run
+            end
+
         end.parse!
 
         errors = @params.validate
@@ -80,8 +85,7 @@ module VagrantPlugins
 
         @params.finalize!
 
-        # this code will be run only if the command wasn't asking for help
-
+        # this code will be run only if the command wasn't asking for helpls
         @engine = VagrantPlugins::Spk::Commons::Engine.new
         @engine.create_work_dir(@params.work_dir)
 
@@ -107,31 +111,34 @@ module VagrantPlugins
           end
         end
 
-        #Pre commands
-        if @params.pre_commands
-          file_list = @params.pre_commands.split(',')
-          action = SpkCommands.new(@params, @engine, file_list, "pre")
-          action.execute!
-        end
 
-        # this needs refactoring. every case needs it's own class
-        case @params.mode
-        when "build-images"
-          action = SpkBuildImages.new(@params,@engine)
-          action.execute!
-        when "run"
-          action = SpkRun.new(@params)
-          action.execute!
-        end
+        if !@params.why_run
+          #Pre commands
+          if @params.pre_commands
+            file_list = @params.pre_commands.split(',')
+            action = SpkCommands.new(@params, @engine, file_list, env_vars_string,  "pre")
+            action.execute!
+          end
 
-        
-        # Post Commands
-        if @params.post_commands
-          file_list = @params.post_commands.split(',')
-          action = SpkCommands.new(@params, @engine, file_list, "post")
-          action.execute!
-        end
+          # this needs refactoring. every case needs it's own class
+          case @params.mode
+          when "build-images"
+            action = SpkBuildImages.new(@params,@engine, chef_items)
+            action.execute!
+          when "run"
+            action = SpkRun.new(@params)
+            action.execute!
+          end
 
+          # Post Commands
+          if @params.post_commands
+            file_list = @params.post_commands.split(',')
+            action = SpkCommands.new(@params, @engine, file_list, env_vars_string, "post")
+            action.execute!
+          end
+        else
+          abort("Why run mode selected - not continuing")
+        end
  			end
   	end
 
