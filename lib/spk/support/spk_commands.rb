@@ -1,5 +1,3 @@
-require 'pry'
-
 class SpkCommands
 	
 	def initialize(params, engine, file_list, env_vars, mode)

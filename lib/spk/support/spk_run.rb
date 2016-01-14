@@ -1,4 +1,3 @@
-require 'spk/commons/engine'
 require 'erb'
 class SpkRun
 	def initialize(params, engine, nodes)
