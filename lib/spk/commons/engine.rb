@@ -3,7 +3,6 @@ require 'json/merge_patch'
 require 'json'
 require 'yaml'
 require 'open3'
-require 'curb'
 
 module VagrantPlugins
 	module Spk
@@ -20,33 +19,33 @@ module VagrantPlugins
 				end
 
 
-				def get_stack_template_nodes(command, work_dir, stack_template, ks_template)
+				def get_stack_template_nodes(work_dir, stack_template, ks_template)
 					Downloader.get(ks_template, "#{work_dir}/ks-centos.cfg" )
-				  return get_json(command,work_dir, "nodes.json", stack_template)
+				  return get_json(work_dir, "nodes.json", stack_template)
 				end
 
-				def get_json(command, work_dir, file_name, url)
+				def get_json(work_dir, file_name, url)
 					Downloader.get(url, "#{work_dir}/#{file_name}")
 				  return JSON.parse(File.read("#{work_dir}/#{file_name}"))
 				end
 
-				def get_chef_items(nodes, work_dir, command, cookbooks_url, databags_url)
-				  get_artifact(work_dir, command, cookbooks_url, "cookbooks")
-				  get_artifact(work_dir, command, databags_url, "databags")
+				def get_chef_items(nodes, work_dir, cookbooks_url, databags_url)
+				  get_artifact(work_dir, cookbooks_url, "cookbooks")
+				  get_artifact(work_dir, databags_url, "databags")
 				  # Download node URL
 				  nodes.each do |name,node|
-						get_node_definition(work_dir, command, name, "#{node['instance-template']['url']}", node['instance-template']['overlayYamlUrl'], node['instance-template']['overlay'] )
+						get_node_definition(work_dir, name, "#{node['instance-template']['url']}", node['instance-template']['overlayYamlUrl'], node['instance-template']['overlay'] )
 				  end
 				end
 
 
-				def get_packer_defs(command, work_dir, nodes)
+				def get_packer_defs(work_dir, nodes)
 				  packer_defs = {}
 				  nodes.each do |chef_node_name,chef_node|
 				    # Compose Packer JSON
-				    provisioners = parse_packer_elements(command, work_dir, chef_node, chef_node_name, 'provisioner', 'provisioners')
-				    builders = parse_packer_elements(command, work_dir, chef_node, chef_node_name, 'builder', 'builders')
-				    postprocessors = parse_packer_elements(command, work_dir, chef_node, chef_node_name, 'postprocessor', 'postprocessors')
+				    provisioners = parse_packer_elements(work_dir, chef_node, chef_node_name, 'provisioner', 'provisioners')
+				    builders = parse_packer_elements(work_dir, chef_node, chef_node_name, 'builder', 'builders')
+				    postprocessors = parse_packer_elements(work_dir, chef_node, chef_node_name, 'postprocessor', 'postprocessors')
 
 				    # For debugging purposes
 				    # print "Packer Builders: #{builders}\n"
@@ -89,7 +88,7 @@ module VagrantPlugins
 				private
 
 
-	      def get_node_definition(work_dir, command, node_name, instance_template, local_yaml_url, local_json_vars)
+	      def get_node_definition(work_dir, node_name, instance_template, local_yaml_url, local_json_vars)
 					  print "Processing node '#{node_name}'\n"
 					  Downloader.get(instance_template, "#{work_dir}/attributes-#{node_name}.json.original" )
 
@@ -131,7 +130,7 @@ module VagrantPlugins
 
 				# packer_element can be 'provisioners' or 'builders'; it's used to parse JSON input structure
 				# packer_element_type can be 'provisioner' or 'builder'; it's used to name files
-				def parse_packer_elements(command, work_dir, chef_node, chef_node_name, packer_element_type, packer_element)
+				def parse_packer_elements(work_dir, chef_node, chef_node_name, packer_element_type, packer_element)
 				  urls = chef_node['images'][packer_element]
 				  ret = "["
 					if urls
@@ -173,7 +172,7 @@ module VagrantPlugins
 				  return ret
 				end
 
-				def get_artifact(work_dir, command, url, artifact_name)
+				def get_artifact(work_dir, url, artifact_name)
 				  # Download and uncompress Chef artifacts (in a Berkshelf package format)
 				  if url and url.length != 0
 				  	Downloader.get(url, "#{work_dir}/#{artifact_name}.tar.gz")

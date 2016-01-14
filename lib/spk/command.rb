@@ -90,19 +90,19 @@ module VagrantPlugins
         @engine = VagrantPlugins::Spk::Commons::Engine.new
         @engine.create_work_dir(@params.work_dir)
 
-        nodes = @engine.get_stack_template_nodes(@params.command, @params.work_dir, @params.stack_template, @params.ks_template)
+        nodes = @engine.get_stack_template_nodes(@params.work_dir, @params.stack_template, @params.ks_template)
 
         # TODO - make it parametric
         Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
 
-        chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.command, @params.cookbooks_url, @params.databags_url)
+        chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.cookbooks_url, @params.databags_url)
 
         env_vars_string = ""
         if @params.env_vars
           file_list = @params.env_vars.split(',')
           env_vars_final = []
           file_list.each do |file|
-            env_vars_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file)
+            env_vars_final << @engine.get_json(@params.work_dir, file.split('/')[-1], file)
           end
           env_vars_final.each do |vars|
             vars.each do |var|
