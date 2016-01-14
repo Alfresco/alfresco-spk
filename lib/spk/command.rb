@@ -80,6 +80,7 @@ module VagrantPlugins
 
         end.parse!
 
+
         errors = @params.validate
         abort(errors.join("\n")) if errors.size > 0
 
@@ -116,25 +117,21 @@ module VagrantPlugins
           #Pre commands
           if @params.pre_commands
             file_list = @params.pre_commands.split(',')
-            action = SpkCommands.new(@params, @engine, file_list, env_vars_string,  "pre")
-            action.execute!
+            SpkCommands.new(@params, @engine, file_list, env_vars_string,  "pre").execute!
           end
 
           # this needs refactoring. every case needs it's own class
           case @params.mode
           when "build-images"
-            action = SpkBuildImages.new(@params,@engine, chef_items)
-            action.execute!
+            SpkBuildImages.new(@params,@engine, chef_items).execute!
           when "run"
-            action = SpkRun.new(@params)
-            action.execute!
+            SpkRun.new(@params, @engine, nodes).execute!
           end
 
           # Post Commands
           if @params.post_commands
             file_list = @params.post_commands.split(',')
-            action = SpkCommands.new(@params, @engine, file_list, env_vars_string, "post")
-            action.execute!
+            SpkCommands.new(@params, @engine, file_list, env_vars_string, "post").execute!
           end
         else
           abort("Why run mode selected - not continuing")

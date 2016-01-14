@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
 
-  <% nodes.each do |node_name,node| %>
+  <% @nodes.each do |node_name,node| %>
     <% box_attrs = @engine.get_node_attrs(@params.work_dir, node_name) %>
     box_ip = "<%= node['local-run']['ip'] == nil ? "" : node['local-run']['ip']%>"
     host_name = "<%= box_attrs["hostname"] || box_attrs["name"] %>"

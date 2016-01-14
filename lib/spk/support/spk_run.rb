@@ -1,8 +1,10 @@
 require 'spk/commons/engine'
 require 'erb'
 class SpkRun
-	def initialize(params)
+	def initialize(params, engine, nodes)
 		@params = params
+		@engine = engine
+		@nodes = nodes
 	end
 	
 	def execute!

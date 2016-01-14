@@ -21,7 +21,7 @@ module VagrantPlugins
 				@why_run = UNSET_VALUE
 			end
 
-			def validate
+			def validate(machine=nil)
 				errors = _detected_errors
 
 				if @mode.nil? or @mode.empty? or !["run","build-images"].include?(@mode)
