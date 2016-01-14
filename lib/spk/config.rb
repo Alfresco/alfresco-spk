@@ -2,10 +2,9 @@
 module VagrantPlugins
 	module Spk
 		class Config < Vagrant.plugin(2, :config)
-			attr_accessor :command, :work_dir, :packer_bin, :packer_opts, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :pre_commands, :post_commands, :env_vars, :ks_template, :mode, :why_run
+			attr_accessor :work_dir, :packer_bin, :packer_opts, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :pre_commands, :post_commands, :env_vars, :ks_template, :mode, :why_run
 
 			def initialize
-				@command = UNSET_VALUE
 				@work_dir = UNSET_VALUE
 				@packer_bin = UNSET_VALUE
 				@packer_opts = UNSET_VALUE
@@ -36,7 +35,6 @@ module VagrantPlugins
 			end
 
 			def finalize!
-				@command = "curl --no-sessionid --silent" if @command == UNSET_VALUE
 				@work_dir = "#{Dir.home}/.vagrant.d/data/spk/vagrant" if @work_dir == UNSET_VALUE
 				@packer_bin = 'packer' if @packer_bin == UNSET_VALUE
 				@packer_opts = '' if @packer_opts == UNSET_VALUE

@@ -1,7 +1,9 @@
+require 'spk/utils/downloader'
 require 'json/merge_patch'
 require 'json'
 require 'yaml'
 require 'open3'
+require 'curb'
 
 module VagrantPlugins
 	module Spk
@@ -19,12 +21,12 @@ module VagrantPlugins
 
 
 				def get_stack_template_nodes(command, work_dir, stack_template, ks_template)
-				  download_file(command, ks_template ,"#{work_dir}/ks-centos.cfg")
+					Downloader.get(ks_template, "#{work_dir}/ks-centos.cfg" )
 				  return get_json(command,work_dir, "nodes.json", stack_template)
 				end
 
 				def get_json(command, work_dir, file_name, url)
-				  download_file(command, url, "#{work_dir}/#{file_name}")
+					Downloader.get(url, "#{work_dir}/#{file_name}")
 				  return JSON.parse(File.read("#{work_dir}/#{file_name}"))
 				end
 
@@ -86,24 +88,14 @@ module VagrantPlugins
 
 				private
 
-				def download_file(command, url, destination)
-					print "Running: #{command} #{url} > #{destination}"
-				  `#{command} #{url} > #{destination}`
-				  if File.zero?(destination)
-				    abort("Error downloading #{url} into #{destination}! File has 0 bytes; aborting")
-				  else
-				    print "Downloaded #{url} into #{destination}\n"
-				  end
-				end
-
 
 	      def get_node_definition(work_dir, command, node_name, instance_template, local_yaml_url, local_json_vars)
 					  print "Processing node '#{node_name}'\n"
-					  download_file(command, instance_template, "#{work_dir}/attributes-#{node_name}.json.original")
+					  Downloader.get(instance_template, "#{work_dir}/attributes-#{node_name}.json.original" )
 
 					  # If a Yaml file Url is specified, override Json definition
 					  if local_yaml_url
-					    download_file(command, local_yaml_url, "#{work_dir}/local-yaml-vars-#{node_name}.yml")
+					  	Downloader.get(local_yaml_url, "#{work_dir}/local-yaml-vars-#{node_name}.yml")
 					    local_json_vars = yaml_to_json(File.read("#{work_dir}/local-yaml-vars-#{node_name}.yml"))
 					  else
 					    local_json_vars = local_json_vars.to_json
@@ -145,7 +137,7 @@ module VagrantPlugins
 					if urls
 					  urls.each do |element_name,url|
 					    packer_filename = "#{work_dir}/packer/#{element_name}-#{packer_element_type}.json"
-					    download_file(command, "#{url}", packer_filename)
+					    Downloader.get(url, packer_filename)
 					    element = File.read(packer_filename)
 
 					    # Inject Chef attributes JSON into the chef-solo provisioner
@@ -184,7 +176,7 @@ module VagrantPlugins
 				def get_artifact(work_dir, command, url, artifact_name)
 				  # Download and uncompress Chef artifacts (in a Berkshelf package format)
 				  if url and url.length != 0
-				    download_file(command, url, "#{work_dir}/#{artifact_name}.tar.gz")
+				  	Downloader.get(url, "#{work_dir}/#{artifact_name}.tar.gz")
 				    `rm -rf #{work_dir}/#{artifact_name}; tar xzf #{work_dir}/#{artifact_name}.tar.gz -C #{work_dir}`
 				    print "Unpacked #{work_dir}/#{artifact_name}.tar.gz into #{work_dir}\n"
 				  end
