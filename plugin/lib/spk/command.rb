@@ -102,7 +102,7 @@ module VagrantPlugins
           env_vars_final.each do |vars|
             vars.each do |var|
               puts "VAR: #{var}"
-              env_vars_string += var[0] + "=" + var[1] + "\n"
+              env_vars_string += "export " + var[0] + "=" + var[1] + "\n"
             end
           end
         end
