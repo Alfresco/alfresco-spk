@@ -9,7 +9,7 @@ describe SpkCommands do
 		@mode = ""
 	end
 
-	describe "Class instanciations" do
+	describe "Class instantiations" do
 	  it 'should not accept an empty initialization' do
 			expect { SpkCommands.new() }.to raise_error(ArgumentError)
 		end
