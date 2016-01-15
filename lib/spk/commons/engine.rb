@@ -174,8 +174,8 @@ module VagrantPlugins
 				  # Download and uncompress Chef artifacts (in a Berkshelf package format)
 				  if url and url.length != 0
 				  	Downloader.get(url, "#{work_dir}/#{artifact_name}.tar.gz")
-				  	FileUtils.rm_r("#{work_dir}/#{artifact_name}", :force => true)
-				  	Unpacker.unpack("#{artifact_name}.tar.gz", work_dir)
+				  	FileUtils.rm_rf("#{work_dir}/#{artifact_name}")
+				  	Unpacker.tar("#{artifact_name}.tar.gz", work_dir)
 				    print "Unpacked #{work_dir}/#{artifact_name}.tar.gz into #{work_dir}\n"
 				  end
 				end
