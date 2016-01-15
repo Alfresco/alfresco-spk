@@ -70,7 +70,7 @@ module VagrantPlugins
 				    packerFile.close()
 
 				    print "Executing Packer template '#{packer_definition}-packer.json' (~ 60 minutes run)\n"
-				    `cd #{work_dir}/packer; #{packer_bin} build #{packer_definition}-packer.json #{packer_opts} >> #{packer_log}`
+				    `cd #{work_dir}/packer; #{packer_bin} build #{packer_opts} #{packer_definition}-packer.json >> #{packer_log}`
 				  end
 				end
 

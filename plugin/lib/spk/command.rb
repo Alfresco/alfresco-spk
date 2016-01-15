@@ -67,9 +67,16 @@ module VagrantPlugins
               @params.post_commands = post_commands
             end
 
-            opts.on("-v", "--env-vars [PATH]", String, "Comma-separated list of URLs resolving environment variables JSON files") do |env_vars|
+            opts.on("-v", "--env-vars [PATHS]", String, "Comma-separated list of URLs resolving environment variables JSON files") do |env_vars|
               @params.env_vars = env_vars
             end
+
+            opts.on("-D", "--debug", String, "true, to run packer in debug mode; default is false") do |debug|
+              if debug and debug == "true"
+                @params.packer_opts = "-debug"
+              end
+            end
+
         end.parse!
         @params.finalize!
 
