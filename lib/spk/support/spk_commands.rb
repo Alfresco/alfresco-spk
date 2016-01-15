@@ -13,7 +13,7 @@ class SpkCommands
 	def execute!
 		  validate
       commands_final = []
-      @file_list.each { |file| commands_final << @engine.get_json(@params.command,@params.work_dir, file.split('/')[-1], file) }
+      @file_list.each { |file| commands_final << @engine.get_json(@params.work_dir, file.split('/')[-1], file) }
 
       command_sh = @env_vars
       commands_final.each do |commands|

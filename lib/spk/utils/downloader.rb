@@ -1,9 +1,14 @@
-require 'curb'
+require 'open-uri'
 
 class Downloader
 	def self.get(file, destination)
-		file = Curl::Easy.get(file)
-		file.on_body { |d| File.open(destination,'w+') {|f| f.write d } }
-		file.perform
+		file = file.gsub("file://", "")
+		file_path = file.gsub("$PWD", "#{Dir.pwd}")
+		puts "#{file_path} to #{destination}"
+		open(file_path) {|f|
+		   File.open(destination,"wb") do |file|
+		     file.puts f.read
+		   end
+		}
 	end
 end
