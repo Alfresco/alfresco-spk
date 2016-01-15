@@ -11,12 +11,16 @@
     "images" : {
       "provisioners" : {
         "selinux-permissive" : "file://$PWD/packer/selinux-permissive-provisioner.json",
-        "chef-alfresco" : "file://$PWD/packer/chef-alfresco-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json",
+        "image-cleanup" : "file://$PWD/packer/image-cleanup-provisioner.json"
       },
       "builders" : {
         "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
       },
       "variables" : {
+        "data_bags_path" : ".",
+        "chef_version" : "12.6.0",
+        "run_list_item" : "alfresco::default",
         "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
         "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
       }

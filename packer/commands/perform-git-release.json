@@ -1,0 +1,6 @@
+[
+  ["Increment Cookbook Version","  sed \"s/$CURRENT_VERSION/$INCREMENTED_VERSION/\" metadata.rb > metadata.rb.tmp ; rm -f metadata.rb ; mv metadata.rb.tmp metadata.rb"],
+ ["Update Cookbook Changelog","if [ -n \"$GIT_TOKEN\" ] ; then github_changelog_generator -u Alfresco -p chef-alfresco -t $GIT_TOKEN ; sed -i '/- Update /d' ./CHANGELOG.md ; fi"],
+ ["Push Git tag remotely", "git push origin --tags"],
+ ["Release Cookbook in Git", "git stash ; git pull origin master ; git stash pop ; git add metadata.rb ; git add *.md ; git commit -m Bumping version to v$CURRENT_VERSION ; git push origin master"]
+]
