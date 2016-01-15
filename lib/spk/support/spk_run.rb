@@ -1,4 +1,5 @@
 require 'erb'
+require 'pry'
 class SpkRun
 	def initialize(params, engine, nodes)
 		@params = params
@@ -11,7 +12,7 @@ class SpkRun
     # To be templated and run
     File.open("#{@params.work_dir}/Vagrantfile", "w") { |file| file.write(ERB.new(template).result(binding)) }
 
-    `cd #{@params.work_dir} && vagrant up 2>&1`
+    `cd #{@params.work_dir} && vagrant up > vagrant.log`
     abort("Machine is up and running")
 	end
 end
