@@ -27,5 +27,12 @@
       "device_name" : "/dev/sdc",
       "virtual_name" : "ephemeral1"
     }
+  ],
+  "launch_block_device_mappings" : [
+    {
+      "device_name" : "/dev/sda1",
+      "volume_size" : "{{user `ami_root_disk_size`}}",
+      "delete_on_termination" : "true"
+    }
   ]
 }
