@@ -99,6 +99,9 @@ module VagrantPlugins
 
         nodes = @engine.get_stack_template_nodes(@params.work_dir, @params.stack_template, @params.ks_template)
 
+        # Delete Berksfile.lock, if present 
+        `rm -rf Berksfile.lock`
+
         # TODO - make it parametric
         Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
 
