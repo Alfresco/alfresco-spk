@@ -70,8 +70,14 @@ module VagrantPlugins
               @params.post_commands = post_commands
             end
 
-            opts.on("-v", "--env-vars [PATH]", String, "Comma-separated list of URLs resolving environment variables JSON files") do |env_vars|
+            opts.on("-v", "--env-vars [PATHS]", String, "Comma-separated list of URLs resolving environment variables JSON files") do |env_vars|
               @params.env_vars = env_vars
+            end
+
+            opts.on("-D", "--debug", String, "true, to run packer in debug mode; default is false") do |debug|
+              if debug and debug == "true"
+                @params.packer_opts = "-debug"
+              end
             end
 
             opts.on("-w", "--why-run [true|false]", String, "Why run mode will just test configuration but will not run or build anything") do |why_run|
@@ -85,6 +91,7 @@ module VagrantPlugins
         abort(errors.join("\n")) if errors.size > 0
 
         @params.finalize!
+
 
         # this code will be run only if the command wasn't asking for helpls
         @engine = VagrantPlugins::Spk::Commons::Engine.new
