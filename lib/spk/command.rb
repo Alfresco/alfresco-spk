@@ -100,9 +100,10 @@ module VagrantPlugins
         nodes = @engine.get_stack_template_nodes(@params.work_dir, @params.stack_template, @params.ks_template)
 
         # Delete Berksfile.lock, if present 
+        puts "[spk-info] Trying to delete local berksfile.lock"
         begin
-          puts "[spk-info] Trying to delete local berksfile.lock"
           File.delete("#{Dir.pwd}/Berksfile.lock")
+          puts "[spk-info] local Berksfile.lock removed!"
         rescue Errno::ENOENT
           puts "[spk-info] File not found, continuing normally.."
         end

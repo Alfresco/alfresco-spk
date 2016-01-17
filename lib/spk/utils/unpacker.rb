@@ -9,7 +9,7 @@ require 'zlib'
 class Unpacker
 	TAR_LONGLINK = '././@LongLink'
 	def self.tar(file, destination)
-		puts "unpacking #{file} to #{destination}"
+		puts "[spk-info] unpacking #{file} to #{destination}"
 		Gem::Package::TarReader.new( Zlib::GzipReader.open "#{destination}/#{file}" ) do |tar|
 		  dest = nil
 		  tar.each do |entry|
