@@ -13,11 +13,8 @@ module VagrantPlugins
 
 				# Populate alfresco home folder.
 				def create_work_dir(work_dir)
-				  `mkdir -p #{work_dir}/packer`
-					print "Created #{work_dir}/packer folder\n"
-				  # `mkdir -p #{work_dir}/alf_data`
-				  # `chmod 777 #{work_dir}/alf_data`
-					# print "Created #{work_dir}/packer #{work_dir}/alf_data folders\n"
+					FileUtils.mkdir_p("#{work_dir}/packer")
+					puts "[spk-info] Created #{work_dir}/packer folder\n"
 				end
 
 
