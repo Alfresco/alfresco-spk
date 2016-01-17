@@ -100,7 +100,12 @@ module VagrantPlugins
         nodes = @engine.get_stack_template_nodes(@params.work_dir, @params.stack_template, @params.ks_template)
 
         # Delete Berksfile.lock, if present 
-        `rm -rf Berksfile.lock`
+        begin
+          puts "[spk-info] Trying to delete local berksfile.lock"
+          File.delete("#{Dir.pwd}/Berksfile.lock")
+        rescue Errno::ENOENT
+          puts "[spk-info] File not found, continuing normally.."
+        end
 
         # TODO - make it parametric
         Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
