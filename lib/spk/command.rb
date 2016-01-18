@@ -4,7 +4,7 @@ require 'spk/commons/engine'
 require 'spk/support/spk_build_images'
 require 'spk/support/spk_run'
 require 'spk/support/spk_commands'
-require 'spk/support/packer'
+require 'berkshelf'
 require 'optparse'
 require 'open3'
 require 'fileutils'
@@ -138,7 +138,7 @@ module VagrantPlugins
           # this needs refactoring. every case needs it's own class
           case @params.mode
           when "build-images"
-            SpkBuildImages.new(@params, chef_items).execute!
+            SpkBuildImages.new(@params, @engine, chef_items).execute!
           when "run"
             SpkRun.new(@params, @engine, nodes).execute!
           end

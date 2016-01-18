@@ -46,6 +46,27 @@ module VagrantPlugins
 				  return JSON.parse(box_attrs)
 				end
 
+				#TODO - this should not be here, but cannot handled within
+				# SPK provisioner, since no Packer variables are supported
+				# there
+				def get_nexus_creds(json_attrs)
+					name = ENV['MVN_CHEF_REPO_NAME']
+					url = ENV['MVN_CHEF_REPO_URL']
+					username = ENV['MVN_CHEF_REPO_USERNAME']
+					password = ENV['MVN_CHEF_REPO_PASSWORD']
+					ret = json_attrs
+				  if name and url and username and password
+				    ret['artifact-deployer'] = {}
+				    ret['artifact-deployer']['maven'] = {}
+				    ret['artifact-deployer']['maven']['repositories'] = {}
+				    ret['artifact-deployer']['maven']['repositories'][name] = {}
+				    ret['artifact-deployer']['maven']['repositories'][name]['url'] = url
+				    ret['artifact-deployer']['maven']['repositories'][name]['username'] = username
+				    ret['artifact-deployer']['maven']['repositories'][name]['password'] = password
+				  end
+				  return ret
+				end
+
 				private
 
 

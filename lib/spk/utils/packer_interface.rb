@@ -3,11 +3,12 @@ require 'json/merge_patch'
 require 'spk/utils/downloader'
 
 class PackerInterface
-	def initialize(work_dir)
+	def initialize(work_dir, engine)
 		@work_dir = work_dir
+		@engine = engine
 	end
 	
-  def get_defs(work_dir, nodes)
+  def get_defs(nodes)
 	  packer_defs = {}
 	  nodes.each do |chef_node_name,chef_node|
 	    # Compose Packer JSON
@@ -25,13 +26,13 @@ class PackerInterface
 	  return packer_defs
 	end
 
-	def run_packer_defs(packer_defs, work_dir, packer_bin, packer_opts, packer_log)
+	def run_defs(packer_defs, packer_bin, packer_opts)
 	  # Summarise Packer suites and ask for confirmation before running it
 	  print "[spk-info] Running the following Packer templates:\n"
 	  packer_defs.each do |packer_definition,packerDef|
 	    print "[spk-info] #{packer_definition}-packer.json\n"
 	  end
-	  print "[spk-info] Check #{packer_log} for logs.\n"
+	  print "[spk-info] Check packer.log for logs.\n"
 
 	  packer_defs.each do |packer_definition,packerDef|
 	    packerFile = File.open("#{@work_dir}/packer/#{packer_definition}-packer.json", 'w')
@@ -39,7 +40,7 @@ class PackerInterface
 	    packerFile.close()
 
 	    print "[spk-info] Executing Packer template '#{packer_definition}-packer.json' (~ 60 minutes run)\n"
-	    `cd #{work_dir}/packer; #{packer_bin} build #{packer_opts} #{packer_definition}-packer.json > packer.log`
+	    `cd #{@work_dir}/packer; #{packer_bin} build #{packer_opts} #{packer_definition}-packer.json > packer.log`
 	  end
 	end
 	private
@@ -73,29 +74,8 @@ class PackerInterface
 	  node_url = "#{@work_dir}/attributes-#{chef_node_name}.json"
 	  node_url_content = File.read("#{@work_dir}/attributes-#{chef_node_name}.json.original")
 	  json_provisioner['json'] = JSON.parse(node_url_content)
-	  json_provisioner['json'] = get_nexus_creds(json_provisioner['json'])
+	  json_provisioner['json'] = @engine.get_nexus_creds(json_provisioner['json'])
 	  return json_provisioner.to_json
 	end
 
-
-	#TODO - this should not be here, but cannot handled within
-	# SPK provisioner, since no Packer variables are supported
-	# there
-	def get_nexus_creds(json_attrs)
-		name = ENV['MVN_CHEF_REPO_NAME']
-		url = ENV['MVN_CHEF_REPO_URL']
-		username = ENV['MVN_CHEF_REPO_USERNAME']
-		password = ENV['MVN_CHEF_REPO_PASSWORD']
-		ret = json_attrs
-	  if name and url and username and password
-	    ret['artifact-deployer'] = {}
-	    ret['artifact-deployer']['maven'] = {}
-	    ret['artifact-deployer']['maven']['repositories'] = {}
-	    ret['artifact-deployer']['maven']['repositories'][name] = {}
-	    ret['artifact-deployer']['maven']['repositories'][name]['url'] = url
-	    ret['artifact-deployer']['maven']['repositories'][name]['username'] = username
-	    ret['artifact-deployer']['maven']['repositories'][name]['password'] = password
-	  end
-	  return ret
-	end
 end
