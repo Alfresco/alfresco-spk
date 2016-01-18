@@ -1,8 +1,8 @@
 require 'packer-config'
 require 'json/merge_patch'
-require 'spk/utilities/downloader'
+require 'spk/utils/downloader'
 
-class Packer
+class PackerInterface
 	def initialize(work_dir)
 		@work_dir = work_dir
 	end
