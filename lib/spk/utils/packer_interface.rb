@@ -12,26 +12,17 @@ class PackerInterface
   def get_defs(nodes)
 	  packer_defs = {}
 	  nodes.each do |chef_node_name,chef_node|
-	    # Compose Packer JSON
-	    provisioners = parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners')
-	    builders = parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders')
-	    postprocessors = parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors')
 
-	    # For debugging purposes
-	    # print "Packer Builders: #{builders}\n"
-	    # print "Packer Provisioners: #{provisioners}\n"
-	    variables = chef_node['images']['variables'].to_json
-
-	    pconfig = Packer::Config.new "#{@work_dir}/packer/#{chef_node_name}-packer.json"
+	  	pconfig = Packer::Config.new "#{@work_dir}/packer/#{chef_node_name}-packer.json"
 	    pconfig.description "VirtualBox vagrant for #{chef_node_name}"
 
+	    # => Building the packer config object variables
 	    chef_node['images']['variables'].each {|variable_name, value| pconfig.add_variable "#{variable_name}", "#{value}"}
 
-	    enpack(pconfig, "Builder", builders)
-	    enpack(pconfig, "Provisioner", provisioners)
-	    enpack(pconfig, "PostProcessor", postprocessors)
-
-	    pconfig.provisioners.first.required = ["type"]
+	    # => Building the packer config components: Builders, Provisioners and PostProcessors
+	   	parametrize(pconfig, "Builder", parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders'))
+	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
+	    parametrize(pconfig, "PostProcessor", parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors'))
 
 	    packer_defs[chef_node_name] = pconfig
 	  end
@@ -47,11 +38,11 @@ class PackerInterface
 	    packer.build
 	  end
 
+	  # => keeping this for now, because i need to integrate custom packer_opts
 	  # packer_defs.each do |packer_definition,packerDef|
 	  #   packerFile = File.open("#{@work_dir}/packer/#{packer_definition}-packer.json", 'w')
 	  #   packerFile.write(packerDef)
 	  #   packerFile.close()
-
 	  #   print "[spk-info] Executing Packer template '#{packer_definition}-packer.json' (~ 60 minutes run)\n"
 	  #   `cd #{@work_dir}/packer; #{packer_bin} build #{packer_opts} #{packer_definition}-packer.json > packer.log`
 	  # end
@@ -94,15 +85,28 @@ class PackerInterface
 	end
 
 
-	def enpack(packer, type, objects)
-		JSON.parse(objects).each do |object|
-    	typo = "Packer::#{type}::#{object['type'].upcase.gsub('-','_')}"
-    	info = packer.send("add_#{type.downcase}", Object.const_get(typo))
-    	object.each do |key, value|
-    		info.send("#{key}", value) if key != "type"
+	def parametrize(packer, type, components)
+		JSON.parse(components).each do |component|
+    	class_name = "Packer::#{type}::#{component['type'].upcase.gsub('-','_')}"
+    	config = packer.send("add_#{type.downcase}", Object.const_get(class_name))
+    	
+    	# Little bit difficult to understand without knowing what is the .send command in ruby
+    	# Basically this iterate through the entire packer json file and add the variable to the objects
+    	# Since the keys of the json file are the same name of method, i can call them iteratively
+    	# For example config.send("output_file", "example.box") is equal to config.output_file "example.box"
+    	component.each do |key, value|
+    		config.send("#{key}", value) if key != "type"
     	end
+
+    	# => We don't specify a communicator, and packer-config require one. So if it's not required, we will use ssh
     	if type == "Builder"
-    		info.communicator "ssh" if object["communicator"].nil?
+    		config.communicator "ssh" if component["communicator"].nil?
+    	end
+
+    	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start
+    	# => this is a bug, and a pull request is on it's way to solve this problem 
+    	if type == "Provisioner" and component['type'] == "chef-solo"
+    		config.required = ["type"]
     	end
     end
 	end
