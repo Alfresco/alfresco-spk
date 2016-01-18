@@ -6,7 +6,6 @@ require 'spk/support/spk_run'
 require 'spk/support/spk_commands'
 require 'berkshelf'
 require 'optparse'
-require 'open3'
 require 'fileutils'
 
 module VagrantPlugins
