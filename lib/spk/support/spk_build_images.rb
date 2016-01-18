@@ -1,13 +1,15 @@
+require 'spk/utils/packer'
+
 class SpkBuildImages
-	def initialize(params, engine, chef_items)
+	def initialize(params, chef_items)
 		@params = params
-		@engine = engine
 		@chef_items = chef_items
 	end
 	
 	def execute!
-		packer_defs = @engine.get_packer_defs(@params.work_dir, @chef_items)
-    @engine.run_packer_defs(packer_defs, @params.work_dir, @params.packer_bin, @params.packer_opts , "packer.log")
+		packer = Packer.new(@params.work_dir)
+		packer_defs = packer.get_defs(@chef_items)
+		packer.run_defs(packer_defs, @params.packer_bin, @params.packer_opts, "packer.log")
     abort("Vagrant up build-images completed!")
 	end
 end
