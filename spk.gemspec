@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'berkshelf', '~> 4.0.1'
   spec.add_runtime_dependency 'json-merge_patch', '~> 1.1'
   spec.add_runtime_dependency 'pry', '~> 0.10.3'
-  spec.add_runtime_dependency 'packer-config', '~> 1.4'
+  spec.add_runtime_dependency "packer-config", "~> 1.4.0"
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency 'yard', '~> 0.8.7.6'
