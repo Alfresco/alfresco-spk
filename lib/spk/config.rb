@@ -47,6 +47,7 @@ module VagrantPlugins
 				@post_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/post-commands.json" if @post_commands == UNSET_VALUE
 				@why_run = false if @why_run == UNSET_VALUE
 				@ks_template = "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/ks/ks-centos.cfg" if @ks_template == UNSET_VALUE
+				@env_vars = "" if @env_vars == UNSET_VALUE
 			end
 		end
 	end
