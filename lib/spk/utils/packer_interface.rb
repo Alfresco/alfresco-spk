@@ -1,6 +1,7 @@
 require 'packer-config'
 require 'json/merge_patch'
 require 'spk/utils/downloader'
+require 'spk/utils/solo'
 require 'pry'
 
 class PackerInterface
@@ -24,6 +25,7 @@ class PackerInterface
 	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
 	    parametrize(pconfig, "PostProcessor", parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors'))
 
+	    binding.pry
 	    packer_defs[chef_node_name] = pconfig
 	  end
 
@@ -65,7 +67,7 @@ class PackerInterface
 
 		    # Inject Chef attributes JSON into the chef-solo provisioner
 		    if element_name == 'chef-alfresco'
-		      element = merge_elements(@params.work_dir, chef_node_name, element_name, element)
+		      element = merge_elements(chef_node_name, element_name, element)
 		    end
 		    ret += element + ","
 		  end
@@ -90,7 +92,14 @@ class PackerInterface
 		JSON.parse(components).each do |component|
     	class_name = "Packer::#{type}::#{component['type'].upcase.gsub('-','_')}"
     	config = packer.send("add_#{type.downcase}", Object.const_get(class_name))
-    	
+
+    	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start
+    	# => this is a bug, and a pull request is on it's way to solve this problem 
+    	if type == "Provisioner" and component['type'] == "chef-solo"
+    		binding.pry
+    		config.required = ["type"]
+    	end
+
     	# Little bit difficult to understand without knowing what is the .send command in ruby
     	# Basically this iterate through the entire json object and add the variable to the packer config.
     	# Since the keys of the json object are the same name of the packer config method, i can call them iteratively
@@ -104,11 +113,7 @@ class PackerInterface
     		config.communicator "ssh" if component["communicator"].nil?
     	end
 
-    	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start
-    	# => this is a bug, and a pull request is on it's way to solve this problem 
-    	if type == "Provisioner" and component['type'] == "chef-solo"
-    		config.required = ["type"]
-    	end
+    	
     end
 	end
 
