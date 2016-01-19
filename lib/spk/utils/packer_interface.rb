@@ -4,8 +4,8 @@ require 'spk/utils/downloader'
 require 'pry'
 
 class PackerInterface
-	def initialize(work_dir, engine)
-		@work_dir = work_dir
+	def initialize(params, engine)
+		@params = params
 		@engine = engine
 	end
 	
@@ -13,7 +13,7 @@ class PackerInterface
 	  packer_defs = {}
 	  nodes.each do |chef_node_name,chef_node|
 
-	  	pconfig = Packer::Config.new "#{@work_dir}/packer/#{chef_node_name}-packer.json"
+	  	pconfig = Packer::Config.new "#{@params.work_dir}/packer/#{chef_node_name}-packer.json"
 	    pconfig.description "VirtualBox vagrant for #{chef_node_name}"
 
 	    # => Building the packer config object variables
@@ -35,6 +35,7 @@ class PackerInterface
 	  print "[spk-info] Running the following Packer templates:\n"
 	  packer_defs.each do |packer_definition, packer|
 	    print "[spk-info] Building #{packer_definition}-packer.json\n"
+	    packer.packer_options << "-debug" if @params.debug == true
 	    packer.build
 	  end
 
@@ -58,13 +59,13 @@ class PackerInterface
 	  ret = "["
 		if urls
 		  urls.each do |element_name,url|
-		    packer_filename = "#{@work_dir}/packer/#{element_name}-#{packer_element_type}.json"
+		    packer_filename = "#{@params.work_dir}/packer/#{element_name}-#{packer_element_type}.json"
 		    Downloader.get(url, packer_filename)
 		    element = File.read(packer_filename)
 
 		    # Inject Chef attributes JSON into the chef-solo provisioner
 		    if element_name == 'chef-alfresco'
-		      element = merge_elements(@work_dir, chef_node_name, element_name, element)
+		      element = merge_elements(@params.work_dir, chef_node_name, element_name, element)
 		    end
 		    ret += element + ","
 		  end
@@ -77,8 +78,8 @@ class PackerInterface
 
 	def merge_elements(chef_node_name, provisioner_name, provisioner)
 	  json_provisioner = JSON.parse(provisioner)
-	  node_url = "#{@work_dir}/attributes-#{chef_node_name}.json"
-	  node_url_content = File.read("#{@work_dir}/attributes-#{chef_node_name}.json.original")
+	  node_url = "#{@params.work_dir}/attributes-#{chef_node_name}.json"
+	  node_url_content = File.read("#{@params.work_dir}/attributes-#{chef_node_name}.json.original")
 	  json_provisioner['json'] = JSON.parse(node_url_content)
 	  json_provisioner['json'] = @engine.get_nexus_creds(json_provisioner['json'])
 	  return json_provisioner.to_json
@@ -91,8 +92,8 @@ class PackerInterface
     	config = packer.send("add_#{type.downcase}", Object.const_get(class_name))
     	
     	# Little bit difficult to understand without knowing what is the .send command in ruby
-    	# Basically this iterate through the entire packer json file and add the variable to the objects
-    	# Since the keys of the json file are the same name of method, i can call them iteratively
+    	# Basically this iterate through the entire json object and add the variable to the packer config.
+    	# Since the keys of the json object are the same name of the packer config method, i can call them iteratively
     	# For example config.send("output_file", "example.box") is equal to config.output_file "example.box"
     	component.each do |key, value|
     		config.send("#{key}", value) if key != "type"

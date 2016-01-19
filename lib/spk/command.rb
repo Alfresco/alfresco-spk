@@ -73,9 +73,7 @@ module VagrantPlugins
             end
 
             opts.on("-D", "--debug", String, "true, to run packer in debug mode; default is false") do |debug|
-              if debug and debug == "true"
-                @params.packer_opts = "-debug"
-              end
+                @params.debug = debug
             end
 
             opts.on("-w", "--why-run [true|false]", String, "Why run mode will just test configuration but will not run or build anything") do |why_run|

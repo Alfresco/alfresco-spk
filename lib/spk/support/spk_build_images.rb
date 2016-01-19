@@ -8,7 +8,7 @@ class SpkBuildImages
 	end
 	
 	def execute!
-		packer = PackerInterface.new(@params.work_dir, @engine)
+		packer = PackerInterface.new(@params, @engine)
 		packer_defs = packer.get_defs(@chef_items)
 		packer.run_defs(packer_defs, @params.packer_opts)
     abort("Vagrant up build-images completed!")
