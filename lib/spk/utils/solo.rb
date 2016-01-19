@@ -1,4 +1,6 @@
 require 'packer-config'
+require 'spk/utils/dataobject'
+
 
 module Packer
   class Provisioner < Packer::DataObject
@@ -11,7 +13,7 @@ module Packer
       	end
 
       	def json(hash)
-          self.__add_hash('json', hash)
+          self.__add_json('json', hash)
         end
 
       end

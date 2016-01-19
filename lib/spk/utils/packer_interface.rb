@@ -24,8 +24,8 @@ class PackerInterface
 	   	parametrize(pconfig, "Builder", parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders'))
 	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
 	    parametrize(pconfig, "PostProcessor", parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors'))
-
 	    binding.pry
+	    pconfig.validate
 	    packer_defs[chef_node_name] = pconfig
 	  end
 
@@ -93,13 +93,6 @@ class PackerInterface
     	class_name = "Packer::#{type}::#{component['type'].upcase.gsub('-','_')}"
     	config = packer.send("add_#{type.downcase}", Object.const_get(class_name))
 
-    	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start
-    	# => this is a bug, and a pull request is on it's way to solve this problem 
-    	if type == "Provisioner" and component['type'] == "chef-solo"
-    		binding.pry
-    		config.required = ["type"]
-    	end
-
     	# Little bit difficult to understand without knowing what is the .send command in ruby
     	# Basically this iterate through the entire json object and add the variable to the packer config.
     	# Since the keys of the json object are the same name of the packer config method, i can call them iteratively
@@ -108,6 +101,14 @@ class PackerInterface
     		config.send("#{key}", value) if key != "type"
     	end
 
+
+			if type == "Provisioner" and component['type'] == "chef-solo"
+    		config.required = ["type"]
+    	end
+
+    	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start
+    	# => this is a bug, and a pull request is on it's way to solve this problem 
+    	
     	# => We don't specify a communicator, and packer-config require one. So if it's not required, we will use ssh
     	if type == "Builder"
     		config.communicator "ssh" if component["communicator"].nil?
