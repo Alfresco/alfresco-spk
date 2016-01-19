@@ -104,15 +104,14 @@ module VagrantPlugins
           puts "[spk-info] File not found, continuing normally.."
         end
 
-        # Delete Berksfile.lock, if present 
-        `rm -rf Berksfile.lock`
-
+        puts "[spk-info] Packaging berkshelf recipes..."
         # TODO - make it parametric
         Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
 
         chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.cookbooks_url, @params.databags_url)
 
         env_vars_string = ""
+
         if @params.env_vars
           file_list = @params.env_vars.split(',')
           env_vars_final = []
