@@ -2,7 +2,7 @@ require 'packer-config'
 require 'json/merge_patch'
 require 'spk/utils/downloader'
 require 'spk/utils/solo'
-require 'spk/utils/packer-config'
+require 'spk/utils/packer_config'
 require 'pry'
 
 class PackerInterface
