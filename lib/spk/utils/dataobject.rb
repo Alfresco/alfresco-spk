@@ -8,5 +8,12 @@ module Packer
         self.data[key.to_s][k] = data[k]
       end
     end
+
+    def add_splitted_variable(name, value)
+      variables_copy = Marshal.load(Marshal.dump(self.variables))
+      variables_copy[name.to_s] = value.to_s
+      self.__add_hash('variables', variables_copy)
+    end
+
   end
 end

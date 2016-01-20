@@ -2,6 +2,7 @@ require 'packer-config'
 require 'json/merge_patch'
 require 'spk/utils/downloader'
 require 'spk/utils/solo'
+require 'spk/utils/packer-config'
 require 'pry'
 
 class PackerInterface
@@ -24,7 +25,7 @@ class PackerInterface
 	   	parametrize(pconfig, "Builder", parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders'))
 	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
 	    parametrize(pconfig, "PostProcessor", parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors'))
-	    binding.pry
+
 	    pconfig.validate
 	    packer_defs[chef_node_name] = pconfig
 	  end
@@ -108,7 +109,7 @@ class PackerInterface
 
     	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start
     	# => this is a bug, and a pull request is on it's way to solve this problem 
-    	
+
     	# => We don't specify a communicator, and packer-config require one. So if it's not required, we will use ssh
     	if type == "Builder"
     		config.communicator "ssh" if component["communicator"].nil?

@@ -15,7 +15,6 @@ module Packer
       	def json(hash)
           self.__add_json('json', hash)
         end
-
       end
     end
   end
