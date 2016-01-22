@@ -83,7 +83,7 @@ module VagrantPlugins
         end.parse!
 
 
-        errors = @params.validate
+        errors = validate
         abort(errors.join("\n")) if errors.size > 0
 
         @params.finalize!
@@ -151,6 +151,20 @@ module VagrantPlugins
           abort("Why run mode selected - not continuing")
         end
  			end
+
+      def validate
+        errors = ""
+
+        if @params.mode.nil? or @params.mode.empty? or !["run","build-images"].include?(@params.mode)
+          errors << "You need to specify if you want to build-images or run"
+        end
+
+        if @params.stack_template.nil? or @params.stack_template.empty? 
+          errors << "You must provide a stack template"
+        end
+
+        errors
+      end
   	end
 
   end
