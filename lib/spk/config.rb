@@ -20,19 +20,6 @@ module VagrantPlugins
 				@why_run = UNSET_VALUE
 			end
 
-			def validate(machine=nil)
-				errors = _detected_errors
-
-				if @mode.nil? or @mode.empty? or !["run","build-images"].include?(@mode)
-					errors << "You need to specify if you want to build-images or run"
-				end
-
-				if @stack_template.nil? or @stack_template.empty? 
-					errors << "You must provide a stack template"
-				end
-
-				errors
-			end
 
 			def finalize!
 				@work_dir = "#{Dir.home}/.vagrant.d/data/spk" if @work_dir == UNSET_VALUE
