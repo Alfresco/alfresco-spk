@@ -17,7 +17,7 @@
   ["GIT_PROJECT_NAME","$ARTIFACT_ID"],
   ["DATABAGS_ARTIFACTID","alfresco-databags"],
   ["DATABAGS_GROUPID","org.alfresco.devops"],
-  ["DATABAGS_VERSION","0.2.7"],
+  ["DATABAGS_VERSION","0.2.8"],
   ["DATABAGS_PATH","~/.vagrant.d/data/spk/packer/data_bags.tar.gz"],
   ["DATABAGS_FOLDER_PATH","~/.vagrant.d/data/spk/packer/data_bags"],
   ["KS_FILE_URL","https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/ks/ks-centos.cfg"],
