@@ -23,7 +23,7 @@ class PackerInterface
 	   	parametrize(pconfig, "Builder", parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders'))
 	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
 	    parametrize(pconfig, "PostProcessor", parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors'))
-	    binding.pry
+	
 	    pconfig.validate
 	    packer_defs[chef_node_name] = pconfig
 	  end
