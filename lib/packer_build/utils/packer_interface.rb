@@ -1,6 +1,6 @@
 require 'packer-config'
 require 'json/merge_patch'
-require 'packer/utils/downloader'
+require 'packer_build/utils/downloader'
 require 'pry'
 
 class PackerInterface

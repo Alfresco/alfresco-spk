@@ -1,27 +1,27 @@
 require_relative 'config'
 
-require 'packer/commons/engine'
-require 'packer/support/packer_build_images'
-require 'packer/support/packer_commands'
+require 'packer_build/commons/engine'
+require 'packer_build/support/packer_build_images'
+require 'packer_build/support/packer_commands'
 require 'berkshelf'
 require 'optparse'
 require 'fileutils'
 
 module VagrantPlugins
-  module Packer
+  module PackerBuild
     class Command < Vagrant.plugin('2', :command)
 
       def initialize(args, env)
-        @params = VagrantPlugins::Packer::Config.new
+        @params = VagrantPlugins::PackerBuild::Config.new
       end
 
       def self.synopsis
-        'Build its immutable images'
+        'Build immutable images using Packer'
       end
 
  			def execute
         OptionParser.new do |opts|
-            opts.banner = "Usage: vagrant packer build "\
+            opts.banner = "Usage: vagrant packer-build "\
                           "[-b|--box-url] "\
                           "[-n|--box-name] "\
                           "[-c|--cookbooks-url] "\
@@ -81,14 +81,14 @@ module VagrantPlugins
         end.parse!
 
 
-        errors = validate
-        abort(errors.join("\n")) if errors.size > 0
-
+        #errors = validate
+        #abort(errors.join("\n")) if errors.size > 0
+        binding.pry
         @params.finalize!
 
 
         # this code will be run only if the command wasn't asking for helpls
-        @engine = VagrantPlugins::Packer::Commons::Engine.new
+        @engine = VagrantPlugins::PackerBuild::Commons::Engine.new
         @engine.create_work_dir(@params.work_dir)
 
         nodes = @engine.get_stack_template_nodes(@params.work_dir, @params.stack_template, @params.ks_template)
@@ -123,7 +123,8 @@ module VagrantPlugins
             end
           end
         end
-
+          binding.pry
+      
 
         if !@params.why_run
           #Pre commands

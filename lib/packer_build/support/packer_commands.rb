@@ -34,8 +34,8 @@ class PackerCommands
 	private
 
 	def validate
-		raise ArgumentError.new("Params should be an instance of VagrantPlugins::Packer::Config") if !@params.is_a?(VagrantPlugins::Packer::Config)
-		raise ArgumentError.new("Engine should be an instance of VagrantPlugins::Packer::Commons::Engine") if !@engine.is_a?(VagrantPlugins::Packer::Commons::Engine)
+		raise ArgumentError.new("Params should be an instance of VagrantPlugins::PackerBuild::Config") if !@params.is_a?(VagrantPlugins::PackerBuild::Config)
+		raise ArgumentError.new("Engine should be an instance of VagrantPlugins::PackerBuild::Commons::Engine") if !@engine.is_a?(VagrantPlugins::PackerBuild::Commons::Engine)
 		raise ArgumentError.new("File list needs to be an Array, and cannot be empty") if !@file_list.is_a?(Array) or @file_list.empty?
 		raise ArgumentError.new("Environment variables should be a string and cannot be empty") if !@env_vars.is_a?(String)
 		raise ArgumentError.new("Mode should be either pre or post") if !["pre","post"].include?(@mode)

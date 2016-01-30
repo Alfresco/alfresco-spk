@@ -1,5 +1,5 @@
-require 'packer/utils/downloader'
-require 'packer/utils/unpacker'
+require 'packer_build/utils/downloader'
+require 'packer_build/utils/unpacker'
 require 'json/merge_patch'
 require 'fileutils'
 require 'json'
@@ -10,7 +10,7 @@ require 'pry'
 
 
 module VagrantPlugins
-	module Packer
+	module PackerBuild
 		module Commons
 			class Engine
 

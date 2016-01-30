@@ -1,18 +1,18 @@
 module VagrantPlugins
-  module Packer
+  module PackerBuild
     class Plugin < Vagrant.plugin('2')
-      name "Packer"
+      name "packer-build"
 
       description <<-DESC
       
       DESC
 
-      config 'packer' do
+      config 'packer_build' do
         require_relative 'config'
         Config
       end
 
-      command 'packer' do
+      command 'packer-build' do
         require_relative 'command'
         Command
       end

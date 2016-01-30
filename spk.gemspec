@@ -1,8 +1,8 @@
-require File.expand_path('../lib/packer/version', __FILE__)
+require File.expand_path('../lib/packer_build/version', __FILE__)
 
 Gem::Specification.new do |spec|
-  spec.name          = "packer"
-  spec.version       = VagrantPlugins::Packer::VERSION
+  spec.name          = "packer_build"
+  spec.version       = VagrantPlugins::PackerBuild::VERSION
   spec.authors       = ["Enzo Rivello"]
   spec.email         = ["enzo.rivello@alfresco.com"]
 
