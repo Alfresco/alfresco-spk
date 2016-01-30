@@ -35,7 +35,7 @@ class PackerInterface
 	  print "[packer-info] Running the following Packer templates:\n"
 	  packer_defs.each do |packer_definition, packer|
 	    print "[packer-info] Building #{packer_definition}-packer.json\n"
-	    packer.packer_options << "-debug" if @params.debug == true
+	    packer.packer_options << "-debug" if @params.debug
 	    packer.build
 	  end
 	end

@@ -70,12 +70,12 @@ module VagrantPlugins
               @params.env_vars = env_vars
             end
 
-            opts.on("-D", "--debug", String, "true, to run packer in debug mode; default is false") do |debug|
-                @params.debug = true if debug
+            opts.on("-d", "--packer-debug", "true, to run packer in debug mode; default is false") do |debug|
+                @params.debug = debug
             end
 
-            opts.on("-w", "--why-run [true|false]", String, "Why run mode will just test configuration but will not run or build anything") do |why_run|
-              @params.why_run = true if why_run
+            opts.on("-w", "--why-run", "Why run mode will just test configuration but will not run or build anything") do |why_run|
+              @params.why_run = why_run
             end
 
         end.parse!
