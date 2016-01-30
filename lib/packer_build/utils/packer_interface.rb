@@ -30,7 +30,7 @@ class PackerInterface
 	  return packer_defs
 	end
 
-	def run_defs(packer_defs, packer_opts)
+	def run_defs(packer_defs)
 	  # Summarise Packer suites and ask for confirmation before running it
 	  print "[packer-info] Running the following Packer templates:\n"
 	  packer_defs.each do |packer_definition, packer|

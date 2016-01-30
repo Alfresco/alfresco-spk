@@ -1,7 +1,7 @@
 module VagrantPlugins
   module PackerBuild
     class Plugin < Vagrant.plugin('2')
-      name "packer-build"
+      name "packer_build"
 
       description <<-DESC
       

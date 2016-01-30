@@ -13,6 +13,10 @@ module VagrantPlugins
 
       def initialize(args, env)
         @params = VagrantPlugins::PackerBuild::Config.new
+        if env.vagrantfile.config.packer_build.is_a?(VagrantPlugins::PackerBuild::Config)
+          @params = env.vagrantfile.config.packer_build
+        end
+        @env = env
       end
 
       def self.synopsis
@@ -83,7 +87,6 @@ module VagrantPlugins
 
         #errors = validate
         #abort(errors.join("\n")) if errors.size > 0
-        binding.pry
         @params.finalize!
 
 
@@ -123,8 +126,6 @@ module VagrantPlugins
             end
           end
         end
-          binding.pry
-      
 
         if !@params.why_run
           #Pre commands
@@ -132,8 +133,6 @@ module VagrantPlugins
             file_list = @params.pre_commands.split(',')
             PackerCommands.new(@params, @engine, file_list, env_vars_string,  "pre").execute!
           end
-
-          # this needs refactoring. every case needs it's own class
           
           PackerBuildImages.new(@params, @engine, chef_items).execute!
 
