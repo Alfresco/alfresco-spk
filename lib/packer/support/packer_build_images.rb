@@ -1,6 +1,6 @@
-require 'spk/utils/packer_interface'
+require 'packer/utils/packer_interface'
 
-class SpkBuildImages
+class PackerBuildImages
 	def initialize(params, engine, chef_items)
 		@params = params
 		@chef_items = chef_items
@@ -11,6 +11,6 @@ class SpkBuildImages
 		packer = PackerInterface.new(@params, @engine)
 		packer_defs = packer.get_defs(@chef_items)
 		packer.run_defs(packer_defs, @params.packer_opts)
-    abort("Vagrant up build-images completed!")
+    abort("Images built!")
 	end
 end

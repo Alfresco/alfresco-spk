@@ -7,5 +7,5 @@ group :development do
 end
 
 group :plugins do
-  gem "spk", path: "."
+  gem "packer", path: "."
 end

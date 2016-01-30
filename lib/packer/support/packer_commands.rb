@@ -1,4 +1,4 @@
-class SpkCommands
+class PackerCommands
 	
 	def initialize(params, engine, file_list, env_vars, mode)
 		@params = params
@@ -18,8 +18,8 @@ class SpkCommands
       command_sh = @env_vars
       commands_final.each do |commands|
         commands.each do |command|
-          puts "[spk-#{@mode}] #{command[0]}"
-          puts "[spk-#{@mode}] DEBUG: #{command[1]}"
+          puts "[packer-#{@mode}] #{command[0]}"
+          puts "[packer-#{@mode}] DEBUG: #{command[1]}"
           command_sh += command[1] + "\n"
         end
       end
@@ -27,15 +27,15 @@ class SpkCommands
       File.open(command_file, 'w') { |file| file.write(command_sh) }
       FileUtils.chmod(0755, command_file);
       stdout, stderr, status = Open3.capture3(command_file)
-      puts "[spk-#{@mode}] RET: #{status}, ERR: #{stderr}, OUT: #{stdout}"
+      puts "[packer-#{@mode}] RET: #{status}, ERR: #{stderr}, OUT: #{stdout}"
 	end
 	
 
 	private
 
 	def validate
-		raise ArgumentError.new("Params should be an instance of VagrantPlugins::Spk::Config") if !@params.is_a?(VagrantPlugins::Spk::Config)
-		raise ArgumentError.new("Engine should be an instance of VagrantPlugins::Spk::Commons::Engine") if !@engine.is_a?(VagrantPlugins::Spk::Commons::Engine)
+		raise ArgumentError.new("Params should be an instance of VagrantPlugins::Packer::Config") if !@params.is_a?(VagrantPlugins::Packer::Config)
+		raise ArgumentError.new("Engine should be an instance of VagrantPlugins::Packer::Commons::Engine") if !@engine.is_a?(VagrantPlugins::Packer::Commons::Engine)
 		raise ArgumentError.new("File list needs to be an Array, and cannot be empty") if !@file_list.is_a?(Array) or @file_list.empty?
 		raise ArgumentError.new("Environment variables should be a string and cannot be empty") if !@env_vars.is_a?(String)
 		raise ArgumentError.new("Mode should be either pre or post") if !["pre","post"].include?(@mode)

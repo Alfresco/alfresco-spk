@@ -1,29 +1,27 @@
 require_relative 'config'
 
-require 'spk/commons/engine'
-require 'spk/support/spk_build_images'
-require 'spk/support/spk_run'
-require 'spk/support/spk_commands'
+require 'packer/commons/engine'
+require 'packer/support/packer_build_images'
+require 'packer/support/packer_commands'
 require 'berkshelf'
 require 'optparse'
 require 'fileutils'
 
 module VagrantPlugins
-  module Spk
+  module Packer
     class Command < Vagrant.plugin('2', :command)
 
       def initialize(args, env)
-        @params = VagrantPlugins::Spk::Config.new
-        @params.mode = args[0]
+        @params = VagrantPlugins::Packer::Config.new
       end
 
       def self.synopsis
-        'Run a stack locally or build its immutable images'
+        'Build its immutable images'
       end
 
  			def execute
         OptionParser.new do |opts|
-            opts.banner = "Usage: vagrant spk [build-images|run] "\
+            opts.banner = "Usage: vagrant packer build "\
                           "[-b|--box-url] "\
                           "[-n|--box-name] "\
                           "[-c|--cookbooks-url] "\
@@ -56,7 +54,7 @@ module VagrantPlugins
               @params.ks_template = ks_template
             end
 
-            opts.on("-s", "--stack-template [PATH]", String, "URL resolving the SPK stack template") do |stack_template|
+            opts.on("-s", "--stack-template [PATH]", String, "URL resolving the stack template") do |stack_template|
               @params.stack_template = stack_template
             end
 
@@ -73,11 +71,11 @@ module VagrantPlugins
             end
 
             opts.on("-D", "--debug", String, "true, to run packer in debug mode; default is false") do |debug|
-                @params.debug = debug
+                @params.debug = true if debug
             end
 
             opts.on("-w", "--why-run [true|false]", String, "Why run mode will just test configuration but will not run or build anything") do |why_run|
-              @params.why_run = why_run
+              @params.why_run = true if why_run
             end
 
         end.parse!
@@ -90,21 +88,21 @@ module VagrantPlugins
 
 
         # this code will be run only if the command wasn't asking for helpls
-        @engine = VagrantPlugins::Spk::Commons::Engine.new
+        @engine = VagrantPlugins::Packer::Commons::Engine.new
         @engine.create_work_dir(@params.work_dir)
 
         nodes = @engine.get_stack_template_nodes(@params.work_dir, @params.stack_template, @params.ks_template)
 
         # Delete Berksfile.lock, if present 
-        puts "[spk-info] Trying to delete local berksfile.lock"
+        puts "[packer-info] Trying to delete local berksfile.lock"
         begin
           File.delete("#{Dir.pwd}/Berksfile.lock")
-          puts "[spk-info] local Berksfile.lock removed!"
+          puts "[packer-info] local Berksfile.lock removed!"
         rescue Errno::ENOENT
-          puts "[spk-info] File not found, continuing normally.."
+          puts "[packer-info] File not found, continuing normally.."
         end
 
-        puts "[spk-info] Packaging berkshelf recipes..."
+        puts "[packer-info] Packaging berkshelf recipes..."
         # TODO - make it parametric
         Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
 
@@ -131,21 +129,17 @@ module VagrantPlugins
           #Pre commands
           if @params.pre_commands
             file_list = @params.pre_commands.split(',')
-            SpkCommands.new(@params, @engine, file_list, env_vars_string,  "pre").execute!
+            PackerCommands.new(@params, @engine, file_list, env_vars_string,  "pre").execute!
           end
 
           # this needs refactoring. every case needs it's own class
-          case @params.mode
-          when "build-images"
-            SpkBuildImages.new(@params, @engine, chef_items).execute!
-          when "run"
-            SpkRun.new(@params, @engine, nodes).execute!
-          end
+          
+          PackerBuildImages.new(@params, @engine, chef_items).execute!
 
           # Post Commands
           if @params.post_commands
             file_list = @params.post_commands.split(',')
-            SpkCommands.new(@params, @engine, file_list, env_vars_string, "post").execute!
+            PackerCommands.new(@params, @engine, file_list, env_vars_string, "post").execute!
           end
         else
           abort("Why run mode selected - not continuing")
@@ -154,10 +148,6 @@ module VagrantPlugins
 
       def validate
         errors = ""
-
-        if @params.mode.nil? or @params.mode.empty? or !["run","build-images"].include?(@params.mode)
-          errors << "You need to specify if you want to build-images or run"
-        end
 
         if @params.stack_template.nil? or @params.stack_template.empty? 
           errors << "You must provide a stack template"

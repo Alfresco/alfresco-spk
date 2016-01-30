@@ -1,6 +1,6 @@
 require 'packer-config'
 require 'json/merge_patch'
-require 'spk/utils/downloader'
+require 'packer/utils/downloader'
 require 'pry'
 
 class PackerInterface
@@ -32,21 +32,12 @@ class PackerInterface
 
 	def run_defs(packer_defs, packer_opts)
 	  # Summarise Packer suites and ask for confirmation before running it
-	  print "[spk-info] Running the following Packer templates:\n"
+	  print "[packer-info] Running the following Packer templates:\n"
 	  packer_defs.each do |packer_definition, packer|
-	    print "[spk-info] Building #{packer_definition}-packer.json\n"
+	    print "[packer-info] Building #{packer_definition}-packer.json\n"
 	    packer.packer_options << "-debug" if @params.debug == true
 	    packer.build
 	  end
-
-	  # => keeping this for now, because i need to integrate custom packer_opts
-	  # packer_defs.each do |packer_definition,packerDef|
-	  #   packerFile = File.open("#{@work_dir}/packer/#{packer_definition}-packer.json", 'w')
-	  #   packerFile.write(packerDef)
-	  #   packerFile.close()
-	  #   print "[spk-info] Executing Packer template '#{packer_definition}-packer.json' (~ 60 minutes run)\n"
-	  #   `cd #{@work_dir}/packer; #{packer_bin} build #{packer_opts} #{packer_definition}-packer.json > packer.log`
-	  # end
 	end
 
 

@@ -1,5 +1,5 @@
-require 'spk/utils/downloader'
-require 'spk/utils/unpacker'
+require 'packer/utils/downloader'
+require 'packer/utils/unpacker'
 require 'json/merge_patch'
 require 'fileutils'
 require 'json'
@@ -10,14 +10,14 @@ require 'pry'
 
 
 module VagrantPlugins
-	module Spk
+	module Packer
 		module Commons
 			class Engine
 
 				# Populate alfresco home folder.
 				def create_work_dir(work_dir)
 					FileUtils.mkdir_p("#{work_dir}/packer")
-					puts "[spk-info] Created #{work_dir}/packer folder\n"
+					puts "[packer-info] Created #{work_dir}/packer folder\n"
 				end
 
 
@@ -47,8 +47,7 @@ module VagrantPlugins
 				end
 
 				#TODO - this should not be here, but cannot handled within
-				# SPK provisioner, since no Packer variables are supported
-				# there
+				# provisioner, since no Packer variables are supported
 				def get_nexus_creds(json_attrs)
 					name = ENV['MVN_CHEF_REPO_NAME']
 					url = ENV['MVN_CHEF_REPO_URL']

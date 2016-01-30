@@ -1,8 +1,8 @@
 
 module VagrantPlugins
-	module Spk
+	module Packer
 		class Config < Vagrant.plugin(2, :config)
-			attr_accessor :work_dir, :packer_bin, :debug, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :pre_commands, :post_commands, :env_vars, :ks_template, :mode, :why_run
+			attr_accessor :work_dir, :packer_bin, :debug, :box_url, :box_name, :cookbooks_url, :databags_url, :stack_template, :pre_commands, :post_commands, :env_vars, :ks_template, :why_run
 
 			def initialize
 				@work_dir = UNSET_VALUE
@@ -10,7 +10,6 @@ module VagrantPlugins
 				@debug = UNSET_VALUE
 				@box_url = UNSET_VALUE
 				@box_name = UNSET_VALUE
-				@mode = UNSET_VALUE
 				@cookbooks_url = UNSET_VALUE
 				@databags_url = UNSET_VALUE
 				@pre_commands = UNSET_VALUE
@@ -25,7 +24,6 @@ module VagrantPlugins
 				@work_dir = "#{Dir.home}/.vagrant.d/data/spk" if @work_dir == UNSET_VALUE
 				@packer_bin = 'packer' if @packer_bin == UNSET_VALUE
 				@debug = false if @debug == UNSET_VALUE
-				@mode = '' if @mode == UNSET_VALUE
 				@box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.2_chef-provisionerless.box' if @box_url == UNSET_VALUE
 				@box_name = "opscode_centos-7.2" if @box_name == UNSET_VALUE
 				@cookbooks_url = "file://$PWD/berks-cookbooks.tar.gz" if @cookbooks_url == UNSET_VALUE
