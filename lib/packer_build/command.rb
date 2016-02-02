@@ -16,7 +16,6 @@ module VagrantPlugins
         if env.vagrantfile.config.packer_build.is_a?(VagrantPlugins::PackerBuild::Config)
           @params = env.vagrantfile.config.packer_build
         end
-        @env = env
       end
 
       def self.synopsis
@@ -87,6 +86,7 @@ module VagrantPlugins
 
         #errors = validate
         #abort(errors.join("\n")) if errors.size > 0
+
         @params.finalize!
 
 

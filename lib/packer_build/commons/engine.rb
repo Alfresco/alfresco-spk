@@ -20,6 +20,15 @@ module VagrantPlugins
 					puts "[packer-info] Created #{work_dir}/packer folder\n"
 				end
 
+				def fetch_cookbook_version
+					result = ""
+					begin
+						result = open("#{Dir.pwd}/metadata.rb").grep(/version/).first.split(" ").last.gsub(/\"/,'')
+					rescue
+					end
+					result
+				end
+
 
 				def get_stack_template_nodes(work_dir, stack_template, ks_template)
 					Downloader.get(ks_template, "#{work_dir}/ks-centos.cfg" )
