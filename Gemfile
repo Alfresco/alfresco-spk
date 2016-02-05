@@ -7,5 +7,5 @@ group :development do
 end
 
 group :plugins do
-  gem "packer_build", path: "."
+  gem "vagrant-packer-plugin", path: "."
 end
