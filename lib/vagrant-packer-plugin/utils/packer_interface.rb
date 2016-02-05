@@ -1,6 +1,7 @@
 require 'packer-config'
 require 'json/merge_patch'
 require 'vagrant-packer-plugin/patches/runner'
+require 'vagrant-packer-plugin/patches/dataobject'
 require 'vagrant-packer-plugin/utils/downloader'
 require 'pry'
 
