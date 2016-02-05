@@ -1,8 +1,8 @@
 require_relative 'config'
 
-require 'packer_build/commons/engine'
-require 'packer_build/support/packer_build_images'
-require 'packer_build/support/packer_commands'
+require 'vagrant-packer-plugin/commons/engine'
+require 'vagrant-packer-plugin/support/vagrant-packer-plugin_images'
+require 'vagrant-packer-plugin/support/packer_commands'
 
 require 'berkshelf'
 require 'optparse'
@@ -14,8 +14,8 @@ module VagrantPlugins
 
       def initialize(args, env)
         @params = VagrantPlugins::PackerBuild::Config.new
-        if env.vagrantfile.config.packer_build.is_a?(VagrantPlugins::PackerBuild::Config)
-          @params = env.vagrantfile.config.packer_build
+        if env.vagrantfile.config.vagrant-packer-plugin.is_a?(VagrantPlugins::PackerBuild::Config)
+          @params = env.vagrantfile.config.vagrant-packer-plugin
         end
       end
 

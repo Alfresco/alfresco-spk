@@ -1,5 +1,5 @@
-require 'packer_build/utils/downloader'
-require 'packer_build/utils/unpacker'
+require 'vagrant-packer-plugin/utils/downloader'
+require 'vagrant-packer-plugin/utils/unpacker'
 require 'json/merge_patch'
 require 'fileutils'
 require 'json'

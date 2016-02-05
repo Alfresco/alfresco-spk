@@ -1,4 +1,4 @@
-require 'packer_build/utils/packer_interface'
+require 'vagrant-packer-plugin/utils/packer_interface'
 
 class PackerBuildImages
 	def initialize(params, engine, chef_items)
