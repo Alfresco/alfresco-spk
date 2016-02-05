@@ -25,7 +25,7 @@ module VagrantPlugins
 				@databags_url = '' if @databags_url == UNSET_VALUE
 				@pre_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/pre-commands.json" if @pre_commands == UNSET_VALUE
 				@post_commands = "file://#{File.expand_path File.dirname(__FILE__)}/../../files/post-commands.json" if @post_commands == UNSET_VALUE
-				@ks_template = "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/ks/ks-centos.cfg" if @ks_template == UNSET_VALUE
+				@ks_template = "" if @ks_template == UNSET_VALUE
 				@env_vars = "" if @env_vars == UNSET_VALUE
 			end
 		end
