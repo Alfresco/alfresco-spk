@@ -20,12 +20,11 @@ class PackerInterface
 
 	    # => Building the packer config object variables
 	    chef_node['images']['variables'].each {|variable_name, value| pconfig.add_variable "#{variable_name}", "#{value}"}
-
 	    # => Building the packer config components: Builders, Provisioners and PostProcessors
 	   	parametrize(pconfig, "Builder", parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders'))
 	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
 	    parametrize(pconfig, "PostProcessor", parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors'))
-	    ENV['CURRENT_VERSION'] = @engine.fetch_cookbook_version
+	    ENV['COOKBOOK_VERSION'] = @engine.fetch_cookbook_version
 	    pconfig.validate
 	    packer_defs[chef_node_name] = pconfig
 	  end
@@ -96,6 +95,7 @@ class PackerInterface
 
 			if type == "Provisioner" and component['type'] == "chef-solo"
     		config.required = ["type"]
+    		config.run_list  packer.variables["run_list_item"].split(",")
     	end
 
     	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start
