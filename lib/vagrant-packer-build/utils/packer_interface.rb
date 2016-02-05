@@ -1,5 +1,6 @@
 require 'packer-config'
 require 'json/merge_patch'
+require 'packer_build/patches/runner'
 require 'packer_build/utils/downloader'
 require 'pry'
 
