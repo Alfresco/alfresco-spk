@@ -1,6 +1,8 @@
 require 'packer-config'
 require 'json/merge_patch'
-require 'spk/utils/downloader'
+require 'vagrant-packer-plugin/patches/runner'
+require 'vagrant-packer-plugin/patches/dataobject'
+require 'vagrant-packer-plugin/utils/downloader'
 require 'pry'
 
 class PackerInterface
@@ -18,11 +20,11 @@ class PackerInterface
 
 	    # => Building the packer config object variables
 	    chef_node['images']['variables'].each {|variable_name, value| pconfig.add_variable "#{variable_name}", "#{value}"}
-
 	    # => Building the packer config components: Builders, Provisioners and PostProcessors
 	   	parametrize(pconfig, "Builder", parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders'))
 	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
 	    parametrize(pconfig, "PostProcessor", parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors'))
+	    ENV['COOKBOOK_VERSION'] = @engine.fetch_cookbook_version
 	    pconfig.validate
 	    packer_defs[chef_node_name] = pconfig
 	  end
@@ -30,23 +32,14 @@ class PackerInterface
 	  return packer_defs
 	end
 
-	def run_defs(packer_defs, packer_opts)
+	def run_defs(packer_defs)
 	  # Summarise Packer suites and ask for confirmation before running it
-	  print "[spk-info] Running the following Packer templates:\n"
+	  print "[packer-info] Running the following Packer templates:\n"
 	  packer_defs.each do |packer_definition, packer|
-	    print "[spk-info] Building #{packer_definition}-packer.json\n"
-	    packer.packer_options << "-debug" if @params.debug == true
+	    print "[packer-info] Building #{packer_definition}-packer.json\n"
+	    packer.packer_options << "-debug" if @params.debug
 	    packer.build
 	  end
-
-	  # => keeping this for now, because i need to integrate custom packer_opts
-	  # packer_defs.each do |packer_definition,packerDef|
-	  #   packerFile = File.open("#{@work_dir}/packer/#{packer_definition}-packer.json", 'w')
-	  #   packerFile.write(packerDef)
-	  #   packerFile.close()
-	  #   print "[spk-info] Executing Packer template '#{packer_definition}-packer.json' (~ 60 minutes run)\n"
-	  #   `cd #{@work_dir}/packer; #{packer_bin} build #{packer_opts} #{packer_definition}-packer.json > packer.log`
-	  # end
 	end
 
 
@@ -102,6 +95,7 @@ class PackerInterface
 
 			if type == "Provisioner" and component['type'] == "chef-solo"
     		config.required = ["type"]
+    		config.run_list  packer.variables["run_list_item"].split(",")
     	end
 
     	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start

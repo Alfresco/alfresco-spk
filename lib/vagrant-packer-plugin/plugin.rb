@@ -1,18 +1,18 @@
 module VagrantPlugins
-  module Spk
+  module PackerBuild
     class Plugin < Vagrant.plugin('2')
-      name "Spk"
+      name "vagrant-packer-plugin"
 
       description <<-DESC
-      Build or run and Alfresco SPK stack
+      
       DESC
 
-      config 'spk' do
+      config 'packer_build' do
         require_relative 'config'
         Config
       end
 
-      command 'spk' do
+      command 'packer-build' do
         require_relative 'command'
         Command
       end
