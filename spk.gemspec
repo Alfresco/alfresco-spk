@@ -1,4 +1,4 @@
-require File.expand_path('../lib/packer_build/version', __FILE__)
+require File.expand_path('../lib/vagrant-packer-plugin/version', __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name          = "vagrant-packer-plugin"
