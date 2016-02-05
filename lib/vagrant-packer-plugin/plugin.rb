@@ -7,7 +7,7 @@ module VagrantPlugins
       
       DESC
 
-      config 'packer-build' do
+      config 'packer_build' do
         require_relative 'config'
         Config
       end
