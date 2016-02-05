@@ -6,5 +6,5 @@ rescue LoadError
   Bundler.require(:default, :development)
 end
 
-require 'packer_build/plugin'
-require 'packer_build/command'
+require 'vagrant-packer-plugin/plugin'
+require 'vagrant-packer-plugin/command'
