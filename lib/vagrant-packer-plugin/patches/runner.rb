@@ -1,4 +1,4 @@
-
+require 'vagrant-packer-plugin/patches/dataobject'
 require 'open3'
 require 'shellwords'
 
