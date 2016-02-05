@@ -14,7 +14,6 @@ module VagrantPlugins
 		module Commons
 			class Engine
 
-				# Populate alfresco home folder.
 				def create_work_dir(work_dir)
 					FileUtils.mkdir_p("#{work_dir}/packer")
 					puts "[packer-info] Created #{work_dir}/packer folder\n"
