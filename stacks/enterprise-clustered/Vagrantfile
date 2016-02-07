@@ -31,9 +31,6 @@ Vagrant.configure("2") do |config|
     config.vm.define role do |instance|
       instance_template = JSON.parse(IO.read(File.expand_path("../../instance-templates/#{role}.json", "#{__FILE__}/..")))
 
-      instance_template['artifact-deployer']['maven']['repositories']['private']['username'] = ENV['NEXUS_USERNAME']
-      instance_template['artifact-deployer']['maven']['repositories']['private']['password'] = ENV['NEXUS_PASSWORD']
-
       if role == "share"
         instance_template['alfresco']['properties']['dir.contentstore'] = "/vagrant/.vagrant/alf_data"
         instance_template['alfresco']['properties']['solr.host'] =  "192.168.33.52"

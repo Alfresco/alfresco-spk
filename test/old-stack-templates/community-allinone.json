@@ -1,7 +1,7 @@
 {
   "alfresco-allinone" : {
     "instance-template" : {
-      "url" : "./instance-templates/allinone-community.json"
+      "url" : "./instance-templates/community-allinone.json"
     },
     "images" : {
       "provisioners" : {

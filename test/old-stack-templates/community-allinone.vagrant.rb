@@ -6,7 +6,7 @@
 # vi: set ft=ruby :
 #
 
-instance_template_path = "../instance-templates/allinone-community.json"
+instance_template_path = "../instance-templates/community-allinone.json"
 cookbooks_url = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.20/chef-alfresco-0.6.20.tar.gz"
 run_list = ["alfresco::default"]
 

@@ -12,7 +12,9 @@
     "maven" : {
       "repositories" : {
         "private" : {
-          "url" : "https://artifacts.alfresco.com/nexus/content/groups/private"
+          "url" : "https://artifacts.alfresco.com/nexus/content/repositories/private",
+          "username" : "{{ user `private_maven_repo_username`}}",
+          "password" : "{{ user `private_maven_repo_password`}}"
         }
       }
     }

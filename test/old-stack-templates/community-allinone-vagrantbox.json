@@ -1,7 +1,7 @@
 {
   "alfresco-allinone" : {
     "instance-template" : {
-      "url" : "file://$PWD/instance-templates/allinone-community.json",
+      "url" : "file://$PWD/instance-templates/community-allinone.json",
       "overlay" : {
         "alfresco" : {
           "install_fonts" : false

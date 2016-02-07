@@ -13,7 +13,7 @@ export WORK_DIR=/tmp/chef-bootstrap
 mkdir -p $WORK_DIR
 
 export CHEF_NODE_NAME=allinone
-export CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/alfresco/alfresco-spk/master/instance-templates/allinone-community.json
+export CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/alfresco/alfresco-spk/master/instance-templates/community-allinone.json
 
 export FQDN=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
 

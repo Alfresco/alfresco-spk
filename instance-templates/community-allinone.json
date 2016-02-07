@@ -1,5 +1,5 @@
 {
-  "name": "allinone-community",
+  "name": "community-allinone",
   "nginx" : {
     "use_nossl_config" : true
   },
@@ -21,7 +21,7 @@
     "variables" : {
       "chef_version" : "12.6.0",
       "chef_prevent_sudo" : "false",
-      "run_list_item" : "alfresco::default",
+      "run_list" : "alfresco::default",
       "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
       "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
     }

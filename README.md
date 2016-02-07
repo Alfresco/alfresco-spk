@@ -49,7 +49,7 @@ Alfresco SPK provides a [list of pre-defined instance-templates](instance-templa
 In every [stack example](stack-examples) you will find the following items:
 ```
 # Where the instance template is located
-instance_template_path = "../instance-templates/allinone-community.json"
+instance_template_path = "../instance-templates/community-allinone.json"
 
 # chef-alfresco binary
 cookbooks_url = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.20/chef-alfresco-0.6.20.tar.gz"
@@ -75,7 +75,7 @@ Alfresco SPK provides a [chef-bootstrap.sh](scripts/chef-bootstrap.sh) that can 
 
 ```
 CHEF_NODE_NAME=allinone
-CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/alfresco/alfresco-spk/master/instance-templates/allinone-community.json
+CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/alfresco/alfresco-spk/master/instance-templates/community-allinone.json
 
 CHEF_LOCAL_YAML_VARS_URL=file://$WORK_DIR/local-vars.yaml
 cat > $CHEF_LOCAL_YAML_VARS_URL << "EOF"

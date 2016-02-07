@@ -1,7 +1,7 @@
 {
   "alfresco-allinone" : {
     "instance-template" : {
-      "url" : "file://$PWD/instance-templates/allinone-community.json",
+      "url" : "file://$PWD/instance-templates/community-allinone.json",
       "overlayYamlUrl" : "file://$PWD/yaml-overlays/allinone.yml"
     },
     "local-run" : {

@@ -8,7 +8,7 @@ mkdir -p $WORK_DIR
 # DATABAGS_URL="..."
 
 export CHEF_NODE_NAME=allinone
-export CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/alfresco/alfresco-spk/master/instance-templates/allinone-community.json
+export CHEF_INSTANCE_TEMPLATE=https://raw.githubusercontent.com/alfresco/alfresco-spk/master/instance-templates/community-allinone.json
 
 # Manage Alfresco License retrieval
 mkdir /opt/alflicense
