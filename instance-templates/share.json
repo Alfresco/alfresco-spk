@@ -1,5 +1,5 @@
 {
-  "name": "share-enterprise",
+  "name": "enterprise-share",
   "nginx" : {
     "use_nossl_config" : true
   },

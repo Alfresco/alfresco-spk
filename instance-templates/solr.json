@@ -1,5 +1,5 @@
 {
-  "name": "solr-enterprise",
+  "name": "enterprise-solr",
   "alfresco" : {
     "skip_certificate_creation" : true,
     "version" : "5.0.2.5",

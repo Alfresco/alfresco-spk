@@ -24,14 +24,16 @@ vagrant plugin install ~/.vagrant.d/vagrant-packer-plugin-0.5.0.gem
 
 ## Run a stack locally
 ```
-cd stacks/community-allinone
+git clone https://github.com/Alfresco/alfresco-spk.git
+cd alfresco-spk/stacks/community-allinone
 vagrant up
 ```
 Browse [stacks](stacks) folder and change `VAGRANT_VAGRANTFILE` to test the stack of your choice; to customize it, read more about `Stack definitions` below.
 
 ## Build an Image
 ```
-cd stacks/community-allinone
+git clone https://github.com/Alfresco/alfresco-spk.git
+cd alfresco-spk/stacks/community-allinone
 vagrant packer-build
 ```
 This will build an Amazon AMI, but could also create an OVF, Vagrant .box or any other nature [supported by Packer](https://www.packer.io/docs/templates/builders.html)
@@ -62,13 +64,14 @@ Single-instance stacks - such as [Alfresco Community Allinone](stacks/community-
 
 ### Alfresco Enterprise
 ```
+export MVN_CHEF_REPO_USERNAME=<your_nexus_user>
+export MVN_CHEF_REPO_PASSWORD=<your_nexus_password>
+
 cd stacks/enterprise-clustered
-export NEXUS_USERNAME=<your_nexus_user>
-export NEXUS_PASSWORD=<your_nexus_password>
 vagrant up
 ```
 
-### Integrating with AWS (or any other packer-supported builder)
+### Integrating with Orchestration tools (WIP)
 When AMIs are (or not) in place and provisioning logic have been tested locally, it is possible to configure other orchestration tools and/or Cloud providers in order to spin up the same stack remotely.
 
 Alfresco SPK provides a [chef-bootstrap.sh](scripts/chef-bootstrap.sh) that can be used to easily integrate with the orchestration tool of your choice; below we provide an integration example using AWS Cloudformation (and [UserData](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) attribute)
