@@ -2,7 +2,7 @@
   "type": "chef-solo",
   "execute_command" : "cd /tmp/packer-chef-solo && ln -s cookbooks-0 cookbooks && {{if .Sudo}}sudo {{end}}chef-client --no-color -z -j {{.JsonPath}}",
   "install_command": "{{if .Sudo}}sudo {{end}}bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v {{user `chef_version`}}'",
-  "prevent_sudo": "{{user `chef_prevent_sudo`}}",
+  "prevent_sudo": false,
   "skip_install": false,
   "data_bags_path": "./data_bags",
   "cookbook_paths": ["./cookbooks"],
