@@ -22,7 +22,7 @@ module VagrantPlugins
 				end
 
 				def get_instance_templates(work_dir, instance_templates, ks_template)
-					Downloader.get(ks_template, "#{work_dir}/ks-centos.cfg" )
+					Downloader.get(ks_template, "#{work_dir}/ks.cfg" )
 					json_ret = {}
 					instance_templates.each_with_index do |instance_template,index|
 						json_ret[instance_template] = get_json(work_dir, "instance-template-#{index}.json", instance_template)
