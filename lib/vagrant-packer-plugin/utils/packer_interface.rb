@@ -13,20 +13,20 @@ class PackerInterface
 
   def get_defs(nodes)
 	  packer_defs = {}
-	  nodes.each do |_chef_node_name,chef_node|
-			chef_node_name = chef_node['name']
-	  	pconfig = Packer::Config.new "#{@params.work_dir}/#{chef_node_name}-packer.json"
-	    pconfig.description "VirtualBox vagrant for #{chef_node_name}"
+	  nodes.each do |_node_name,node|
+			node_name = node['name']
+	  	pconfig = Packer::Config.new "#{@params.work_dir}/#{node_name}-packer.json"
+	    pconfig.description "VirtualBox vagrant for #{node_name}"
 
 	    # => Building the packer config object variables
-	    chef_node['_images']['variables'].each {|variable_name, value| pconfig.add_variable "#{variable_name}", "#{value}"}
+	    node['_images']['variables'].each {|variable_name, value| pconfig.add_variable "#{variable_name}", "#{value}"}
 	    # => Building the packer config components: Builders, Provisioners and PostProcessors
-	   	parametrize(pconfig, "Builder", parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders'))
-	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
-	    parametrize(pconfig, "PostProcessor", parse_packer_elements(chef_node, chef_node_name, 'postprocessor', 'postprocessors'))
+	   	parametrize(pconfig, "Builder", parse_packer_elements(node, node_name, 'builder', 'builders'))
+	    parametrize(pconfig, "Provisioner", parse_packer_elements(node, node_name, 'provisioner', 'provisioners'))
+	    parametrize(pconfig, "PostProcessor", parse_packer_elements(node, node_name, 'postprocessor', 'postprocessors'))
 	    ENV['COOKBOOK_VERSION'] = @engine.fetch_cookbook_version
 	    pconfig.validate
-	    packer_defs[chef_node_name] = pconfig
+	    packer_defs[node_name] = pconfig
 	  end
 
 	  return packer_defs
@@ -46,8 +46,8 @@ class PackerInterface
 
 	# packer_element can be 'provisioners' or 'builders'; it's used to parse JSON input structure
 	# packer_element_type can be 'provisioner' or 'builder'; it's used to name files
-	def parse_packer_elements(chef_node, chef_node_name, packer_element_type, packer_element)
-	  urls = chef_node['_images'][packer_element]
+	def parse_packer_elements(node, node_name, packer_element_type, packer_element)
+	  urls = node['_images'][packer_element]
 	  ret = "["
 		if urls
 		  urls.each do |element_name,url|
@@ -58,7 +58,7 @@ class PackerInterface
 
 		    # Inject Chef attributes JSON into the chef-solo provisioner
 		    if elementJson['type'] == 'chef-solo'
-		      element = inject_chef_attributes(chef_node['name'], element_name, elementJson)
+		      element = inject_chef_attributes(node['name'], element_name, elementJson)
 		    end
 		    ret += element + ","
 		  end
@@ -68,9 +68,9 @@ class PackerInterface
 	  return ret
 	end
 
-	def inject_chef_attributes(chef_node_name, provisioner_name, json_provisioner)
-	  node_url = "#{@params.work_dir}/attributes-#{chef_node_name}.json"
-	  node_url_content = File.read("#{@params.work_dir}/attributes-#{chef_node_name}.json")
+	def inject_chef_attributes(node_name, provisioner_name, json_provisioner)
+	  node_url = "#{@params.work_dir}/attributes-#{node_name}.json"
+	  node_url_content = File.read("#{@params.work_dir}/attributes-#{node_name}.json")
 	  json_provisioner['json'] = JSON.parse(node_url_content)
 		json_provisioner['json']['_images'] = {} if json_provisioner['json']['_images']
 	  return json_provisioner.to_json
