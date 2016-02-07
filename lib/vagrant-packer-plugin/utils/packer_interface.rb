@@ -15,7 +15,7 @@ class PackerInterface
 	  packer_defs = {}
 	  nodes.each do |_chef_node_name,chef_node|
 			chef_node_name = chef_node['name']
-	  	pconfig = Packer::Config.new "#{@params.work_dir}/packer/#{chef_node_name}-packer.json"
+	  	pconfig = Packer::Config.new "#{@params.work_dir}/#{chef_node_name}-packer.json"
 	    pconfig.description "VirtualBox vagrant for #{chef_node_name}"
 
 	    # => Building the packer config object variables
@@ -51,7 +51,7 @@ class PackerInterface
 	  ret = "["
 		if urls
 		  urls.each do |element_name,url|
-		    packer_filename = "#{@params.work_dir}/packer/#{element_name}-#{packer_element_type}.json"
+		    packer_filename = "#{@params.work_dir}/#{element_name}-#{packer_element_type}.json"
 		    Downloader.get(url, packer_filename)
 		    element = File.read(packer_filename)
 				elementJson = JSON.parse(element)
@@ -73,7 +73,6 @@ class PackerInterface
 	  node_url_content = File.read("#{@params.work_dir}/attributes-#{chef_node_name}.json")
 	  json_provisioner['json'] = JSON.parse(node_url_content)
 		json_provisioner['json']['_images'] = {} if json_provisioner['json']['_images']
-	  json_provisioner['json'] = @engine.get_nexus_creds(json_provisioner['json'])
 	  return json_provisioner.to_json
 	end
 

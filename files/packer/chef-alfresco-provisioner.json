@@ -4,6 +4,6 @@
   "install_command": "bash -c 'curl -L https://www.opscode.com/chef/install.sh| bash -s -- -v 12.5.1'",
   "prevent_sudo": true,
   "skip_install": false,
-  "cookbook_paths": ["../cookbooks"],
+  "cookbook_paths": ["./cookbooks"],
   "run_list": ["alfresco::default"]
 }

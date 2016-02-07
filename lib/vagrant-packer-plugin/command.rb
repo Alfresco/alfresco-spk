@@ -30,9 +30,13 @@ module VagrantPlugins
                           "[-c|--cookbooks-url] "\
                           "[-d|--databags-url] "\
                           "[-k|--ks-template] "\
+                          "[-B|--berksfile] "\
                           "[-i|--instance-templates] "\
                           "[-e|--pre-commands] "\
                           "[-o|--post-commands] "\
+                          "[-v|--env-vars] "\
+                          "[-D|--packer-debug] "\
+                          "[-w|--why-run] "\
                           "[--env-vars] "
 
             opts.separator ""
@@ -57,6 +61,10 @@ module VagrantPlugins
               @params.ks_template = ks_template
             end
 
+            opts.on("-B", "--berksfile [PATH]", String, "path resolving the Berksfile)") do |berksfile|
+              @params.berksfile = berksfile
+            end
+
             opts.on("-i", "--instance-templates [PATH1],[PATH2]", String, "URL resolving the instance templates") do |instance_templates|
               @params.instance_templates = instance_templates
             end
@@ -73,7 +81,7 @@ module VagrantPlugins
               @params.env_vars = env_vars
             end
 
-            opts.on("-d", "--packer-debug", "true, to run packer in debug mode; default is false") do |debug|
+            opts.on("-D", "--packer-debug", "true, to run packer in debug mode; default is false") do |debug|
                 @params.debug = debug
             end
 
@@ -92,7 +100,6 @@ module VagrantPlugins
 
         # this code will be run only if the command wasn't asking for helpls
         @engine = VagrantPlugins::PackerBuild::Commons::Engine.new
-        @engine.create_work_dir(@params.work_dir)
 
         nodes = @engine.get_instance_templates(@params.work_dir, @params.instance_templates, @params.ks_template)
 
@@ -106,9 +113,10 @@ module VagrantPlugins
         end
 
         puts "[packer-info] Packaging berkshelf recipes..."
-        # TODO - make it parametric
-        Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
 
+        Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
+        # TODO - consider also params.berksfile, but not working yet
+        # Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1],"-b #{@params.berksfile}"])
         chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.cookbooks_url, @params.databags_url)
 
         env_vars_string = ""

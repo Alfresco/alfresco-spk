@@ -2,7 +2,7 @@
 module VagrantPlugins
 	module PackerBuild
 		class Config < Vagrant.plugin(2, :config)
-			attr_accessor :work_dir, :debug, :box_url, :box_name, :cookbooks_url, :databags_url, :instance_templates, :pre_commands, :post_commands, :env_vars, :ks_template, :why_run
+			attr_accessor :work_dir, :debug, :box_url, :box_name, :cookbooks_url, :databags_url, :instance_templates, :pre_commands, :post_commands, :env_vars, :ks_template, :berksfile, :why_run
 
 			def initialize
 				@work_dir = UNSET_VALUE
@@ -13,6 +13,7 @@ module VagrantPlugins
 				@pre_commands = UNSET_VALUE
 				@post_commands = UNSET_VALUE
 				@ks_template = UNSET_VALUE
+				@berksfile = UNSET_VALUE
 				@env_vars = UNSET_VALUE
 			end
 
@@ -25,6 +26,7 @@ module VagrantPlugins
 				@pre_commands = "" if @pre_commands == UNSET_VALUE
 				@post_commands = "" if @post_commands == UNSET_VALUE
 				@ks_template = "" if @ks_template == UNSET_VALUE
+				@berksfile = "Berksfile" if @berksfile == UNSET_VALUE
 				@env_vars = "" if @env_vars == UNSET_VALUE
 			end
 		end
