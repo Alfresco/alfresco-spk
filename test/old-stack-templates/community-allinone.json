@@ -5,12 +5,12 @@
     },
     "images" : {
       "provisioners" : {
-        "selinux-permissive" : "./packer/selinux-permissive-provisioner.json",
-        "chef-alfresco" : "./packer/chef-provisioner.json",
-        "image-cleanup" : "./packer/image-cleanup-provisioner.json"
+        "selinux-permissive" : "./packer/provisioners/selinux-permissive.json",
+        "chef-alfresco" : "./packer/provisioners/chef.json",
+        "image-cleanup" : "./packer/provisioners/image-cleanup.json"
       },
       "builders" : {
-        "amazon-ebs" : "./packer/amazon-ebs-builder.json"
+        "amazon-ebs" : "./packer/builders/amazon-ebs.json"
       },
       "variables" : {
         "chef_version" : "12.6.0",

@@ -11,12 +11,12 @@
   "run_list": ["alfresco::default"],
   "_images" : {
     "provisioners" : {
-      "selinux-permissive" : "./packer/selinux-permissive-provisioner.json",
-      "chef-alfresco" : "./packer/chef-provisioner.json",
-      "image-cleanup" : "./packer/image-cleanup-provisioner.json"
+      "selinux-permissive" : "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/packer/provisioners/selinux-permissive.json",
+      "chef-alfresco" : "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/packer/provisioners/chef.json",
+      "image-cleanup" : "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/packer/provisioners/image-cleanup.json"
     },
     "builders" : {
-      "amazon-ebs" : "./packer/amazon-ebs-builder.json"
+      "amazon-ebs" : "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/packer/builders/amazon-ebs.json"
     },
     "variables" : {
       "chef_version" : "12.6.0",

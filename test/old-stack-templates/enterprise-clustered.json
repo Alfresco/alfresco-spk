@@ -101,11 +101,11 @@
     },
     "images" : {
       "provisioners" : {
-        "chef-alfresco" : "file://$PWD/packer/chef-provisioner.json",
-        "image-cleanup" : "file://$PWD/packer/image-cleanup-provisioner.json"
+        "chef-alfresco" : "file://$PWD/packer/provisioners/chef.json",
+        "image-cleanup" : "file://$PWD/packer/provisioners/image-cleanup.json"
       },
       "builders" : {
-        "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
+        "amazon-ebs" : "file://$PWD/packer/builders/amazon-ebs.json"
       },
       "variables" : {
         "data_bags_path" : ".",

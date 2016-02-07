@@ -41,10 +41,10 @@ def getEnvParams()
 end
 
 def initWorkDir(workDir)
-  `mkdir -p #{workDir}/packer`
+  `mkdir -p #{workDir}`
   `mkdir -p #{workDir}/alf_data`
   `chmod 777 #{workDir}/alf_data`
-  print "Created #{workDir}/packer #{workDir}/alf_data folders\n"
+  print "Created #{workDir} #{workDir}/alf_data folders\n"
 end
 
 def getStackTemplateNodes(downloadCmd, workDir, stackTemplateUrl)
@@ -135,7 +135,7 @@ def parsePackerElements(downloadCmd, workDir, chefNode, chefNodeName, packerElem
   urls = chefNode['images'][packerElement]
   ret = "["
   urls.each do |elementName,url|
-    packerFileName = "#{workDir}/packer/#{elementName}-#{packerElementType}.json"
+    packerFileName = "#{workDir}/#{elementName}-#{packerElementType}.json"
     downloadFile(downloadCmd, url, packerFileName)
     element = File.read(packerFileName)
 
@@ -182,15 +182,15 @@ def runPackerDefinitions(packerDefs, workDir, packerBin, packerOpts, packerLogFi
   print "Check #{packerLogFile} for logs.\n"
 
   packerDefs.each do |packerDefName,packerDef|
-    packerFile = File.open("#{workDir}/packer/#{packerDefName}-packer.json", 'w')
+    packerFile = File.open("#{workDir}/#{packerDefName}-packer.json", 'w')
     packerFile.write(packerDef)
     packerFile.close()
 
     print "Executing Packer template '#{packerDefName}-packer.json' (~ 60 minutes run)\n"
     if '-debug' == packerOpts
-      `cd #{workDir}/packer; #{packerBin} build #{packerOpts} #{packerDefName}-packer.json`
+      `cd #{workDir}; #{packerBin} build #{packerOpts} #{packerDefName}-packer.json`
     else
-      `cd #{workDir}/packer; #{packerBin} build #{packerOpts} #{packerDefName}-packer.json >> #{packerLogFile}`
+      `cd #{workDir}; #{packerBin} build #{packerOpts} #{packerDefName}-packer.json >> #{packerLogFile}`
     end
   end
 end
