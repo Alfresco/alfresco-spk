@@ -1,11 +1,26 @@
 {
-    "name": "solr-enterprise",
-    "alfresco" : {
-        "skip_certificate_creation" : true,
-        "version" : "5.0.2",
-        "edition" : "enterprise",
-        "components" : ["tomcat","repo","solr"],
-        "restart_services" : ["tomcat-alfresco","tomcat-solr"]
-    },
-    "run_list": ["alfresco::default"]
+  "name": "solr-enterprise",
+  "alfresco" : {
+    "skip_certificate_creation" : true,
+    "version" : "5.0.2.5",
+    "edition" : "enterprise",
+    "components" : ["tomcat","repo","solr"],
+    "restart_services" : ["tomcat-alfresco","tomcat-solr"],
+    "properties" : {}
+  },
+  "artifact-deployer" : {
+    "maven" : {
+      "repositories" : {
+        "private" : {
+          "url" : "https://artifacts.alfresco.com/nexus/content/groups/private"
+        }
+      }
+    }
+  },
+  "run_list": ["alfresco::default"],
+  "_local" : {
+    "ip" : "192.168.33.52",
+    "ram" : "2048",
+    "cpus" : "1"
+  }
 }

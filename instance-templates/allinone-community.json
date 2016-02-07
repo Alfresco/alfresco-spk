@@ -1,13 +1,34 @@
 {
-    "name": "allinone-community",
-    "nginx" : {
-      "use_nossl_config" : true,
-      "disable_nginx_init" : true
+  "name": "allinone-community",
+  "nginx" : {
+    "use_nossl_config" : true
+  },
+  "alfresco" : {
+    "components" : ["haproxy","nginx","tomcat","transform","repo","share","solr","mysql"],
+    "public_protocol" : "http",
+    "public_portssl" : "80"
+  },
+  "run_list": ["alfresco::default"],
+  "_images" : {
+    "provisioners" : {
+      "selinux-permissive" : "./packer/selinux-permissive-provisioner.json",
+      "chef-alfresco" : "./packer/chef-provisioner.json",
+      "image-cleanup" : "./packer/image-cleanup-provisioner.json"
     },
-    "alfresco" : {
-        "skip_certificate_creation" : true,
-        "public_protocol" : "http",
-        "public_portssl" : "80"
+    "builders" : {
+      "amazon-ebs" : "./packer/amazon-ebs-builder.json"
     },
-    "run_list": ["alfresco::default"]
+    "variables" : {
+      "chef_version" : "12.6.0",
+      "chef_prevent_sudo" : "false",
+      "run_list_item" : "alfresco::default",
+      "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
+      "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
+    }
+  },
+  "_local" : {
+    "ip" : "192.168.33.43",
+    "ram" : "4096",
+    "cpus" : "2"
+  }
 }

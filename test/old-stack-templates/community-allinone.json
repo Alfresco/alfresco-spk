@@ -1,0 +1,24 @@
+{
+  "alfresco-allinone" : {
+    "instance-template" : {
+      "url" : "./instance-templates/allinone-community.json"
+    },
+    "images" : {
+      "provisioners" : {
+        "selinux-permissive" : "./packer/selinux-permissive-provisioner.json",
+        "chef-alfresco" : "./packer/chef-provisioner.json",
+        "image-cleanup" : "./packer/image-cleanup-provisioner.json"
+      },
+      "builders" : {
+        "amazon-ebs" : "./packer/amazon-ebs-builder.json"
+      },
+      "variables" : {
+        "chef_version" : "12.6.0",
+        "chef_prevent_sudo" : "false",
+        "run_list_item" : "alfresco::default",
+        "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
+        "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
+      }
+    }
+  }
+}

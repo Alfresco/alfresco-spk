@@ -1,15 +1,28 @@
 {
-    "name": "share-enterprise",
-    "nginx" : {
-      "use_nossl_config" : true,
-      "disable_nginx_init" : true
-    },
-    "alfresco" : {
-        "skip_certificate_creation" : true,
-        "version" : "5.0.2",
-        "edition" : "enterprise",
-        "components" : ["haproxy","nginx","tomcat","transform","repo","share","aos"],
-        "restart_services" : ["tomcat-alfresco","tomcat-share"]
-    },
-    "run_list": ["alfresco::default"]
+  "name": "share-enterprise",
+  "nginx" : {
+    "use_nossl_config" : true
+  },
+  "alfresco" : {
+    "version" : "5.0.2.5",
+    "edition" : "enterprise",
+    "components" : ["haproxy","nginx","tomcat","transform","repo","share","aos"],
+    "restart_services" : ["tomcat-alfresco","tomcat-share"],
+    "properties" : {}
+  },
+  "artifact-deployer" : {
+    "maven" : {
+      "repositories" : {
+        "private" : {
+          "url" : "https://artifacts.alfresco.com/nexus/content/groups/private"
+        }
+      }
+    }
+  },
+  "run_list": ["alfresco::default"],
+  "_local" : {
+    "ip" : "192.168.33.51",
+    "ram" : "4096",
+    "cpus" : "2"
+  }
 }

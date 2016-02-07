@@ -1,161 +1,70 @@
+Checkout the [Alfresco SPK presentation](http://www.slideshare.net/m.pillitu/alfresco-spkalfrescoday) at Alfresco Day.
+
 ## What is Alfresco SPK
-Alfresco SPK is a toolset that can be used by stack operators (Devops/Architects/Engineers, Support, QA, Sales, Marketing, ...) to define stacks locally (first) and run them anywhere (later); it sits on top of existing technologies (ChefDK, Vagrant, Packer) and implements a modular, testable, consistent development workflow for Alfresco software provisioning.
+Alfresco SPK is a toolset that can be used by stack operators (Devops/Architects/Engineers, Support, QA, Sales, Marketing, ...) to define Alfresco immutable Images, testing them locally first, also for arbitrarily complex architectures.
 
-Check [Alfresco Day presentation](http://www.slideshare.net/m.pillitu/alfresco-spkalfrescoday) to know more about Alfresco SPK
+It allows you to:
+1. Run an arbitrarily complex stack locally
+2. Build (immutable) image(s) with the exact same provisioning logic used for local run
+3. Test immutable images locally
+4. Run a stack on any orchestration tool with the same provisioning logic used for local runs
 
-## Concepts
+## Installation
+Alfresco SPK uses ([Vagrant](https://www.vagrantup.com) and) [vagrant-packer-plugin](https://github.com/Alfresco/vagrant-packer-plugin) to build images and [chef-alfresco](https://github.com/Alfresco/chef-alfresco) to install Alfresco inside the boxes.
 
-### Instance template
-A JSON file that contains provisioning configurations related to a single node of an Alfresco stack; instance templates are resolved via URL, that can point to a local or remote file.
-
-Instance templates are [Chef nodes](https://docs.chef.io/nodes.html) that contain all configurations - also known as Chef attributes - that are involved in the instance provisioning, for example the Alfresco admin password, the db host, the amps to install and much (much) more.
-
-Alfresco SPK provides a [list of pre-defined instance-templates](instance-templates) that are used by the sample stacks; attributes are defined, along with its defaults, by [chef-alfresco](https://github.com/Alfresco/chef-alfresco).
-
-### Stack template
-A JSON file that describes a stack in terms of instances.
-
-Stack templates are resolved via URL, that can point to a local or remote file. The default stack template is defined in `stack-templates/community-allinone.json`, though the [stack-templates](stack-templates) folder aims to host many more examples.
-
-You can use any stack template you want, either locally or remotely:
-```
-export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
-```
-
-Each instance defined in a stack template is composed by the following items.
-
-#### Instance template reference
-A URL link that resolves an instance template (described above):
-```
-{
-  "alfresco-allinone" : {
-    "instance-template" : {
-      "url" : "file://$PWD/instance-templates/allinone-community.json",
-      "overlay" : {
-        "alfresco" : {
-          "properties" : {
-            "dir.contentstore" : "/vagrant/.vagrant/alf_data",
-            "db.host" : "192.168.33.10"
-          }
-        }
-      }
-    },
-    ...
-  }
-}
-```
-URL can be resolved locally or remotely.
-
-The `overlay` element contain local configurations that are [merged](https://tools.ietf.org/html/rfc7386) into the instance template; as such, the syntax is the same used by instance templates.
-
-Configuration overlays can be specified in JSON or YAML formats; the latter is easier to define within inline scripts, avoiding the need to escape `"` chars:
-
-```
-{
-  "alfresco-allinone" : {
-    "instance-template" : {
-      "url" : "file://$PWD/instance-templates/allinone-community.json",
-      "overlayYamlUrl" : "file://$PWD/yaml-overlays/allinone.yml"
-    },
-    ...
-  }
-}
-```
-
-This snippet was taken from [community-allinone.json stack template](stack-templates/community-allinone.json) and uses [allinone.yml](yaml-overlays/allinone.yml) as YAML overlay.
-
-#### Vagrant-related configurations
-Used to run the stack locally; for example, `memory` and `cpu` control the resources allocated by Vagrant to run the instance.
-```
-{
-  "alfresco-allinone" : {
-    "local-run" : {
-      "memory" : "2048",
-      "cpus" : "2"
-      "ip" : "192.168.33.33"
-    },
-    ...
-  }
-}
-```
-
-#### Image configurations
-Used to create images based on instance template configurations; the `images` item defines
-- builders; they define the nature(s) of the image(s) that you want to build; currently, the only builder implemented and extensively tested is [amazon-ebs](packer/amazon-ebs-builder.json.example) (which produces an AMI), though there have been successes for OVF and Docker images too (WIP); any [Packer builder](https://www.packer.io/docs/templates/builders.html) can be easily integrated
-- provisioners; by default, the only provisioner needed is [`chef-solo`](packer/chef-solo-provisioner.json), which basically runs the same provisioning logic that runs locally; however, you can extend this list with more [Packer provisioners](https://www.packer.io/docs/templates/provisioners.html) of your choice
-- variables; for each entry, a [Packer variable](https://www.packer.io/docs/templates/user-variables.html) is defined; variables can be used by provisioners and builders using the following syntax:
-```
-{{user `this is my property`}}
-```
-
-Below a configuration example that builds an allinone image:
-```
-{
-  "alfresco-allinone" : {
-    "images" : {
-      "provisioners" : {
-        "chef-solo" : "file://$PWD/packer/chef-solo-provisioner.json"
-      },
-      "builders" : {
-        "amazon-ebs" : "file://$PWD/packer/amazon-ebs-builder.json"
-      },
-      "variables" : {
-        "ami_description" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}",
-        "ami_name" : "Alfresco Community 5.1.c-EA - Allinone Server - {{timestamp}}"
-      }
-    },
-    ...
-  }
-}
-```
-
-## Requirements
-* [ChefDK](https://downloads.chef.io/chef-dk)
+Please install:
 * [Vagrant](https://www.vagrantup.com/downloads.html)
 * [Packer](https://packer.io/downloads.html)
 
-## Configure Vagrant
-Vagrant needs some additional plugins:
+To install the Vagrant Packer Plugin:
 ```
-vagrant plugin install vagrant-omnibus
-vagrant plugin install vagrant-vbguest
-vagrant plugin install json-merge_patch
+curl -L --no-sessionid https://github.com/Alfresco/alfresco-spk/raw/vagrant-packer-plugin/pkg/vagrant-packer-plugin-0.5.0.gem > ~/.vagrant.d/vagrant-packer-plugin-0.5.0.gem
+vagrant plugin install ~/.vagrant.d/vagrant-packer-plugin-0.5.0.gem
 ```
 
-## Development Workflow
-
-### Checkout the project
-To start using the Alfresco SPK, first you need to checkout (and cd into) this project:
+## Run a stack locally
 ```
-git clone https://github.com/Alfresco/alfresco-spk.git
-cd alfresco-spk
+cd stacks/community-allinone
+vagrant up
+```
+Browse [stacks](stacks) folder and change `VAGRANT_VAGRANTFILE` to test the stack of your choice; to customize it, read more about `Stack definitions` below.
+
+## Build an Image
+```
+cd stacks/community-allinone
+vagrant packer-build
+```
+This will build an Amazon AMI, but could also create an OVF, Vagrant .box or any other nature [supported by Packer](https://www.packer.io/docs/templates/builders.html)
+
+## Concepts
+
+### What is an Instance template
+An Instance Template is a JSON file that includes all information to build an immutable image; it contains:
+1. chef-alfresco configuration, using Chef attributes syntax; it also includes the list of recipes to invoke (`run_list`)
+2. vagrant-packer configuration, using Packer syntax
+
+Alfresco SPK provides a [list of pre-defined instance-templates](instance-templates) that are used by the sample stacks.
+
+### Stack definitions
+In every [stack example](stack-examples) you will find the following items:
+```
+# Where the instance template is located
+instance_template_path = "../instance-templates/allinone-community.json"
+
+# chef-alfresco binary
+cookbooks_url = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.20/chef-alfresco-0.6.20.tar.gz"
+
+# chef-alfresco recipes to invoke
+run_list = ["alfresco::default"]
 ```
 
-### Running locally
-Assuming that you defined `$STACK_TEMPLATE_URL` with the proper JSON stack definition, in order to spin up the entire stack locally using Vagrant, just type `vagrant up`
+Single-instance stacks - such as [Alfresco Community Allinone](stacks/community-allinone.vagrant.rb) - are simpler to start with; if you're looking for multi-machine configurations, check [Alfresco Enterprise Clustered](stacks/enterprise-clustered.vagrant.rb)
 
-This will create a [Vagrant Machine](https://docs.vagrantup.com/v2/multi-machine) for each instance that composes the stack.
-
-Assuming that you've run your stack locally and you're happy with the instance template definitions, you can proceed with one (or both) of the following options:
-
-### Building Immutable images
-Create one or more immutable images for each of the instances involved in a given stack; instance templates will be used to dictate the provisioning configuration, whereas Local Variables - as mentioned above - will be ignored.
-
-To create the images:
+### Alfresco Enterprise
 ```
-vagrant up build-images
-```
-
-As above, you can select the stack template using:
-```
-export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
-```
-
-An image will be created for each instance *and* builder; for example, if you create images for the `enterprise-clustered.json` stack, using `amazon-ebs` and `docker` as builders, you'll get 4 images created.
-
-#### WIP - Build Docker images
-```
-cd docker
+cd stacks/enterprise-clustered
+export NEXUS_USERNAME=<your_nexus_user>
+export NEXUS_PASSWORD=<your_nexus_password>
 vagrant up
 ```
 
@@ -179,59 +88,3 @@ ruby chef-bootstrap.rb
 ```
 
 The expression `{"Fn::GetAtt": ["ElasticLoadBalancer","DNSName"]}` is Cloudformation-specific and reads the `DNSName` value of an `ElasticLoadBalancer` instance defined in the same Cloudformation template.
-
-## Custom parameters
-You can optionally override the following variables:
-```
-DOWNLOAD_CMD="curl --silent"
-WORK_DIR="./.vagrant"
-
-COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.10/chef-alfresco-0.6.10.tar.gz"
-DATABAGS_URL=nil
-
-STACK_TEMPLATE_URL="https://raw.githubusercontent.com/Alfresco/chef-alfresco/master/stack-templates/enterprise-clustered.json"
-```
-
-### Example of custom values
-```
-export COOKBOOKS_URL="https://artifacts.alfresco.com/nexus/service/local/repositories/snapshots/content/org/alfresco/devops/chef-alfresco/0.6.8-SNAPSHOT/chef-alfresco-0.6.8-20151104.130154-30.tar.gz"
-export STACK_TEMPLATE_URL=file://$PWD/stack-templates/enterprise-clustered.json
-```
-
-### Access the boxes
-```
-vagrant ssh alfresco-share1
-```
-Check stack templates for private IP used to run it locally; Share services run on port 80.
-
-## Using Alfresco Enterprise
-In order to use an enterprise version, you must pass your artifacts.alfresco.com credentials as follows:
-```
-NEXUS_USERNAME=myusername
-NEXUS_PASSWORD=password
-```
-This approach works for local, remote run and image creation (read above how to export variables on a remote run)
-
-## Debugging
-To enable Vagrant debug mode:
-```
-VAGRANT_LOG=debug
-```
-
-To enable Packer debug mode:
-```
-export PACKER_OPTS=-debug
-```
-
-If you want to check if VirtualBox is still running from previous attempps run
-
-```
-ps aux | grep VirtualBoxVM
-ps aux | grep Vbox
-```
-
-To reset your local environment, run the following command
-
-```
-vagrant destroy -f && killall VBoxSVC && rm -Rf .vagrant *.lock
-```
