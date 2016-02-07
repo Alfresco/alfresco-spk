@@ -1,9 +1,0 @@
-{
-  "type": "shell",
-  "inline": [
-    "sudo yum -y clean all",
-    "sudo find /var/log -type f -delete",
-    "sudo find /var/cache -type f -delete",
-    "sudo find /tmp -type f -delete"
-  ]
-}
