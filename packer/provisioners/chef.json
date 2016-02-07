@@ -5,6 +5,6 @@
   "prevent_sudo": "{{user `chef_prevent_sudo`}}",
   "skip_install": false,
   "data_bags_path": "./data_bags",
-  "cookbook_paths": ["../cookbooks"],
+  "cookbook_paths": ["./cookbooks"],
   "run_list": ["{{user `run_list_item`}}"]
 }
