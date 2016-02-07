@@ -10,16 +10,16 @@ class PackerInterface
 		@params = params
 		@engine = engine
 	end
-	
+
   def get_defs(nodes)
 	  packer_defs = {}
-	  nodes.each do |chef_node_name,chef_node|
-
+	  nodes.each do |_chef_node_name,chef_node|
+			chef_node_name = chef_node['name']
 	  	pconfig = Packer::Config.new "#{@params.work_dir}/packer/#{chef_node_name}-packer.json"
 	    pconfig.description "VirtualBox vagrant for #{chef_node_name}"
 
 	    # => Building the packer config object variables
-	    chef_node['images']['variables'].each {|variable_name, value| pconfig.add_variable "#{variable_name}", "#{value}"}
+	    chef_node['_images']['variables'].each {|variable_name, value| pconfig.add_variable "#{variable_name}", "#{value}"}
 	    # => Building the packer config components: Builders, Provisioners and PostProcessors
 	   	parametrize(pconfig, "Builder", parse_packer_elements(chef_node, chef_node_name, 'builder', 'builders'))
 	    parametrize(pconfig, "Provisioner", parse_packer_elements(chef_node, chef_node_name, 'provisioner', 'provisioners'))
@@ -42,23 +42,23 @@ class PackerInterface
 	  end
 	end
 
-
 	private
 
 	# packer_element can be 'provisioners' or 'builders'; it's used to parse JSON input structure
 	# packer_element_type can be 'provisioner' or 'builder'; it's used to name files
 	def parse_packer_elements(chef_node, chef_node_name, packer_element_type, packer_element)
-	  urls = chef_node['images'][packer_element]
+	  urls = chef_node['_images'][packer_element]
 	  ret = "["
 		if urls
 		  urls.each do |element_name,url|
 		    packer_filename = "#{@params.work_dir}/packer/#{element_name}-#{packer_element_type}.json"
 		    Downloader.get(url, packer_filename)
 		    element = File.read(packer_filename)
+				elementJson = JSON.parse(element)
 
 		    # Inject Chef attributes JSON into the chef-solo provisioner
-		    if element_name == 'chef-alfresco'
-		      element = merge_elements(chef_node_name, element_name, element)
+		    if elementJson['type'] == 'chef-solo'
+		      element = inject_chef_attributes(chef_node['name'], element_name, elementJson)
 		    end
 		    ret += element + ","
 		  end
@@ -68,12 +68,11 @@ class PackerInterface
 	  return ret
 	end
 
-
-	def merge_elements(chef_node_name, provisioner_name, provisioner)
-	  json_provisioner = JSON.parse(provisioner)
+	def inject_chef_attributes(chef_node_name, provisioner_name, json_provisioner)
 	  node_url = "#{@params.work_dir}/attributes-#{chef_node_name}.json"
-	  node_url_content = File.read("#{@params.work_dir}/attributes-#{chef_node_name}.json.original")
+	  node_url_content = File.read("#{@params.work_dir}/attributes-#{chef_node_name}.json")
 	  json_provisioner['json'] = JSON.parse(node_url_content)
+		json_provisioner['json']['_images'] = {} if json_provisioner['json']['_images']
 	  json_provisioner['json'] = @engine.get_nexus_creds(json_provisioner['json'])
 	  return json_provisioner.to_json
 	end
@@ -92,22 +91,18 @@ class PackerInterface
     		config.send("#{key}", value) if key != "type"
     	end
 
-
 			if type == "Provisioner" and component['type'] == "chef-solo"
     		config.required = ["type"]
-    		config.run_list  packer.variables["run_list_item"].split(",")
+    		config.run_list  packer.variables["run_list"].split(",")
     	end
 
     	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start
-    	# => this is a bug, and a pull request is on it's way to solve this problem 
-    	
+    	# => this is a bug, and a pull request is on it's way to solve this problem
+
     	# => We don't specify a communicator, and packer-config require one. So if it's not required, we will use ssh
     	if type == "Builder"
     		config.communicator "ssh" if component["communicator"].nil?
     	end
-
-    	
     end
 	end
-
 end

@@ -30,7 +30,7 @@ module VagrantPlugins
                           "[-c|--cookbooks-url] "\
                           "[-d|--databags-url] "\
                           "[-k|--ks-template] "\
-                          "[-s|--stack-template] "\
+                          "[-i|--instance-templates] "\
                           "[-e|--pre-commands] "\
                           "[-o|--post-commands] "\
                           "[--env-vars] "
@@ -57,8 +57,8 @@ module VagrantPlugins
               @params.ks_template = ks_template
             end
 
-            opts.on("-s", "--stack-template [PATH]", String, "URL resolving the stack template") do |stack_template|
-              @params.stack_template = stack_template
+            opts.on("-i", "--instance-templates [PATH1],[PATH2]", String, "URL resolving the instance templates") do |instance_templates|
+              @params.instance_templates = instance_templates
             end
 
             opts.on("-e", "--pre-commands [PATHS]", String, "Comma-separated list of URLs resolving pre-commands JSON files") do |pre_commands|
@@ -94,9 +94,9 @@ module VagrantPlugins
         @engine = VagrantPlugins::PackerBuild::Commons::Engine.new
         @engine.create_work_dir(@params.work_dir)
 
-        nodes = @engine.get_stack_template_nodes(@params.work_dir, @params.stack_template, @params.ks_template)
+        nodes = @engine.get_instance_templates(@params.work_dir, @params.instance_templates, @params.ks_template)
 
-        # Delete Berksfile.lock, if present 
+        # Delete Berksfile.lock, if present
         puts "[packer-info] Trying to delete local berksfile.lock"
         begin
           File.delete("#{Dir.pwd}/Berksfile.lock")
@@ -133,7 +133,7 @@ module VagrantPlugins
             file_list = @params.pre_commands.split(',')
             PackerCommands.new(@params, @engine, file_list, env_vars_string,  "pre").execute!
           end
-          
+
           PackerBuildImages.new(@params, @engine, chef_items).execute!
 
           # Post Commands
@@ -149,8 +149,8 @@ module VagrantPlugins
       def validate
         errors = ""
 
-        if @params.stack_template.nil? or @params.stack_template.empty? 
-          errors << "You must provide a stack template"
+        if @params.instance_templates.nil? or @params.instance_templates.empty?
+          errors << "You must provide at least one instance template"
         end
 
         errors
