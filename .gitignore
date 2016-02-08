@@ -12,3 +12,4 @@ output-virtualbox-iso
 *.tar
 bootstrap-data
 license
+alf_data

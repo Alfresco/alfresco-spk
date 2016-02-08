@@ -14,6 +14,12 @@ Vagrant.configure("2") do |config|
   config.vm.box = "centos-7.2"
   config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.2_chef-provisionerless.box"
 
+  # Create contentstore locally
+  require 'fileutils'
+  FileUtils::mkdir_p '../../alf_data'
+  config.vm.synced_folder "../../alf_data", "/alf_data", :mount_options => ['dmode=777', 'fmode=777']
+
+
   # Vagrant Packer Plugin configurations
   # config.packer_build.instance_templates = ["../../instance-templates/share.json","../../instance-templates/solr.json"]
   config.packer_build.ks_template = "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/ks/ks-centos.cfg"
@@ -32,11 +38,11 @@ Vagrant.configure("2") do |config|
       instance_template = JSON.parse(IO.read(File.expand_path("../../instance-templates/#{role}.json", "#{__FILE__}/..")))
 
       if role == "share"
-        instance_template['alfresco']['properties']['dir.contentstore'] = "/vagrant/.vagrant/alf_data"
+        instance_template['alfresco']['properties']['dir.contentstore'] = "/vagrant/alf_data"
         instance_template['alfresco']['properties']['solr.host'] =  "192.168.33.52"
         instance_template['alfresco']['properties']['solr.port'] = "8090"
       elsif role == "solr"
-        instance_template['alfresco']['properties']['dir.contentstore'] = "/vagrant/.vagrant/alf_data"
+        instance_template['alfresco']['properties']['dir.contentstore'] = "/vagrant/alf_data"
         instance_template['alfresco']['properties']['db.host'] =  "192.168.33.51"
       end
 
