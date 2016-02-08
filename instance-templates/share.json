@@ -6,7 +6,7 @@
   "alfresco" : {
     "version" : "5.0.2.5",
     "edition" : "enterprise",
-    "components" : ["haproxy","nginx","tomcat","transform","repo","share","aos"],
+    "components" : ["haproxy","nginx","tomcat","transform","repo","share","aos","mysql"],
     "restart_services" : ["tomcat-alfresco","tomcat-share"],
     "properties" : {}
   },

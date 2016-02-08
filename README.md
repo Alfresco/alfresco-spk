@@ -14,12 +14,12 @@ Alfresco SPK uses ([Vagrant](https://www.vagrantup.com) and) [vagrant-packer-plu
 
 Please install:
 * [Vagrant](https://www.vagrantup.com/downloads.html)
+* [Virtualbox](https://www.virtualbox.org/)
 * [Packer](https://packer.io/downloads.html)
 
 To install the Vagrant Packer Plugin:
 ```
-curl -L --no-sessionid https://github.com/Alfresco/alfresco-spk/raw/vagrant-packer-plugin/pkg/vagrant-packer-plugin-0.5.0.gem > ~/.vagrant.d/vagrant-packer-plugin-0.5.0.gem
-vagrant plugin install ~/.vagrant.d/vagrant-packer-plugin-0.5.0.gem
+./install-packer-plugin.sh
 ```
 
 ## Run a stack locally
