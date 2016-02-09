@@ -1,5 +1,5 @@
 class PackerCommands
-	
+
 	def initialize(params, engine, file_list, env_vars, mode)
 		@params = params
 		@engine = engine
@@ -7,8 +7,6 @@ class PackerCommands
 		@env_vars = env_vars
 		@mode = mode
 	end
-
-
 
 	def execute!
 		  validate
@@ -29,14 +27,15 @@ class PackerCommands
       stdout, stderr, status = Open3.capture3(command_file)
       puts "[packer-#{@mode}] RET: #{status}, ERR: #{stderr}, OUT: #{stdout}"
 	end
-	
 
 	private
 
 	def validate
+		print @engine
+
 		raise ArgumentError.new("Params should be an instance of VagrantPlugins::PackerBuild::Config") if !@params.is_a?(VagrantPlugins::PackerBuild::Config)
 		raise ArgumentError.new("Engine should be an instance of VagrantPlugins::PackerBuild::Commons::Engine") if !@engine.is_a?(VagrantPlugins::PackerBuild::Commons::Engine)
-		raise ArgumentError.new("File list needs to be an Array, and cannot be empty") if !@file_list.is_a?(Array) or @file_list.empty?
+		# raise ArgumentError.new("File list needs to be an Array, and cannot be empty") if !@file_list.is_a?(Array) or @file_list.empty?
 		raise ArgumentError.new("Environment variables should be a string and cannot be empty") if !@env_vars.is_a?(String)
 		raise ArgumentError.new("Mode should be either pre or post") if !["pre","post"].include?(@mode)
 	end

@@ -30,9 +30,13 @@ module VagrantPlugins
                           "[-c|--cookbooks-url] "\
                           "[-d|--databags-url] "\
                           "[-k|--ks-template] "\
-                          "[-s|--stack-template] "\
+                          "[-B|--berksfile] "\
+                          "[-i|--instance-templates] "\
                           "[-e|--pre-commands] "\
                           "[-o|--post-commands] "\
+                          "[-v|--env-vars] "\
+                          "[-D|--packer-debug] "\
+                          "[-w|--why-run] "\
                           "[--env-vars] "
 
             opts.separator ""
@@ -57,8 +61,12 @@ module VagrantPlugins
               @params.ks_template = ks_template
             end
 
-            opts.on("-s", "--stack-template [PATH]", String, "URL resolving the stack template") do |stack_template|
-              @params.stack_template = stack_template
+            opts.on("-B", "--berksfile [PATH]", String, "path resolving the Berksfile)") do |berksfile|
+              @params.berksfile = berksfile
+            end
+
+            opts.on("-i", "--instance-templates [PATH1],[PATH2]", String, "URL resolving the instance templates") do |instance_templates|
+              @params.instance_templates = instance_templates
             end
 
             opts.on("-e", "--pre-commands [PATHS]", String, "Comma-separated list of URLs resolving pre-commands JSON files") do |pre_commands|
@@ -73,7 +81,7 @@ module VagrantPlugins
               @params.env_vars = env_vars
             end
 
-            opts.on("-d", "--packer-debug", "true, to run packer in debug mode; default is false") do |debug|
+            opts.on("-D", "--packer-debug", "true, to run packer in debug mode; default is false") do |debug|
                 @params.debug = debug
             end
 
@@ -92,11 +100,10 @@ module VagrantPlugins
 
         # this code will be run only if the command wasn't asking for helpls
         @engine = VagrantPlugins::PackerBuild::Commons::Engine.new
-        @engine.create_work_dir(@params.work_dir)
 
-        nodes = @engine.get_stack_template_nodes(@params.work_dir, @params.stack_template, @params.ks_template)
+        nodes = @engine.get_instance_templates(@params.work_dir, @params.instance_templates, @params.ks_template)
 
-        # Delete Berksfile.lock, if present 
+        # Delete Berksfile.lock, if present
         puts "[packer-info] Trying to delete local berksfile.lock"
         begin
           File.delete("#{Dir.pwd}/Berksfile.lock")
@@ -106,9 +113,10 @@ module VagrantPlugins
         end
 
         puts "[packer-info] Packaging berkshelf recipes..."
-        # TODO - make it parametric
-        Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
 
+        Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1]])
+        # TODO - consider also params.berksfile, but not working yet
+        # Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1],"-b #{@params.berksfile}"])
         chef_items = @engine.get_chef_items(nodes, @params.work_dir, @params.cookbooks_url, @params.databags_url)
 
         env_vars_string = ""
@@ -133,7 +141,7 @@ module VagrantPlugins
             file_list = @params.pre_commands.split(',')
             PackerCommands.new(@params, @engine, file_list, env_vars_string,  "pre").execute!
           end
-          
+
           PackerBuildImages.new(@params, @engine, chef_items).execute!
 
           # Post Commands
@@ -149,8 +157,8 @@ module VagrantPlugins
       def validate
         errors = ""
 
-        if @params.stack_template.nil? or @params.stack_template.empty? 
-          errors << "You must provide a stack template"
+        if @params.instance_templates.nil? or @params.instance_templates.empty?
+          errors << "You must provide at least one instance template"
         end
 
         errors

@@ -18,7 +18,7 @@
         "iso_checksum_type" : "sha256",
         "ssh_username" : "root",
         "ssh_password" : "vagrant",
-        "ks_path" : "ks-centos.cfg",
+        "ks_path" : "ks.cfg",
         "http_directory" : "../",
         "guest_os_type" : "RedHat_64",
         "headless" : "false",
