@@ -4,10 +4,11 @@ Checkout the [Alfresco SPK presentation](http://www.slideshare.net/m.pillitu/alf
 Alfresco SPK is a toolset that can be used by stack operators (Devops/Architects/Engineers, Support, QA, Sales, Marketing, ...) to define Alfresco immutable Images, testing them locally first, also for arbitrarily complex architectures.
 
 It allows you to:
-1. Run an arbitrarily complex stack locally
-2. Build (immutable) image(s) with the exact same provisioning logic used for local run
+
+1. Run an arbitrarily complex stack locally 
+2. Build (immutable) image(s) with the exact same provisioning logic used for local run 
 3. Test immutable images locally
-4. Run a stack on any orchestration tool with the same provisioning logic used for local runs
+4. Run a stack on any orchestration tool with the same provisioning logic used for local runs 
 
 ## Installation
 Alfresco SPK uses ([Vagrant](https://www.vagrantup.com) and) [vagrant-packer-plugin](https://github.com/Alfresco/vagrant-packer-plugin) to build images and [chef-alfresco](https://github.com/Alfresco/chef-alfresco) to install Alfresco inside the boxes.
