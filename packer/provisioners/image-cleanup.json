@@ -3,6 +3,9 @@
   "inline": [
     "sudo yum -y clean all",
     "sudo find /var/log -type f -delete",
-    "sudo find /tmp -type f -delete"
+    "sudo find /tmp -type f -delete",
+    "sudo rm -rf /root/.aws",
+    "sudo rm -rf /usr/local/maven-3.1.1/conf/settings.xml",
+    "sudo rm -rf /root/.ssh/authorized_keys 
   ]
 }
