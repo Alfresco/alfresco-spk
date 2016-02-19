@@ -8,6 +8,21 @@
 # export GIT_REPO="https://github.com/foo/bar.git"
 # export ARTIFACT_ID="bar"
 
+# Fixes issue https://github.com/berkshelf/berkshelf-api/issues/112
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+export PATH=/usr/local/packer:$HOME/.chefdk/gem/ruby/2.1.0/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
+
+# If ARTIFACT_ID is not set, extract it from GIT_REPO
+# Right now it only supports HTTP Git urls
+if [ -z "$ARTIFACT_ID" ]; then
+  export ARTIFACT_ID=`echo ${GIT_REPO%????} | cut -d "/" -f 5`
+  echo "[run-release.sh] Setting ARTIFACT_ID=$ARTIFACT_ID"
+else
+  echo "[run-release.sh] ARTIFACT_ID=$ARTIFACT_ID"
+fi
+
 function runTests () {
   echo "[run-release.sh] Running Chef, Foodcritic and ERB syntax check tests"
   if grep -L foodcritic gems.list; then
@@ -69,21 +84,6 @@ function deploy () {
 function run () {
   # Quit on failures
   set -e
-
-  # Fixes issue https://github.com/berkshelf/berkshelf-api/issues/112
-  export LC_ALL=en_US.UTF-8
-  export LANG=en_US.UTF-8
-
-  export PATH=/usr/local/packer:$HOME/.chefdk/gem/ruby/2.1.0/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
-
-  # If ARTIFACT_ID is not set, extract it from GIT_REPO
-  # Right now it only supports HTTP Git urls
-  if [ -z "$ARTIFACT_ID" ]; then
-    export ARTIFACT_ID=`echo ${GIT_REPO%????} | cut -d "/" -f 5`
-    echo "[run-release.sh] Setting ARTIFACT_ID=$ARTIFACT_ID"
-  else
-    echo "[run-release.sh] ARTIFACT_ID=$ARTIFACT_ID"
-  fi
 
   runTests
   buildArtifact
