@@ -76,7 +76,6 @@ class PackerInterface
 	  return json_provisioner.to_json
 	end
 
-
 	def parametrize(packer, type, components)
 		JSON.parse(components).each do |component|
     	class_name = "Packer::#{type}::#{component['type'].upcase.gsub('-','_')}"
@@ -92,7 +91,20 @@ class PackerInterface
 
 			if type == "Provisioner" and component['type'] == "chef-solo"
     		config.required = ["type"]
-    		config.run_list  packer.variables["run_list"].split(",")
+
+				if packer.variables["run_list"]
+					config.run_list packer.variables["run_list"].split(",")
+				else
+					config.run_list component["json"]["run_list"]
+				end
+
+				if @params.databags_url
+					config.data_bags_path "#{@params.work_dir}/data_bags"
+				end
+
+				if @params.berksfile || @params.cookbooks_url
+					config.cookbook_paths ["#{@params.work_dir}/cookbooks"]
+				end
     	end
 
     	# => The current chef-solo provisioner has a bug in which will not start as it requires an empty array to start

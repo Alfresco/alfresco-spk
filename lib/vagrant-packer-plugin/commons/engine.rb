@@ -21,8 +21,7 @@ module VagrantPlugins
 					result
 				end
 
-				def get_instance_templates(work_dir, instance_templates, ks_template)
-					Downloader.get(ks_template, "#{work_dir}/ks.cfg" )
+				def get_instance_templates(work_dir, instance_templates)
 					json_ret = {}
 					instance_templates.each_with_index do |instance_template,index|
 						json_ret[instance_template] = get_json(work_dir, "instance-template-#{index}.json", instance_template)
@@ -35,22 +34,35 @@ module VagrantPlugins
 				  return JSON.parse(File.read("#{work_dir}/#{file_name}"))
 				end
 
-				def get_chef_items(nodes, work_dir, cookbooks_url, databags_url)
-				  get_artifact(work_dir, cookbooks_url, "cookbooks")
-				  get_artifact(work_dir, databags_url, "databags")
-
-					nodes.each do |filename,node|
-						node['_local'] = {}
-
-						attr_file = File.open("#{work_dir}/attributes-#{node['name']}.json", 'w')
-						attr_file.write(node.to_json)
-						attr_file.close()
-					end
-				end
+				# Not needed anymore
+				# def get_chef_items(nodes, work_dir, cookbooks_url, databags_url)
+				# 	nodes.each do |filename,node|
+				# 		node['_local'] = {}
+				#
+				# 		attr_file = File.open("#{work_dir}/attributes-#{node['name']}.json", 'w')
+				# 		attr_file.write(node.to_json)
+				# 		attr_file.close()
+				# 	end
+				# end
 
 				def get_node_attrs(work_dir, chef_node_name)
 				  box_attrs = File.read("#{work_dir}/attributes-#{chef_node_name}.json")
 				  return JSON.parse(box_attrs)
+				end
+
+				def invoke_berkshelf(work_dir, path_name)
+					puts "[packer-info] Trying to delete Berksfile.lock"
+					begin
+						File.delete("#{Dir.pwd}/Berksfile.lock")
+						puts "[packer-info] local Berksfile.lock removed!"
+					rescue Errno::ENOENT
+						puts "[packer-info] File not found, continuing normally.."
+					end
+
+					puts "[packer-info] Packaging Chef Cookbooks repo with berks vendor..."
+					Berkshelf::Cli.start(["vendor","#{work_dir}/#{path_name}")
+					# TODO - consider also params.berksfile, but not working yet
+					# Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1],"-b #{@params.berksfile}"])
 				end
 
 				def get_artifact(work_dir, url, artifact_name)
