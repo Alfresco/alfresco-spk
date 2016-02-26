@@ -60,7 +60,7 @@ module VagrantPlugins
 					end
 
 					puts "[packer-info] Packaging Chef Cookbooks repo with berks vendor..."
-					Berkshelf::Cli.start(["vendor","#{work_dir}/#{path_name}")
+					Berkshelf::Cli.start(["vendor","#{work_dir}/#{path_name}"])
 					# TODO - consider also params.berksfile, but not working yet
 					# Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1],"-b #{@params.berksfile}"])
 				end
