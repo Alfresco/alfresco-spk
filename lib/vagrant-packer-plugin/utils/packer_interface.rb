@@ -25,6 +25,7 @@ class PackerInterface
 	    parametrize(pconfig, "Provisioner", parse_packer_elements(node, node_name, 'provisioner', 'provisioners'))
 	    parametrize(pconfig, "PostProcessor", parse_packer_elements(node, node_name, 'postprocessor', 'postprocessors'))
 	    ENV['COOKBOOK_VERSION'] = @engine.fetch_cookbook_version
+			
 	    pconfig.validate
 	    packer_defs[node_name] = pconfig
 	  end
@@ -70,7 +71,7 @@ class PackerInterface
 
 	def inject_chef_attributes(node_name, provisioner_name, json_provisioner)
 	  node_url = "#{@params.work_dir}/attributes-#{node_name}.json"
-	  node_url_content = File.read("#{@params.work_dir}/attributes-#{node_name}.json")
+	  node_url_content = File.read(node_url)
 	  json_provisioner['json'] = JSON.parse(node_url_content)
 		json_provisioner['json']['_images'] = {} if json_provisioner['json']['_images']
 	  return json_provisioner.to_json
