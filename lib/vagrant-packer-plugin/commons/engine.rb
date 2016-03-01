@@ -24,7 +24,8 @@ module VagrantPlugins
 				def get_instance_templates(work_dir, instance_templates)
 					json_ret = {}
 					instance_templates.each_with_index do |instance_template,index|
-						json_ret[instance_template] = get_json(work_dir, "instance-template-#{index}.json", instance_template)
+						node_name = JSON.parse(File.read(instance_template))['name']
+						json_ret[instance_template] = get_json(work_dir, "attributes-#{node_name}.json", instance_template)
 					end
 				  return json_ret
 				end
