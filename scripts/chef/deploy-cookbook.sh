@@ -83,11 +83,11 @@ function deploy () {
 function run () {
   # Quit on failures
   set -e
-
+  suffix=$1
   runTests
   buildArtifact
   current_version=$(getCurrentVersion)
-  deploy "$current_version-SNAPSHOT"
+  deploy "$current_version$suffix"
 }
 
 run
