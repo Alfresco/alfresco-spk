@@ -9,7 +9,6 @@
     "sudo rm -rf /root/.ssh/authorized_keys",
     "sudo systemctl stop postfix",
     "sudo systemctl disable postfix",
-    "sudo chmod 750 /etc/profile",
     "sudo yum remove php-*",
     "sudo yum remove gcc-*"
   ]
