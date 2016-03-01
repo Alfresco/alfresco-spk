@@ -10,7 +10,7 @@
     "sudo rm -fr /root/.m2",
     "sudo systemctl stop postfix",
     "sudo systemctl disable postfix",
-    "sudo yum remove php-*",
-    "sudo yum remove gcc-*"
+    "sudo yum -y remove php-*",
+    "sudo yum -y remove gcc-*"
   ]
 }
