@@ -79,6 +79,7 @@ module VagrantPlugins
 
         # this code will be run only if the command wasn't asking for helpls
         @engine = VagrantPlugins::PackerBuild::Commons::Engine.new
+        @engine.create_work_dir(@params.work_dir)
 
         if @params.ks_template
           Downloader.get(@params.ks_template, "#{@params.work_dir}/ks.cfg" )

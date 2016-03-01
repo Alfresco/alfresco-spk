@@ -21,6 +21,13 @@ module VagrantPlugins
 					result
 				end
 
+
+				def create_work_dir(work_dir)
+ 					FileUtils.mkdir_p("#{work_dir}")
+ 					puts "[packer-info] Created #{work_dir} folder\n"
+ 				end
+
+
 				def get_instance_templates(work_dir, instance_templates)
 					json_ret = {}
 					instance_templates.each_with_index do |instance_template,index|
