@@ -90,4 +90,5 @@ function run () {
   deploy "$current_version$suffix"
 }
 
-run
+suffix=$1
+run $suffix
