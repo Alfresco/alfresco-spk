@@ -73,10 +73,10 @@ module VagrantPlugins
 					# Berkshelf::Cli.start(["package",@params.cookbooks_url.split('/')[-1],"-b #{@params.berksfile}"])
 				end
 
-				def get_artifact(work_dir, url, artifact_name)
+				def get_artifact(work_dir, url, artifact_name, params=nil)
 				  # Download and uncompress Chef artifacts (in a Berkshelf package format)
 				  if url and url.length != 0
-				  	Downloader.get(url, "#{work_dir}/#{artifact_name}.tar.gz")
+						Downloader.get(url, "#{work_dir}/#{artifact_name}.tar.gz",params)
 				  	FileUtils.rm_rf("#{work_dir}/#{artifact_name}")
 				  	Unpacker.tar("#{artifact_name}.tar.gz", work_dir)
 				    print "Unpacked #{work_dir}/#{artifact_name}.tar.gz into #{work_dir}\n"

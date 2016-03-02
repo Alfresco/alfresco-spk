@@ -97,7 +97,7 @@ module VagrantPlugins
 
         # Download Chef databags via URL or path
         if @params.databags_url
-          @engine.get_artifact(@params.work_dir, @params.databags_url, "databags")
+          @engine.get_artifact(@params.work_dir, @params.databags_url, "databags", @params)
         end
 
         # TODO - why saving attributes in single files if we have the instance-template nodes that have it all?
