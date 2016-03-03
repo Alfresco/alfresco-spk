@@ -24,7 +24,7 @@ function incrementVersion () {
   if [ -n "$GIT_TOKEN" ]
   then
     echo "[post-release-cookbook.sh] Adding $currentVersion to CHANGELOG.md"
-    github_changelog_generator -u Alfresco -p chef-alfresco -t $GIT_TOKEN
+    github_changelog_generator -u Alfresco -p $GIT_PROJECT_NAME -t $GIT_TOKEN
     sed -i '/- Update /d' ./CHANGELOG.md
   fi
 }
