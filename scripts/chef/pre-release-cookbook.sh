@@ -8,6 +8,13 @@ function getCurrentVersion () {
 }
 
 function run() {
+  
+  # Install github_changelog_generator gem
+  if gem list | grep github_changelog_generator; then
+    PKG_CONFIG_PATH=/opt/chefdk/embedded/lib/pkgconfig gem install nokogiri
+    gem install github_changelog_generator
+  fi
+  
   export VERSION=$(getCurrentVersion)
 
   export GIT_PREFIX=git@github.com
