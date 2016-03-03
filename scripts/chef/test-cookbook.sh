@@ -22,11 +22,11 @@ function runTests () {
     gem install yaml-lint
   #fi
 
-  find . -name "*.erb" -exec rails-erb-check {} \;
-  find . -name "*.json" -exec jsonlint {} \;
-  find . -name "*.rb" -exec ruby -c {} \;
+  find . -not -path '*/\.*' -name "*.erb" -exec rails-erb-check {} \;
+  find . -not -path '*/\.*' -name "*.json" -exec jsonlint {} \;
+  find . -not -path '*/\.*' -name "*.rb" -exec ruby -c {} \;
 
-  find . -name "*.yml" -not -path "./.kitchen.yml" -exec yaml-lint {} \;
+  find . -not -path '*/\.*' -name "*.yml" -not -path "./.kitchen.yml" -exec yaml-lint {} \;
   knife cookbook test cookbook -o ./ -a
   foodcritic -f any .
   # Next one should use warning as fail-level, printing only the progress review
