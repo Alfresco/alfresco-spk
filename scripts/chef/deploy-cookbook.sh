@@ -23,41 +23,10 @@ else
   echo "[deploy-cookbook.sh] ARTIFACT_ID=$ARTIFACT_ID"
 fi
 
-function runTests () {
-  echo "[deploy-cookbook.sh] Running Chef, Foodcritic and ERB syntax check tests"
-  if grep -L foodcritic gems.list; then
-    gem install foodcritic
-  fi
+function buildArtifact () {
   if grep -L berkshelf gems.list; then
     gem install berkshelf
   fi
-  if grep -L rails-erb-check gems.list; then
-    gem install rails-erb-check
-  fi
-  if grep -L jsonlint gems.list; then
-    gem install jsonlint
-  fi
-  if grep -L rubocop gems.list; then
-    gem install rubocop
-  fi
-  #if grep -L yaml-lint gems.list; then
-    gem install yaml-lint
-  #fi
-
-  find . -name "*.erb" -exec rails-erb-check {} \;
-  find . -name "*.json" -exec jsonlint {} \;
-  find . -name "*.rb" -exec ruby -c {} \;
-  find . -name "*.yml" -not -path "./.kitchen.yml" -exec yaml-lint {} \;
-  knife cookbook test cookbook -o ./ -a
-  foodcritic -f any .
-  # Next one should use warning as fail-level, printing only the progress review
-  rubocop --fail-level warn | sed -n 2p
-  rm -rf gems.list
-}
-
-function buildArtifact () {
-  # Invoking run-test.sh to install gems and run all checks
-  runTests
 
   if [ -s Berksfile ]; then
     echo "[deploy-cookbook.sh] Building Chef artifact with Berkshelf"
@@ -84,7 +53,6 @@ function run () {
   # Quit on failures
   set -e
   suffix=$1
-  runTests
   buildArtifact
   current_version=$(getCurrentVersion)
   deploy "$current_version$suffix"
