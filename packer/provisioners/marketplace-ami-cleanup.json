@@ -1,0 +1,7 @@
+{
+  "type": "shell",
+  "inline": [
+    "find / -name authorized_keys -delete",
+    "find /root/ /home/*/ -name .cvspass -delete"
+  ]
+}
