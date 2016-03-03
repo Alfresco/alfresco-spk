@@ -11,8 +11,6 @@
     "sudo systemctl disable postfix",
     "sudo yum -y remove php-*",
     "sudo yum -y remove gcc-*",
-    "find / -name authorized_keys -delete",
-    "find /root/ /home/*/ -name .cvspass -delete",
     "sudo find /root/.*history /home/*/.*history -delete"
   ]
 }
