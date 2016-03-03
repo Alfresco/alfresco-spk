@@ -2,8 +2,9 @@
 
 function runTests () {
   echo "[test-cookbook.sh] Running Chef, Foodcritic and ERB syntax check tests"
+
   gem list > gems.list
-  
+
   if grep -L foodcritic gems.list; then
     gem install foodcritic
   fi
@@ -16,6 +17,7 @@ function runTests () {
   if grep -L rubocop gems.list; then
     gem install rubocop
   fi
+
   #if grep -L yaml-lint gems.list; then
     gem install yaml-lint
   #fi
@@ -23,6 +25,7 @@ function runTests () {
   find . -name "*.erb" -exec rails-erb-check {} \;
   find . -name "*.json" -exec jsonlint {} \;
   find . -name "*.rb" -exec ruby -c {} \;
+
   find . -name "*.yml" -not -path "./.kitchen.yml" -exec yaml-lint {} \;
   knife cookbook test cookbook -o ./ -a
   foodcritic -f any .
