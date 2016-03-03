@@ -16,6 +16,11 @@ function incrementVersion () {
 
   echo "[run-release.sh] Incrementing version from $currentVersion to $nextVersion"
 
+  if grep -L github_changelog_generator gems.list; then
+    PKG_CONFIG_PATH=/opt/chefdk/embedded/lib/pkgconfig gem install nokogiri
+    gem install github_changelog_generator
+  fi
+
   sed "s/$currentVersion/$nextVersion/" metadata.rb > metadata.rb.tmp
   rm -f metadata.rb
   mv metadata.rb.tmp metadata.rb
