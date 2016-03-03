@@ -14,7 +14,7 @@ function incrementVersion () {
   export currentVersion=$(getCurrentVersion)
   export nextVersion=$(getIncrementedVersion)
 
-  echo "[run-release.sh] Incrementing version from $currentVersion to $nextVersion"
+  echo "[post-release-cookbook.sh] Incrementing version from $currentVersion to $nextVersion"
 
   if grep -L github_changelog_generator gems.list; then
     PKG_CONFIG_PATH=/opt/chefdk/embedded/lib/pkgconfig gem install nokogiri
@@ -28,7 +28,7 @@ function incrementVersion () {
   # TODO - enable it when autoconf is installed
   if [ -n "$GIT_TOKEN" ]
   then
-    echo "[run-release.sh] Adding $currentVersion to CHANGELOG.md"
+    echo "[post-release-cookbook.sh] Adding $currentVersion to CHANGELOG.md"
     github_changelog_generator -u Alfresco -p chef-alfresco -t $GIT_TOKEN
     sed -i '/- Update /d' ./CHANGELOG.md
   fi
@@ -46,7 +46,7 @@ function run() {
   git add *.md
   git commit -m "Bumping version to v$(getCurrentVersion)"
   git push origin master
-  echo "[run-release.sh] Release completed!"
+  echo "[post-release-cookbook.sh] Release completed!"
 }
 
 run
