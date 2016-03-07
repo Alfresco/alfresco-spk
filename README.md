@@ -5,10 +5,10 @@ Alfresco SPK is a toolset that can be used by stack operators (Devops/Architects
 
 It allows you to:
 
-1. Run an arbitrarily complex stack locally 
-2. Build (immutable) image(s) with the exact same provisioning logic used for local run 
+1. Run an arbitrarily complex stack locally
+2. Build (immutable) image(s) with the exact same provisioning logic used for local run
 3. Test immutable images locally
-4. Run a stack on any orchestration tool with the same provisioning logic used for local runs 
+4. Run a stack on any orchestration tool with the same provisioning logic used for local runs
 
 ## Installation
 Alfresco SPK uses ([Vagrant](https://www.vagrantup.com) and) [vagrant-packer-plugin](https://github.com/Alfresco/vagrant-packer-plugin) to build images and [chef-alfresco](https://github.com/Alfresco/chef-alfresco) to install Alfresco inside the boxes.
@@ -20,7 +20,7 @@ Please install:
 
 To install the Vagrant Packer Plugin:
 ```
-./install-packer-plugin.sh
+vagrant plugin install vagrant-packer-plugin
 ```
 
 ## Run a stack locally
