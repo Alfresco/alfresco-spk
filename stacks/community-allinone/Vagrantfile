@@ -5,8 +5,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
-cookbooks_url = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.20/chef-alfresco-0.6.20.tar.gz"
-run_list = ["alfresco::default"]
+cookbooks_url = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/devops/chef-alfresco/0.6.25/chef-alfresco-0.6.25.tar.gz"
 
 Vagrant.configure("2") do |config|
 
@@ -14,6 +13,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "centos-7.2"
   config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.2_chef-provisionerless.box"
 
+  config.packer_build.cookbooks_url = "#{cookbooks_url}"
   config.packer_build.instance_templates = ["../../instance-templates/community-allinone.json"]
   config.packer_build.ks_template = "https://raw.githubusercontent.com/Alfresco/alfresco-spk/master/ks/ks-centos.cfg"
 
@@ -26,6 +26,12 @@ Vagrant.configure("2") do |config|
 
   # Alfresco provisioning configurations
   instance_template = JSON.parse(IO.read(File.expand_path("../../instance-templates/community-allinone.json", "#{__FILE__}/..")))
+
+  # Making the run lighter
+  instance_template['alfresco']['components'] = ["haproxy","nginx","tomcat","repo","solr","share","mysql"]
+  instance_template['alfresco']['start_service'] = true
+  instance_template['nginx']['disable_nginx_init'] = false
+  instance_template['run_list'] = ["alfresco::default","alfresco::redeploy"]
 
   # Set local configurations
   config.vm.hostname = instance_template['name']
@@ -41,4 +47,5 @@ Vagrant.configure("2") do |config|
       chef.add_recipe recipe
     end
   end
+
 end
