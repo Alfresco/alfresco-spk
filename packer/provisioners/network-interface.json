@@ -1,0 +1,7 @@
+{
+  "type": "shell",
+  "inline": [
+    "sudo sed -i 's/crashkernel\=auto/net.ifnames\=0\ crashkernel\=auto/g' /etc/default/grub",
+    "sudo grub2-mkconfig -o /boot/grub2/grub.cfg"
+  ]
+}
