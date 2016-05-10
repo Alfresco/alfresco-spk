@@ -1,6 +1,7 @@
 {
   "name": "community-allinone",
   "alfresco" : {
+    "version" : "5.1.f",
     "components" : ["haproxy","nginx","tomcat","transform","repo","share","solr","mysql"],
     "start_service" : false,
     "public_protocol" : "http",
