@@ -38,6 +38,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "chef_solo" do |chef|
+    chef.version = '12.10.24'
     chef.json = instance_template
     instance_template['run_list'].each do |recipe|
       chef.add_recipe recipe
