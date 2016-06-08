@@ -3,6 +3,7 @@
   "ssh_pty" : "true",
   "access_key" : "{{user `access_key`}}",
   "secret_key" : "{{user `secret_key`}}",
+  "vpc_id" : "{{user `vpc_id`}}",
   "region" : "{{user `region`}}",
   "source_ami" : "{{user `source_ami`}}",
   "instance_type" : "{{user `instance_type`}}",
