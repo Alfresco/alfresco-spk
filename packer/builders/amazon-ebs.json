@@ -14,6 +14,8 @@
   "ami_virtualization_type"  : "hvm",
   "ami_users"  : "{{user `ami_users`}}",
   "enhanced_networking"  : "true",
+  "associate_public_ip_address": "{{user `associate_public_ip_address`}}",
+  "subnet_id": "{{user `subnet_id`}}",
   "ami_block_device_mappings" : [
     {
       "device_name" : "/dev/sda1",
