@@ -1,4 +1,4 @@
-### What is Alfresco SPK
+# Alfresco SPK
 
 Alfresco SPK is a toolset that can be used by stack operators (Devops/Architects/Engineers, Support, QA, Sales, Marketing, ...) to define Alfresco immutable Images, testing them locally first, also for arbitrarily complex architectures.
 
