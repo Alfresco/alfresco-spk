@@ -3,7 +3,7 @@
 # You need to export GIT_REPO=git@github.com:YourAccount/YourProject.git before calling this script
 
 function getCurrentVersion () {
-  version=`cat metadata.rb| grep version|awk '{print $2}' | tr -d \'`
+  version=$(grep version metadata.rb | awk '{print $2}' | tr -d \'\”)
   echo $version
 }
 
