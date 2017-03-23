@@ -23,10 +23,18 @@ else
   echo "[deploy-cookbook.sh] ARTIFACT_ID=$ARTIFACT_ID"
 fi
 
-function buildArtifact () {
-  if grep -L berkshelf gems.list; then
-    gem install berkshelf
-  fi
+buildArtifact () {
+  gem_installer () {
+    local gem=$1
+
+    gem list --no-installed ${gem} &>> /dev/null
+    if [ $? == 0 ]
+    then
+      gem install ${gem}
+    fi
+  }
+
+  gem_installer berkshelf 
 
   if [ -s Berksfile ]; then
     echo "[deploy-cookbook.sh] Building Chef artifact with Berkshelf"
@@ -37,19 +45,19 @@ function buildArtifact () {
   fi
 }
 
-function getCurrentVersion () {
-  version=`cat metadata.rb| grep version|awk '{print $2}' | tr -d \"`
-  echo $version
+getCurrentVersion () {
+  local version=$(grep version metadata.rb | awk '{print $2}' | tr -d \'\")
+  echo ${version}
 }
 
-function deploy () {
+deploy () {
   echo "[deploy-cookbook.sh] Deploy $1"
   repo_name=$MVN_REPO_ID
 
   mvn deploy:deploy-file -Dfile=$(echo *.tar.gz) -DrepositoryId=$MVN_REPO_CREDS_ID -Durl=$MVN_REPO_URL/content/repositories/$repo_name -DgroupId=$GROUP_ID  -DartifactId=$ARTIFACT_ID -Dversion=$1 -Dpackaging=tar.gz
 }
 
-function run () {
+run () {
   # Quit on failures
   set -e
   suffix=$1

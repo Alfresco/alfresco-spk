@@ -2,19 +2,21 @@
 
 # You need to export GIT_REPO=git@github.com:YourAccount/YourProject.git before calling this script
 
-function getCurrentVersion () {
-  version=`cat metadata.rb| grep version|awk '{print $2}' | tr -d \'`
-  echo $version
+getCurrentVersion () {
+  version=$(grep version metadata.rb | awk '{print $2}' | tr -d \'\")
+  echo ${version}
 }
 
-function run() {
+run() {
   
   # Install github_changelog_generator gem
-  if gem list | grep github_changelog_generator; then
+  gem list --no-installed github_changelog_generator &>> /dev/null
+  if [ $? == 0 ]
+  then
     PKG_CONFIG_PATH=/opt/chefdk/embedded/lib/pkgconfig gem install nokogiri
     gem install github_changelog_generator
   fi
-  
+
   export VERSION=$(getCurrentVersion)
 
   export GIT_PREFIX=git@github.com
