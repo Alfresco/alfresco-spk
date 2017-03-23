@@ -2,22 +2,31 @@
 
 # You need to export GIT_REPO=git@github.com:YourAccount/YourProject.git before calling this script
 
+export PATH=$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH
+
 getCurrentVersion () {
   version=$(grep version metadata.rb | awk '{print $2}' | tr -d \'\")
   echo ${version}
 }
 
 run() {
-  
+
+  gem_installer () {
+    local gem=$1
+
+    gem list --no-installed ${gem} &>> /dev/null
+    if [ $? == 0 ]
+    then
+      gem_user_install () { gem install --no-rdoc --no-ri --user-install $*; }
+      gem_user_install ${gem}
+    fi
+  }
   # Install github_changelog_generator gem
-  gem list --no-installed github_changelog_generator &>> /dev/null
-  if [ $? == 0 ]
-  then
-    PKG_CONFIG_PATH=/opt/chefdk/embedded/lib/pkgconfig gem install nokogiri
-    gem install github_changelog_generator
-  fi
+  PKG_CONFIG_PATH=/opt/chefdk/embedded/lib/pkgconfig gem_installer nokogiri
+  gem_installer github_changelog_generator
 
   export VERSION=$(getCurrentVersion)
+  local V_VERSION=v${VERSION}
 
   export GIT_PREFIX=git@github.com
   export GIT_ACCOUNT_NAME=`echo ${GIT_REPO%????} | cut -d "/" -f 4`
@@ -42,12 +51,11 @@ run() {
   git remote set-url origin $GIT_PREFIX:$GIT_ACCOUNT_NAME/$GIT_PROJECT_NAME.git
 
   echo "[pre-release-cookbook.sh] Check if there's an old tag to remove"
-  if git tag -d "v$VERSION"
-  then echo "Forced removal of local tag v$VERSION"
-  fi
+  git tag -d "${V_VERSION}"
+  [[ $? == 0 ]] && echo "Forced removal of local tag ${V_VERSION}"
 
-  echo "[pre-release-cookbook.sh] Tagging to $VERSION"
-  git tag -a "v$VERSION" -m "releasing v$VERSION"
+  echo "[pre-release-cookbook.sh] Tagging to ${VERSION}"
+  git tag -a "${V_VERSION}" -m "releasing ${V_VERSION}"
 }
 
 run

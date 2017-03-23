@@ -12,7 +12,7 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-export PATH=/usr/local/packer:$HOME/.chefdk/gem/ruby/2.1.0/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
+export PATH=/usr/local/packer:$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH
 
 # If ARTIFACT_ID is not set, extract it from GIT_REPO
 # Right now it only supports HTTP Git urls
@@ -24,21 +24,30 @@ else
 fi
 
 buildArtifact () {
-  gem_installer () {
-    local gem=$1
+    # Using a gem installed berks won't work, because of the dependencies.
 
-    gem list --no-installed ${gem} &>> /dev/null
-    if [ $? == 0 ]
-    then
-      gem install ${gem}
-    fi
-  }
+#  gem_installer () {
+#    local gem=$1
 
-  gem_installer berkshelf 
+#    gem list --no-installed ${gem} &>> /dev/null
+#    if [ $? == 0 ]
+#    then
+#      gem_user_install () { gem install --no-rdoc --no-ri --user-install $*; }
+#      gem_user_install ${gem}
+#    fi
+#  }
+
+#  # Coarse grained.
+#  set +e
+#  gem_installer berkshelf 
+#  set -e
+
+  # Ensure we're using system defined berks
+  local __berks=/usr/bin/berks
 
   if [ -s Berksfile ]; then
     echo "[deploy-cookbook.sh] Building Chef artifact with Berkshelf"
-    rm -rf Berksfile.lock *.tar.gz; berks package berks-cookbooks.tar.gz
+    rm -rf Berksfile.lock *.tar.gz; ${__berks} package berks-cookbooks.tar.gz
   elif [ -d data_bags ]; then
     echo "[deploy-cookbook.sh] Building Chef Databags artifact"
     rm -rf *.tar.gz; tar cfvz alfresco-databags.tar.gz ./data_bags
@@ -52,7 +61,7 @@ getCurrentVersion () {
 
 deploy () {
   echo "[deploy-cookbook.sh] Deploy $1"
-  repo_name=$MVN_REPO_ID
+  local repo_name=$MVN_REPO_ID
 
   mvn deploy:deploy-file -Dfile=$(echo *.tar.gz) -DrepositoryId=$MVN_REPO_CREDS_ID -Durl=$MVN_REPO_URL/content/repositories/$repo_name -DgroupId=$GROUP_ID  -DartifactId=$ARTIFACT_ID -Dversion=$1 -Dpackaging=tar.gz
 }
@@ -60,9 +69,9 @@ deploy () {
 run () {
   # Quit on failures
   set -e
-  suffix=$1
+  local suffix=$1
   buildArtifact
-  current_version=$(getCurrentVersion)
+  local current_version=$(getCurrentVersion)
   deploy "$current_version$suffix"
 }
 
