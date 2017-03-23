@@ -2,12 +2,12 @@
 
 # You need to export GIT_REPO=git@github.com:YourAccount/YourProject.git before calling this script
 
-function getCurrentVersion () {
-  version=$(grep version metadata.rb | awk '{print $2}' | tr -d \'\”)
-  echo $version
+getCurrentVersion () {
+  version=$(grep version metadata.rb | awk '{print $2}' | tr -d \'\")
+  echo ${version}
 }
 
-function run() {
+run() {
   
   # Install github_changelog_generator gem
   gem list --no-installed github_changelog_generator &>> /dev/null

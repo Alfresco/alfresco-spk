@@ -1,16 +1,16 @@
 #!/bin/bash
 
-function getCurrentVersion () {
-  version=`cat metadata.rb| grep version|awk '{print $2}' | tr -d \"`
-  echo $version
+getCurrentVersion () {
+  version=$(grep version metadata.rb | awk '{print $2}' | tr -d \'\")
+  echo ${version}
 }
 
-function getIncrementedVersion () {
+getIncrementedVersion () {
   version=$(getCurrentVersion)
   echo $version | awk -F'[.]' '{print $1 "." $2 "." $3+1}'
 }
 
-function incrementVersion () {
+incrementVersion () {
   export currentVersion=$(getCurrentVersion)
   export nextVersion=$(getIncrementedVersion)
 
@@ -29,7 +29,7 @@ function incrementVersion () {
   fi
 }
 
-function run() {
+run() {
   echo "[post-release-cookbook.sh] Pushing $(getCurrentVersion) tag to github (origin)"
   git push origin --tags
   incrementVersion
