@@ -13,3 +13,7 @@ output-virtualbox-iso
 bootstrap-data
 license
 alf_data
+
+.vscode/
+.idea/
+.project
