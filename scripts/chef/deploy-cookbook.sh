@@ -43,7 +43,7 @@ buildArtifact () {
 #  set -e
 
   # Ensure we're using system defined berks
-  local __berks=/usr/bin/berks
+  local __berks=/usr/local/bin/berks
 
   if [ -s Berksfile ]; then
     echo "[deploy-cookbook.sh] Building Chef artifact with Berkshelf"
