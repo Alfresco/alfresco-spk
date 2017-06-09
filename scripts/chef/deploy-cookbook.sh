@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 # export MVN_REPO_CREDS_ID=my-repo-credentials-id
 # export MVN_REPO_URL=http://artifacts.acme.com/nexus
 # export GROUP_ID=my.acme.project
