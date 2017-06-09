@@ -36,7 +36,7 @@ runTests () {
   gem_installer () {
     local gem=$1
 
-    gem list --no-installed ${gem} &>> /dev/null
+    gem list --no-installed ${gem} 2>&1 > /dev/null
     if [ $? == 0 ]
     then
       gem_user_install () { gem install --no-rdoc --no-ri --user-install $*; }
