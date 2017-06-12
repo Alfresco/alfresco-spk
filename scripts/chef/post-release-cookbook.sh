@@ -1,7 +1,7 @@
 #!/bin/bash
 
 getCurrentVersion () {
-  version=$(grep version metadata.rb | awk '{print $2}' | tr -d \'\")
+  version=$(grep -w version metadata.rb | awk '{print $2}' | tr -d \'\")
   echo ${version}
 }
 
